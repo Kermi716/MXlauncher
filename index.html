@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MX/Launcher</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+            font-family:'Arial',sans-serif;
+            background:#f5f5f5;
+            min-height:100vh;
+            color:#333;
+            position:relative;
+            overflow-x:hidden;
+            user-select:none;
+        }
+
+        /* === МЯГКИЙ БЛЮР ПО КРАЯМ === */
+        @keyframes bloomFadeIn{
+            0%{opacity:0;transform:scale(0.9);}
+            100%{opacity:1;transform:scale(1);}
+        }
+        @keyframes pulseBloom{
+            0%,100%{opacity:0.25;transform:scale(1);}
+            50%{opacity:0.35;transform:scale(1.05);}
+        }
+        @keyframes driftTop{
+            0%,100%{transform:translateX(0);}
+            50%{transform:translateX(-40px);}
+        }
+        @keyframes driftBottom{
+            0%,100%{transform:translateX(0);}
+            50%{transform:translateX(50px);}
+        }
+
+        .top-bloom{
+            position:fixed;
+            top:0;left:0;
+            width:100%;height:250px;
+            background:linear-gradient(to bottom,
+                rgba(13,71,161,0.4) 0%,
+                rgba(30,136,229,0.15) 60%,
+                transparent 100%);
+            filter:blur(180px);
+            pointer-events:none;
+            z-index:0;
+            opacity:0;
+            animation:
+                bloomFadeIn 1.6s ease-out forwards 0.4s,
+                pulseBloom 12s infinite ease-in-out 2s,
+                driftTop 40s infinite ease-in-out 2s;
+        }
+
+        .bottom-bloom{
+            position:fixed;
+            bottom:0;left:0;
+            width:100%;height:220px;
+            background:linear-gradient(to top,
+                rgba(21,94,181,0.35) 0%,
+                rgba(41,121,255,0.12) 60%,
+                transparent 100%);
+            filter:blur(170px);
+            pointer-events:none;
+            z-index:0;
+            opacity:0;
+            animation:
+                bloomFadeIn 1.6s ease-out forwards 0.6s,
+                pulseBloom 14s infinite ease-in-out 2.6s reverse,
+                driftBottom 45s infinite ease-in-out 2.6s;
+        }
+
+        /* === ГОЛОГРАФИЯ === */
+        @keyframes fadeInFloat{
+            0%{opacity:0;transform:translateY(40px) scale(0.85);}
+            100%{opacity:1;transform:translateY(0) scale(1);}
+        }
+        @keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-80px,100px) scale(1.1)}}
+        @keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(100px,-80px) scale(0.9)}}
+        @keyframes float3{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(120px,-60px) rotate(180deg)}}
+        @keyframes rotate1{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        @keyframes rotate2{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        @keyframes rotateTriangle1{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        @keyframes rotateTriangle2{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+        .holo-element,.holo-square,.holo-triangle{opacity:0;z-index:2}
+        .holo-1{
+            position:fixed;width:600px;height:600px;top:-200px;right:-200px;
+            background:radial-gradient(circle,rgba(33,150,243,.2)0%,transparent 70%);
+            filter:blur(70px);pointer-events:none;
+            animation:fadeInFloat .8s ease-out forwards .1s,float1 25s infinite ease-in-out .9s;
+        }
+        .holo-2{
+            position:fixed;width:500px;height:500px;bottom:-150px;left:-150px;
+            background:radial-gradient(circle,rgba(100,181,246,.25)0%,transparent 70%);
+            filter:blur(80px);pointer-events:none;
+            animation:fadeInFloat .8s ease-out forwards .2s,float2 20s infinite ease-in-out 1s;
+        }
+        .holo-3{
+            position:fixed;width:400px;height:400px;top:50%;left:15%;
+            background:radial-gradient(circle,rgba(66,165,245,.15)0%,transparent 70%);
+            filter:blur(60px);pointer-events:none;
+            animation:fadeInFloat .8s ease-out forwards .3s,float3 30s infinite ease-in-out 1.1s;
+        }
+        .holo-square{position:fixed;pointer-events:none;z-index:2}
+        .holo-square svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 10px rgba(33,150,243,.3))}
+        .holo-square-1{width:250px;height:250px;top:12%;left:3%;animation:fadeInFloat .8s ease-out forwards .4s,rotate1 40s infinite linear 1.2s}
+        .holo-square-2{width:120px;height:120px;bottom:25%;right:12%;animation:fadeInFloat .8s ease-out forwards .5s,rotate2 35s infinite linear reverse 1.3s}
+        .holo-triangle{position:fixed;pointer-events:none;z-index:2}
+        .holo-triangle svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 10px rgba(33,150,243,.3))}
+        .holo-triangle-1{width:180px;height:180px;top:35%;right:5%;animation:fadeInFloat .8s ease-out forwards .6s,rotateTriangle1 50s infinite linear 1.4s}
+        .holo-triangle-2{width:220px;height:220px;bottom:10%;left:8%;animation:fadeInFloat .8s ease-out forwards .7s,rotateTriangle2 45s infinite linear reverse 1.5s}
+
+        /* === ОСНОВНОЙ КОНТЕНТ === */
+        .header{
+            background:#fff;padding:60px 20px;text-align:center;
+            box-shadow:0 4px 6px rgba(0,0,0,.1);position:relative;z-index:10;
+        }
+        .logo-text{font-size:64px;margin-bottom:20px}
+        .mx-part{font-weight:900;color:#1E88E5}
+        .launcher-part{font-weight:300;color:#000}
+        .launcher-part::after{content:'|';animation:blink 1s infinite;margin-left:2px}
+        @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+        .version-info{color:#666;font-size:18px;margin-top:15px;opacity:.9}
+        .container{max-width:1200px;margin:0 auto;padding:40px 20px;position:relative;z-index:10}
+
+        /* === ГАЛЕРЕЯ — БЕЗ ТЕМНОЙ ОБВОДКИ === */
+        .gallery{
+            position:relative;
+            width:95%;
+            max-width:1100px;
+            height:700px;
+            margin:0 auto 50px;
+            border-radius:12px;
+            overflow:visible;
+            box-shadow:0 8px 20px rgba(0,0,0,.2);
+            background:#fff;
+            z-index:10;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .gallery-slide{
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            opacity:0;
+            transition:opacity .8s ease;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:#2196F3;
+            border-radius:12px;
+            border: none;
+            outline: none;
+        }
+        .gallery-slide.active{opacity:1}
+
+        .gallery-image{
+            max-width:100%;
+            max-height:100%;
+            width:auto;
+            height:auto;
+            object-fit:contain;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            image-rendering: high-quality;
+            border-radius:8px;
+            display:block;
+        }
+
+        .gallery-nav{
+            position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+            display:flex;gap:10px;z-index:20;
+        }
+        .gallery-dot{
+            width:10px;height:10px;border-radius:50%;background:rgba(0,0,0,.3);
+            cursor:pointer;transition:all .3s;
+        }
+        .gallery-dot.active{background:#2196F3;width:28px;border-radius:5px}
+
+        /* СТРЕЛКИ */
+        .gallery-arrow{
+            position:absolute;top:50%;transform:translateY(-50%);
+            background:rgba(255,255,255,.9);border:none;color:#2196F3;
+            font-size:32px;font-weight:bold;
+            width:55px;height:55px;border-radius:50%;
+            cursor:pointer;transition:all .2s;
+            z-index:20;
+            display:flex;align-items:center;justify-content:center;
+            box-shadow:0 4px 15px rgba(0,0,0,.2);
+            border:2px solid #2196F3;
+            padding-top: 2px;
+        }
+        .gallery-arrow:hover{
+            background:#2196F3;
+            color:#fff;
+            transform:translateY(-50%) scale(1.15);
+            box-shadow:0 6px 20px rgba(33,150,243,.4);
+        }
+        .gallery-arrow.prev{left:15px}
+        .gallery-arrow.next{right:15px}
+
+        /* === КНОПКА СКАЧАТЬ С АНИМАЦИЕЙ === */
+        .download-section{
+            text-align:center;margin:60px 0 40px;z-index:10;position:relative;
+        }
+        .download-btn{
+            position:relative;
+            display:inline-block;
+            padding:18px 50px;
+            font-size:20px;font-weight:700;
+            color:#fff;
+            background:#2196F3;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+            box-shadow:0 4px 12px rgba(33,150,243,.3);
+            transition:background .2s, transform .2s;
+            text-decoration:none;
+            overflow:hidden;
+        }
+        .download-btn:hover{
+            background:#1976D2;
+            box-shadow:0 6px 16px rgba(33,150,243,.4);
+            transform:translateY(-2px);
+        }
+        .download-btn:active{transform:translateY(0)}
+
+        .ripple{
+            position:absolute;
+            border-radius:50%;
+            background:rgba(255,255,255,.6);
+            transform:scale(0);
+            animation:ripple 0.6s linear;
+            pointer-events:none;
+        }
+        @keyframes ripple{
+            to{transform:scale(4);opacity:0;}
+        }
+
+        /* === ПРЕИМУЩЕСТВА === */
+        .features-section{
+            background:rgba(255,255,255,.95);backdrop-filter:blur(20px);
+            padding:70px 50px;margin:80px auto;max-width:1100px;
+            border-radius:20px;box-shadow:0 20px 60px rgba(33,150,243,.15);
+            position:relative;z-index:10;border:1px solid rgba(33,150,243,.1);
+            transition:transform .3s ease, box-shadow .3s ease;
+        }
+        .features-section:hover{
+            transform:translateY(-5px);
+            box-shadow:0 25px 70px rgba(33,150,243,.2);
+        }
+        .features-section h2{
+            color:#1976D2;font-size:36px;margin-bottom:50px;font-weight:700;text-align:center;position:relative
+        }
+        .features-section h2::after{
+            content:'';position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);
+            width:100px;height:3px;background:linear-gradient(90deg,transparent,#2196F3,transparent)
+        }
+        .features-grid{display:flex;flex-direction:column;gap:40px;max-width:900px;margin:0 auto}
+        .feature-item{display:flex;align-items:center;gap:30px;transition:all .4s cubic-bezier(.4,0,.2,1)}
+        .feature-item:nth-child(even){flex-direction:row-reverse}
+        .feature-number{
+            font-size:80px;font-weight:900;
+            background:linear-gradient(135deg,#2196F3,#1976D2);
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+            min-width:140px;text-align:center;text-shadow:0 10px 30px rgba(33,150,243,.3);
+        }
+        .feature-content{
+            flex:1;background:rgba(255,255,255,.8);backdrop-filter:blur(20px);
+            padding:30px 35px;border-radius:15px;border:1px solid rgba(33,150,243,.2);
+            transition:all .3s ease;position:relative;
+        }
+        .feature-content::before{
+            content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+            background:linear-gradient(135deg,rgba(33,150,243,.05),rgba(33,150,243,.15));
+            border-radius:15px;opacity:0;transition:opacity .3s;z-index:-1;
+        }
+        .feature-item:hover .feature-content{
+            transform:translateX(10px);box-shadow:0 15px 40px rgba(33,150,243,.2);border-color:rgba(33,150,243,.4)
+        }
+        .feature-item:nth-child(even):hover .feature-content{transform:translateX(-10px)}
+        .feature-item:hover .feature-content::before{opacity:1}
+        .feature-item:hover .feature-number{transform:scale(1.1);filter:drop-shadow(0 0 20px rgba(33,150,243,.5))}
+        .feature-title{font-size:20px;font-weight:700;color:#1976D2;margin-bottom:10px}
+        .feature-desc{color:#555;font-size:15px;line-height:1.7}
+    </style>
+</head>
+<body>
+
+    <!-- БЛЮР ПО КРАЯМ -->
+    <div class="top-bloom"></div>
+    <div class="bottom-bloom"></div>
+
+    <!-- ГОЛОГРАФИЯ -->
+    <div class="holo-element holo-1"></div>
+    <div class="holo-element holo-2"></div>
+    <div class="holo-element holo-3"></div>
+
+    <div class="holo-square holo-square-1">
+        <svg viewBox="0 0 200 200"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(33,150,243,.1);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:rgba(33,150,243,.05);stop-opacity:1"/>
+        </linearGradient></defs>
+        <rect x="5" y="5" width="190" height="190" rx="20" fill="url(#grad1)" stroke="rgba(33,150,243,.5)" stroke-width="1.5"/>
+        </svg>
+    </div>
+    <div class="holo-square holo-square-2">
+        <svg viewBox="0 0 150 150"><defs><linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(33,150,243,.1);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:rgba(33,150,243,.05);stop-opacity:1"/>
+        </linearGradient></defs>
+        <rect x="5" y="5" width="140" height="140" rx="15" fill="url(#grad2)" stroke="rgba(33,150,243,.5)" stroke-width="1.5"/>
+        </svg>
+    </div>
+
+    <div class="holo-triangle holo-triangle-1">
+        <svg viewBox="0 0 200 200"><defs><linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(33,150,243,.12);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:rgba(33,150,243,.06);stop-opacity:1"/>
+        </linearGradient></defs>
+        <polygon points="100,20 180,170 20,170" fill="url(#grad3)" stroke="rgba(33,150,243,.5)" stroke-width="1.5"/>
+        </svg>
+    </div>
+    <div class="holo-triangle holo-triangle-2">
+        <svg viewBox="0 0 150 150"><defs><linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(66,165,245,.15);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:rgba(66,165,245,.08);stop-opacity:1"/>
+        </linearGradient></defs>
+        <polygon points="75,20 135,130 15,130" fill="url(#grad4)" stroke="rgba(66,165,245,.6)" stroke-width="1.5"/>
+        </svg>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo-text">
+            <span class="mx-part">MX</span><span class="launcher-part" id="launcher-text"></span>
+        </div>
+        <div class="version-info">Поддержка версий Minecraft 1.16.5 - 1.21.4 (Fabric)</div>
+    </div>
+
+    <div class="container">
+
+        <!-- ГАЛЕРЕЯ — БЕЗ ТЕМНОЙ ОБВОДКИ -->
+        <div class="gallery" id="gallery">
+            <button class="gallery-arrow prev" onclick="prevSlide()">&lt;</button>
+            <button class="gallery-arrow next" onclick="nextSlide()">&gt;</button>
+            <div class="gallery-nav" id="galleryNav"></div>
+        </div>
+
+        <!-- КНОПКА СКАЧАТЬ -->
+        <div class="download-section">
+            <a href="MXinstaller.exe" download class="download-btn" id="downloadBtn">Скачать лаунчер</a>
+        </div>
+
+        <!-- ПРЕИМУЩЕСТВА -->
+        <div class="features-section">
+            <h2>Преимущества лаунчера</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-number">01</div>
+                    <div class="feature-content">
+                        <div class="feature-title">Регулярные обновления</div>
+                        <div class="feature-desc">Постоянное улучшение функционала и исправление ошибок для стабильной работы</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-number">02</div>
+                    <div class="feature-content">
+                        <div class="feature-title">Новые клиенты</div>
+                        <div class="feature-desc">Регулярное добавление актуальных модификаций и читов</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-number">03</div>
+                    <div class="feature-content">
+                        <div class="feature-title">Техническая поддержка</div>
+                        <div class="feature-desc">Быстрая помощь в решении технических вопросов и проблем</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-number">04</div>
+                    <div class="feature-content">
+                        <div class="feature-title">Автоматические обновления</div>
+                        <div class="feature-desc">Автоматическая установка новых версий без ручной переустановки</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-number">05</div>
+                    <div class="feature-content">
+                        <div class="feature-title">Система оценок</div>
+                        <div class="feature-desc">Возможность оценивать клиенты и просматривать отзывы других пользователей</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-number">06</div>
+                    <div class="feature-content">
+                        <div class="feature-title">Статистика онлайна</div>
+                        <div class="feature-desc">Отображение количества активных пользователей лаунчера в реальном времени</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-number">07</div>
+                    <div class="feature-content">
+                        <div class="feature-title">Гибкие настройки</div>
+                        <div class="feature-desc">Простой интерфейс с возможностью тонкой настройки под ваши нужды</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-number">08</div>
+                    <div class="feature-content">
+                        <div class="feature-title">Безопасность</div>
+                        <div class="feature-desc">Все клиенты проверены на наличие вредоносного кода</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Печатающийся текст
+        const text = '/Launcher';
+        let i = 0, del = false;
+        const el = document.getElementById('launcher-text');
+        function type(){
+            if(del){
+                el.textContent = text.substring(0, i-1);
+                i--;
+            }else{
+                el.textContent = text.substring(0, i+1);
+                i++;
+            }
+            let s = del?100:200;
+            if(!del && i===text.length){s=3000;del=true;}
+            else if(del && i===0){del=false;s=1000;}
+            setTimeout(type, s);
+        }
+        type();
+
+        // Галерея — без темной обводки
+        const gallery = document.getElementById('gallery');
+        const nav = document.getElementById('galleryNav');
+        const count = 8;
+        let cur = 0;
+
+        // Предзагрузка изображений для лучшего качества
+        function preloadImages() {
+            for(let i = 1; i <= count; i++) {
+                const img = new Image();
+                img.src = `screens/screen${i}.png`;
+            }
+        }
+
+        for(let i = 1; i <= count; i++) {
+            const slide = document.createElement('div');
+            slide.className = 'gallery-slide';
+            if(i === 1) slide.classList.add('active');
+            
+            const img = document.createElement('img');
+            img.src = `screens/screen${i}.png`;
+            img.alt = `Скриншот ${i}`;
+            img.className = 'gallery-image';
+            
+            slide.appendChild(img);
+            gallery.appendChild(slide);
+
+            const dot = document.createElement('div');
+            dot.className = 'gallery-dot';
+            if(i === 1) dot.classList.add('active');
+            dot.onclick = () => go(i - 1);
+            nav.appendChild(dot);
+        }
+
+        const slides = document.querySelectorAll('.gallery-slide');
+        const dots = document.querySelectorAll('.gallery-dot');
+
+        function show(n) {
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            cur = (n + slides.length) % slides.length;
+            slides[cur].classList.add('active');
+            dots[cur].classList.add('active');
+        }
+
+        function nextSlide() { show(cur + 1); }
+        function prevSlide() { show(cur - 1); }
+        function go(i) { show(i); }
+
+        // Предзагрузка при загрузке страницы
+        window.addEventListener('load', preloadImages);
+        
+        // Автопереключение слайдов
+        setInterval(nextSlide, 5000);
+
+        // Ripple при клике
+        const btn = document.getElementById('downloadBtn');
+        btn.addEventListener('click', function(e) {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            ripple.style.width = ripple.style.height = `${Math.max(rect.width, rect.height)}px`;
+
+            btn.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+    </script>
+</body>
+</html>
