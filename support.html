@@ -3,84 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MX Launcher</title>
+    <title>Поддержка | MX Launcher</title>
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
-        body { background-color: #0a0a0c; font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; color: #ffffff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-user-select: none; user-select: none; }
+        body { background-color: #0a0a0c; font-family: 'Segoe UI', Arial, sans-serif; color: #ffffff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
         
-        .top-alert-bar { background-color: #d32f2f; color: #ffffff; text-align: center; padding: 8px 10px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; position: relative; z-index: 9999; box-shadow: 0 5px 20px rgba(0,0,0,0.5); border-bottom: 1px solid rgba(255,255,255,0.1); }
         .blooms-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; pointer-events: none; }
         .blob { position: absolute; filter: blur(80px); opacity: 0.4; border-radius: 50%; animation: float 10s infinite alternate ease-in-out; }
         .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(255, 255, 255, 0.1); animation-duration: 15s; }
         .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: rgba(200, 200, 200, 0.08); animation-duration: 12s; animation-direction: alternate-reverse; }
-        .blob-3 { top: 40%; left: 40%; width: 30vw; height: 30vw; background: rgba(255, 255, 255, 0.05); animation-duration: 18s; }
-        
-        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
-        
         .bg-texture { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('background.jpg'); background-size: cover; background-position: center; opacity: 0.2; z-index: -1; }
         
-        .video-header { position: relative; width: 100%; height: 350px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.5); margin-bottom: 40px; }
-        .bg-video { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: 1; object-fit: cover; opacity: 0.6; }
-        .header-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(10, 10, 12, 0.3), #0a0a0c); z-index: 2; }
-        .header-content { position: relative; z-index: 3; text-align: center; animation: fadeInDown 1s ease forwards; }
-        
-        h1 { font-family: 'Segoe UI Light', 'Segoe UI', sans-serif; font-weight: 300; font-size: 56px; letter-spacing: 4px; color: #ffffff; text-shadow: 0 0 20px rgba(255, 255, 255, 0.3); margin-bottom: 5px; }
-        .subtitle { font-size: 14px; color: rgba(255, 255, 255, 0.7); letter-spacing: 1px; text-transform: uppercase; }
-        
-        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; flex: 1; opacity: 0; animation: fadeInUp 0.8s ease 0.3s forwards; }
-        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; margin-bottom: 30px; transition: all 0.3s ease; }
-        .glass-panel:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 0 30px rgba(255, 255, 255, 0.05); }
-        
-        .status-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        .status-badge { display: flex; align-items: center; background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.3); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; color: #ff5555; letter-spacing: 1px; }
-        .status-dot { width: 8px; height: 8px; background-color: #ff4444; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 10px #ff4444; animation: pulse-red 2s infinite; }
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(255, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); } }
-        
-        .btn-group { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; flex-wrap: wrap; }
-        .btn { padding: 14px 35px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; border: 1px solid transparent; position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-white { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); }
-        .btn-white:hover { background: #fff; color: #000; box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); transform: translateY(-2px); }
-        .btn-telegram { background: rgba(42, 171, 238, 0.15); color: #2aabee; border: 1px solid rgba(42, 171, 238, 0.4); }
-        .btn-telegram:hover { background: #2aabee; color: #fff; box-shadow: 0 0 30px rgba(42, 171, 238, 0.5); border-color: #2aabee; transform: translateY(-2px); }
-        .btn-telegram svg { fill: currentColor; width: 18px; height: 18px; }
-        
-        h2 { font-family: 'Segoe UI Light', sans-serif; font-weight: 300; font-size: 22px; color: #fff; margin: 0; }
-        .simple-header { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        p, li { font-size: 14px; color: rgba(255, 255, 255, 0.6); line-height: 1.6; }
-        .gallery-placeholder { height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 8px; color: rgba(255, 255, 255, 0.3); }
-        .gallery-icon { font-size: 32px; margin-bottom: 10px; }
-        .link-list { list-style: none; margin-top: 15px; }
-        .link-list li { margin-bottom: 10px; }
-        .link-list a { color: #fff; text-decoration: none; font-size: 13px; opacity: 0.7; transition: opacity 0.2s; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 2px; }
-        .link-list a:hover { opacity: 1; border-color: #fff; }
-        
-        footer { text-align: center; padding: 25px 20px 35px 20px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.05); }
-        .footer-links { display: flex; justify-content: center; gap: 30px; margin-bottom: 15px; flex-wrap: wrap; }
-        .footer-links a { 
-            color: rgba(255, 255, 255, 0.5); 
-            text-decoration: none; 
-            font-family: 'Segoe UI Light', sans-serif; 
-            font-size: 12px; 
-            font-weight: 300; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            transition: color 0.4s ease, text-shadow 0.4s ease; 
-        }
-        .footer-links a:hover { 
-            color: #fff; 
-            text-shadow: 0 0 12px rgba(255, 255, 255, 0.4); 
-        }
-        .footer-copy { color: rgba(255, 255, 255, 0.3); font-size: 12px; line-height: 1.5; font-weight: 300; }
-        
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+        .video-header { position: relative; width: 100%; height: 350px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.5); margin-bottom: 40px; }
+        .bg-video { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; object-fit: cover; opacity: 0.6; z-index: 1; }
+        .header-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(10, 10, 12, 0.3), #0a0a0c); z-index: 2; }
+        .header-content { position: relative; z-index: 3; text-align: center; animation: fadeInDown 1s ease forwards; }
+        h1 { font-family: 'Segoe UI Light', sans-serif; font-weight: 300; font-size: 56px; letter-spacing: 4px; color: #ffffff; text-shadow: 0 0 20px rgba(255, 255, 255, 0.3); margin-bottom: 5px; }
+        .subtitle { font-size: 14px; color: rgba(255, 255, 255, 0.7); letter-spacing: 1px; text-transform: uppercase; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; flex: 1; opacity: 0; animation: fadeInUp 0.8s ease 0.3s forwards; width: 100%; }
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; margin-bottom: 30px; transition: all 0.3s ease; }
+        .glass-panel:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 0 30px rgba(255, 255, 255, 0.05); }
+        h2 { font-family: 'Segoe UI Light', sans-serif; font-weight: 300; font-size: 22px; color: #fff; margin: 0; }
+        .simple-header { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        
+        .nav-links { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; }
+        .nav-links a { color: rgba(255, 255, 255, 0.5); text-decoration: none; font-family: 'Segoe UI Light', sans-serif; font-size: 12px; font-weight: 300; text-transform: uppercase; letter-spacing: 2px; transition: color 0.4s ease, text-shadow 0.4s ease; }
+        .nav-links a:hover { color: #fff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.4); }
+        
+        .rules-box { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-left: 3px solid #ffaa00; border-radius: 6px; padding: 20px; margin-bottom: 25px; }
+        .rules-title { font-size: 13px; font-weight: 600; text-transform: uppercase; color: #ffaa00; margin-bottom: 12px; letter-spacing: 1px; }
+        .rules-list { list-style: none; margin-bottom: 15px; }
+        .rules-list li { font-size: 13px; color: rgba(255, 255, 255, 0.8); line-height: 1.6; margin-bottom: 8px; padding-left: 15px; position: relative; }
+        .rules-list li::before { content: '•'; position: absolute; left: 0; color: rgba(255, 255, 255, 0.4); }
+
+        .checkbox-container { display: flex; align-items: center; margin-bottom: 20px; cursor: pointer; }
+        .checkbox-container input { display: none; }
+        .checkmark { width: 18px; height: 18px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; transition: 0.2s; background: rgba(0,0,0,0.3); }
+        .checkbox-container input:checked + .checkmark { background: #fff; border-color: #fff; }
+        .checkbox-container input:checked + .checkmark::after { content: '✓'; color: #000; font-size: 12px; font-weight: bold; }
+        .checkbox-label { font-size: 13px; color: rgba(255,255,255,0.7); transition: color 0.2s; }
+        .checkbox-container:hover .checkbox-label { color: #fff; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+        .form-control { width: 100%; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 12px 15px; color: #fff; font-family: inherit; font-size: 14px; transition: all 0.3s; -webkit-user-select: text; user-select: text;}
+        .form-control:focus { background: rgba(0, 0, 0, 0.4); border-color: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
+        textarea.form-control { resize: vertical; min-height: 120px; }
+        
+        .btn-submit { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); padding: 12px 30px; border-radius: 8px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; width: 100%; }
+        .btn-submit:hover:not(:disabled) { background: #fff; color: #000; box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); transform: translateY(-2px); }
+        .btn-submit:disabled { opacity: 0.3; cursor: not-allowed; }
+
         .toast { position: fixed; top: 50px; right: 20px; background: rgba(20, 20, 20, 0.95); padding: 15px 25px; border-radius: 4px; color: white; z-index: 99999; transform: translateX(200%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 5px 20px rgba(0,0,0,0.8); display: flex; align-items: center; gap: 15px; border: 1px solid transparent; border-left: 4px solid transparent; }
         .toast.show { transform: translateX(0); }
+        
         .toast-success { border-color: rgba(255, 255, 255, 0.3); border-left-color: #ffffff; }
         .toast-success .toast-icon { color: #ffffff; font-weight: bold; font-size: 20px; }
         .toast-error { border-color: rgba(255, 50, 50, 0.3); border-left-color: #ff4444; }
@@ -92,45 +77,36 @@
         .modal-overlay.active .auth-modal { transform: translateY(0); }
         .close-modal { position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 20px; transition: color 0.2s; }
         .close-modal:hover { color: #fff; }
+        
         .auth-tabs { display: flex; margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         .auth-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; color: rgba(255,255,255,0.4); font-weight: 600; font-size: 14px; text-transform: uppercase; transition: all 0.2s; border-bottom: 2px solid transparent; }
         .auth-tab.active { color: #fff; border-bottom-color: #fff; }
+        
         .auth-form { display: none; }
         .auth-form.active { display: block; animation: fadeInUp 0.3s ease; }
-        .form-group { margin-bottom: 20px; }
-        .form-label { display: block; font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 8px; text-transform: uppercase;}
-        .form-control { width: 100%; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 12px 15px; color: #fff; font-family: inherit; font-size: 14px; transition: all 0.3s; -webkit-user-select: text; user-select: text;}
-        .form-control:focus { background: rgba(0, 0, 0, 0.4); border-color: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
+        
         .btn-auth { width: 100%; background: #ffffff; color: #000000; border: none; padding: 14px; border-radius: 8px; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; margin-top: 10px;}
         .btn-auth:hover { background: #cccccc; box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
 
+        footer { text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.2); font-size: 12px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+
         @media (max-width: 768px) {
             .video-header { height: 250px; margin-bottom: 25px; }
-            h1 { font-size: 36px; letter-spacing: 2px; }
-            .subtitle { font-size: 12px; }
-            .btn-group { flex-direction: column; gap: 15px; margin-bottom: 25px; }
-            .btn { width: 100%; padding: 15px; }
-            .glass-panel { padding: 18px; margin-bottom: 20px; }
-            .status-header-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+            h1 { font-size: 36px; }
+            .glass-panel { padding: 18px; }
             .toast { top: auto; bottom: 20px; left: 20px; right: 20px; transform: translateY(200%); justify-content: flex-start; padding: 12px 15px; gap: 12px; }
             .toast.show { transform: translateY(0); }
-            .top-alert-bar { font-size: 11px; padding: 10px; }
             .auth-modal { max-width: 90%; padding: 30px 20px; }
+            .nav-links { flex-direction: column; gap: 15px; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-    <div class="top-alert-bar">
-        В данный момент скачать лаунчер не получится, так как идет полный ребилд лаунчера. Следите за новостями в нашем телеграм канале.
-    </div>
-
     <div class="blooms-container">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
     </div>
-    
     <div class="bg-texture"></div>
 
     <div class="video-header">
@@ -138,69 +114,62 @@
             <source src="video.mp4" type="video/mp4">
         </video>
         <div class="header-overlay"></div>
-        
         <div class="header-content">
             <h1>MX LAUNCHER</h1>
-            <div class="subtitle">Premium Minecraft Experience</div>
+            <div class="subtitle">Служба поддержки игроков</div>
         </div>
     </div>
 
     <div class="container">
-        
-        <div class="btn-group">
-            <a href="#" class="btn btn-white" onclick="showDownloadError(event)">
-                Скачать для Windows
-            </a>
+        <div class="nav-links">
+            <a href="index.html">Вернуться на главную</a>
+            <a href="#" id="auth-btn-support" onclick="openAuthModal(event)">Войти в аккаунт</a>
+        </div>
+
+        <div class="glass-panel">
+            <h2 class="simple-header">Создать обращение</h2>
             
-            <a href="https://t.me/mxlauncher" class="btn btn-telegram" target="_blank">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                </svg>
-                Telegram канал
-            </a>
-        </div>
+            <div id="unauth-view" style="text-align: center; padding: 30px 0;">
+                <p style="margin-bottom: 25px; font-size: 16px;">Для обращения в службу поддержки необходимо авторизоваться.</p>
+                <button class="btn-submit" style="width: auto; display: inline-block;" onclick="openAuthModal(event)">Войти в аккаунт</button>
+            </div>
 
-        <div class="glass-panel">
-            <div class="status-header-row">
-                <h2>Статус Серверов</h2>
-                <div class="status-badge">
-                    <div class="status-dot"></div> OFFLINE
+            <div id="auth-view" style="display: none;">
+                
+                <div class="rules-box">
+                    <div class="rules-title">Внимание! Правила подачи тикета:</div>
+                    <ul class="rules-list">
+                        <li>Формулируйте проблему чётко и ясно. Опишите, после каких действий произошла ошибка.</li>
+                        <li>Укажите версию Windows и характеристики ПК (если проблема технического характера).</li>
+                        <li>Если у вас есть скриншот или видео проблемы, загрузите их на любой хостинг (Imgur, YouTube, Яндекс.Диск) и прикрепите ссылку в тексте обращения.</li>
+                        <li>Не спамьте тикетами и не пишите сообщения, не имеющие смысловой нагрузки. За флуд аккаунт может быть заблокирован.</li>
+                    </ul>
                 </div>
-            </div>
-            <p>
-                Мы полностью переписываем код лаунчера для улучшения производительности. В связи с этим серверы авторизации и загрузки временно отключены. Следите за новостями.
-            </p>
-        </div>
 
-        <div class="glass-panel">
-            <h2 class="simple-header">Интерфейс</h2>
-            <div class="gallery-placeholder">
-                <div class="gallery-icon">?</div>
-                <div style="font-size: 16px; margin-bottom: 5px; color: #fff;">Временно недоступно</div>
-                <div style="font-size: 13px;">Обновляем дизайн.<br>Скриншоты появятся в ближайшее время.</div>
-            </div>
-        </div>
+                <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; font-size: 13px; border: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.5);">
+                    Обращение создается от имени: <strong id="display-username" style="color: #fff; margin-left: 5px;"></strong>
+                </div>
+                
+                <form id="supportForm" onsubmit="submitQuestion(event)">
+                    <div class="form-group">
+                        <label class="form-label">Опишите вашу проблему</label>
+                        <textarea id="support-text" class="form-control" required placeholder="Здравствуйте! У меня возникла проблема при запуске... Ссылка на скриншот: https://imgur.com/..."></textarea>
+                    </div>
 
-        <div class="glass-panel">
-            <h2 class="simple-header">Безопасность</h2>
-            <p style="margin-bottom: 20px;">
-                MX Launcher остается проверенным и безопасным программным обеспечением. Вы можете ознакомиться с результатами проверок предыдущих версий:
-            </p>
-            <ul class="link-list">
-                <li><a href="https://www.youtube.com/watch?v=1maKKxoljtU" target="_blank">Видео проверки безопасности</a></li>
-                <li><a href="https://www.virustotal.com/gui/file/a0f76d25640982e4b1b3b28b6e9b65183d2679d4262360d8b1690fe5f7f149d5/detection" target="_blank">Отчет VirusTotal</a></li>
-            </ul>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="rules-checkbox" onchange="toggleSubmitButton()">
+                        <div class="checkmark"></div>
+                        <span class="checkbox-label">Я прочитал(а) правила подачи и обязуюсь их соблюдать.</span>
+                    </label>
+
+                    <button type="submit" id="submit-btn" class="btn-submit" disabled>Отправить сообщение</button>
+                </form>
+            </div>
         </div>
     </div>
 
     <footer>
-        <div class="footer-links">
-            <a href="support.html">Служба поддержки</a>
-            <a href="#" id="auth-btn-footer" onclick="openAuthModal(event)">Войти в аккаунт</a>
-        </div>
-        <div class="footer-copy">
-            MX Launcher Project © 2025<br>All rights reserved
-        </div>
+        MX Launcher Project © 2025<br>All rights reserved
     </footer>
 
     <div id="notificationToast" class="toast">
@@ -222,11 +191,11 @@
 
             <form id="form-login" class="auth-form active" onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label class="form-label">Никнейм</label>
+                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Никнейм</label>
                     <input type="text" id="login-username" class="form-control" required minlength="3">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Пароль</label>
+                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Пароль</label>
                     <input type="password" id="login-password" class="form-control" required minlength="5">
                 </div>
                 <button type="submit" class="btn-auth">Войти</button>
@@ -234,11 +203,11 @@
 
             <form id="form-register" class="auth-form" onsubmit="handleRegister(event)">
                 <div class="form-group">
-                    <label class="form-label">Придумайте Никнейм</label>
+                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Придумайте Никнейм</label>
                     <input type="text" id="reg-username" class="form-control" required minlength="3">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Придумайте Пароль</label>
+                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Придумайте Пароль</label>
                     <input type="password" id="reg-password" class="form-control" required minlength="5">
                 </div>
                 <button type="submit" class="btn-auth">Создать аккаунт</button>
@@ -268,11 +237,6 @@
             setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
-        function showDownloadError(e) {
-            e.preventDefault(); 
-            showNotification("Ошибка загрузки", "Лаунчер временно недоступен. Попробуйте позже.", false);
-        }
-
         function openAuthModal(e) { e.preventDefault(); document.getElementById('authModal').classList.add('active'); }
         function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
         function switchTab(tab) {
@@ -300,8 +264,11 @@
                 });
 
                 let data;
-                try { data = await response.json(); } catch (err) {
-                    showNotification("Ошибка сервера", "Внутренняя ошибка. Проверьте логи."); return;
+                try {
+                    data = await response.json();
+                } catch (jsonErr) {
+                    showNotification("Сервер выдал ошибку", "Внутренняя ошибка. Проверь логи PythonAnywhere.");
+                    return;
                 }
 
                 if (response.ok) {
@@ -311,10 +278,10 @@
                     showNotification("Успешный вход", `Добро пожаловать, ${data.username}!`, true);
                     setTimeout(() => window.location.reload(), 1500);
                 } else {
-                    showNotification("Ошибка", data.error || "Неверный логин или пароль");
+                    showNotification("Ошибка входа", data.error || "Неверный логин или пароль");
                 }
             } catch (err) {
-                showNotification("Нет связи", "Сервер недоступен.");
+                showNotification("Нет связи", "Сервер недоступен. Проверь CORS или включен ли сервер.");
             }
         }
 
@@ -382,15 +349,78 @@
         }
     }
 
+        function toggleSubmitButton() {
+            const checkbox = document.getElementById('rules-checkbox');
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = !checkbox.checked;
+        }
+
+        async function submitQuestion(e) {
+            e.preventDefault(); 
+            
+            const savedUser = localStorage.getItem('mx_username');
+            const savedToken = localStorage.getItem('mx_token');
+            const messageText = document.getElementById('support-text').value.trim();
+
+            if (!savedUser || !savedToken) {
+                showNotification("Ошибка", "Сначала войдите в аккаунт!");
+                openAuthModal(e);
+                return;
+            }
+
+            if (messageText.length < 10) {
+                showNotification("Ошибка", "Опишите проблему подробнее (минимум 10 символов).");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/create_ticket`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        username: savedUser, 
+                        token: savedToken,
+                        message: messageText
+                    })
+                });
+                
+                const data = await response.json();
+
+                if (response.ok) {
+                    showNotification("Сообщение отправлено", "Мы свяжемся с вами в ближайшее время.", true);
+                    document.getElementById('support-text').value = ''; 
+                    document.getElementById('rules-checkbox').checked = false;
+                    toggleSubmitButton();
+                } else {
+                    showNotification("Ошибка", data.error || "Не удалось отправить сообщение.");
+                }
+            } catch (err) {
+                showNotification("Ошибка", "Сервер недоступен.");
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('mx_username');
-            if (savedUser) {
-                const authBtn = document.getElementById('auth-btn-footer');
+            const savedToken = localStorage.getItem('mx_token');
+            
+            const authBtn = document.getElementById('auth-btn-support');
+            const unauthView = document.getElementById('unauth-view');
+            const authView = document.getElementById('auth-view');
+            const displayUsername = document.getElementById('display-username');
+
+            if (savedUser && savedToken) {
                 if (authBtn) {
                     authBtn.innerHTML = `Личный кабинет`;
                     authBtn.onclick = null; 
                     authBtn.href = "profile.html"; 
                 }
+                
+                unauthView.style.display = 'none';
+                authView.style.display = 'block';
+                displayUsername.textContent = savedUser;
+            } else {
+                unauthView.style.display = 'block';
+                authView.style.display = 'none';
             }
         });
     </script>

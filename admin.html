@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ Панель | MX Launcher</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-user-select: none; user-select: none; }
+        body { background-color: #0a0a0c; font-family: 'Segoe UI', Arial, sans-serif; color: #ffffff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        .blooms-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; filter: blur(80px); opacity: 0.4; border-radius: 50%; animation: float 10s infinite alternate ease-in-out; }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(255, 255, 255, 0.1); animation-duration: 15s; }
+        .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: rgba(200, 200, 200, 0.08); animation-duration: 12s; animation-direction: alternate-reverse; }
+        .bg-texture { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('background.jpg'); background-size: cover; background-position: center; opacity: 0.2; z-index: -1; }
+        
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; opacity: 0; animation: fadeInUp 0.8s ease forwards; }
+        
+        .nav-links { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; }
+        .nav-links a { color: rgba(255, 255, 255, 0.5); text-decoration: none; font-family: 'Segoe UI Light', sans-serif; font-size: 12px; font-weight: 300; text-transform: uppercase; letter-spacing: 2px; transition: color 0.4s ease, text-shadow 0.4s ease; }
+        .nav-links a:hover { color: #fff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.4); }
+
+        h1 { font-family: 'Segoe UI Light', sans-serif; font-weight: 300; font-size: 32px; letter-spacing: 3px; color: #ffffff; text-shadow: 0 0 20px rgba(255, 255, 255, 0.3); margin-bottom: 25px; text-transform: uppercase; text-align: center;}
+        
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; margin-bottom: 30px; transition: all 0.3s ease; }
+        
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); flex-wrap: wrap; gap: 15px;}
+        .panel-header h2 { font-family: 'Segoe UI Light', sans-serif; font-size: 20px; font-weight: 300; color: #fff; margin: 0;}
+        
+        .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap;}
+        .sort-select { background: rgba(0, 0, 0, 0.5); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 12px; border-radius: 6px; font-size: 13px; outline: none; cursor: pointer; transition: 0.3s; }
+        .sort-select:hover, .sort-select:focus { border-color: #fff; }
+
+        .ticket-item { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-left: 3px solid #fff; border-radius: 6px; padding: 20px; margin-bottom: 15px; transition: all 0.3s ease; }
+        .ticket-item:hover { background: rgba(255, 255, 255, 0.04); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .ticket-item.answered-item { border-left-color: rgba(255, 255, 255, 0.4); }
+        
+        .ticket-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 12px; color: rgba(255,255,255,0.5); }
+        .ticket-user { color: #fff; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
+        .ticket-user-label { color: rgba(255,255,255,0.4); font-weight: 400; text-transform: uppercase; font-size: 11px; margin-right: 6px; letter-spacing: 1px; }
+        
+        .ticket-msg { font-size: 14px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.1); line-height: 1.5; color: rgba(255,255,255,0.9); }
+        
+        .ticket-reply-msg { font-size: 14px; margin-bottom: 15px; padding: 15px; border-radius: 8px; line-height: 1.5; color: #fff; }
+        .ticket-reply-msg span { display: block; font-size: 11px; text-transform: uppercase; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: 600; letter-spacing: 1px;}
+        
+        .ticket-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn { padding: 8px 16px; border-radius: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; border: 1px solid transparent; }
+        
+        .btn-toggle-reply { background: rgba(255, 255, 255, 0.05); color: #fff; border-color: rgba(255, 255, 255, 0.2); }
+        .btn-toggle-reply:hover { background: #fff; color: #000; box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); border-color: #fff; }
+        
+        .btn-reject { background: rgba(255, 170, 0, 0.05); color: #ffaa00; border-color: rgba(255, 170, 0, 0.3); }
+        .btn-reject:hover { background: #ffaa00; color: #000; box-shadow: 0 0 15px rgba(255, 170, 0, 0.4); border-color: #ffaa00; }
+
+        .btn-delete { background: rgba(255, 68, 68, 0.05); color: #ff5555; border-color: rgba(255, 68, 68, 0.3); }
+        .btn-delete:hover { background: #ff5555; color: #fff; box-shadow: 0 0 15px rgba(255, 68, 68, 0.4); border-color: #ff5555; }
+
+        .action-section { display: none; margin-top: 15px; animation: fadeIn 0.3s ease; }
+        .action-section.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .reply-input { width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px; color: #fff; font-family: inherit; font-size: 14px; resize: vertical; min-height: 80px; margin-bottom: 10px; -webkit-user-select: text; user-select: text; transition: 0.3s;}
+        .reply-input:focus { border-color: #fff; background: rgba(0, 0, 0, 0.6); box-shadow: 0 0 10px rgba(255,255,255,0.1); }
+        
+        .btn-submit-reply { background: #fff; color: #000; border: none; padding: 10px 20px; border-radius: 6px; font-size: 12px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.3s; width: 100%; }
+        .btn-submit-reply:hover { background: #ccc; }
+
+        .btn-submit-reject { background: #ff5555; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-size: 12px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.3s; width: 100%; }
+        .btn-submit-reject:hover { background: #ff3333; box-shadow: 0 0 15px rgba(255, 68, 68, 0.4); }
+
+        .toast { position: fixed; top: 50px; right: 20px; background: rgba(20, 20, 20, 0.95); padding: 15px 25px; border-radius: 4px; color: white; z-index: 99999; transform: translateX(200%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 5px 20px rgba(0,0,0,0.8); display: flex; align-items: center; gap: 15px; border: 1px solid rgba(255, 255, 255, 0.3); border-left: 4px solid #ffffff; }
+        .toast.show { transform: translateX(0); }
+        .toast-icon { font-weight: bold; font-size: 22px; color: #ffffff; }
+        
+        .empty-state { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.5); font-size: 14px; letter-spacing: 0.5px;}
+        .empty-state-icon { display: block; font-size: 24px; margin-bottom: 15px; opacity: 0.3; }
+
+        footer { text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.2); font-size: 12px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+
+        @media (max-width: 768px) {
+            .ticket-header { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .ticket-actions { flex-direction: column; }
+            .btn { width: 100%; text-align: center; }
+            .controls { width: 100%; flex-direction: column; align-items: stretch;}
+        }
+    </style>
+</head>
+<body>
+    <div class="blooms-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+    <div class="bg-texture"></div>
+
+    <div class="container">
+        <div class="nav-links">
+            <a href="profile.html">Вернуться в профиль</a>
+            <a href="index.html">На главную</a>
+        </div>
+        
+        <h1>Панель управления</h1>
+
+        <div class="glass-panel">
+            <div class="panel-header">
+                <h2 id="panel-title">Управление тикетами</h2>
+                <div class="controls">
+                    <select class="sort-select" id="status-filter" onchange="renderTickets()">
+                        <option value="open">Ожидающие ответа</option>
+                        <option value="answered">Отвеченные / Отклоненные</option>
+                    </select>
+                    <select class="sort-select" id="sort-select" onchange="renderTickets()">
+                        <option value="old">Сначала старые</option>
+                        <option value="new">Сначала новые</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="admin-tickets">
+                <p style="font-size: 14px; color: rgba(255,255,255,0.5);">Проверка прав и загрузка данных...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        MX Launcher Project © 2025<br>All rights reserved
+    </footer>
+
+    <div id="toast" class="toast">
+        <span class="toast-icon">✓</span>
+        <div id="toast-text" style="font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Выполнено</div>
+    </div>
+
+    <script>
+        const API_URL = "https://ultrafucker3.pythonanywhere.com";
+        const savedUser = localStorage.getItem('mx_username');
+        const savedToken = localStorage.getItem('mx_token');
+        
+        let globalTickets = [];
+        let rawDataHash = ""; 
+
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = text;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function formatText(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\n/g, '<br>');
+        }
+
+        async function initAdmin() {
+            if (!savedUser || !savedToken) { window.location.href = "index.html"; return; }
+            await pollAdminTickets(true); 
+            setInterval(() => pollAdminTickets(false), 10000); 
+        }
+
+        async function pollAdminTickets(isFirstLoad = false) {
+            try {
+                const res = await fetch(`${API_URL}/admin_tickets`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken })
+                });
+                
+                if (res.status === 403 || !res.ok) {
+                    if (isFirstLoad) {
+                        alert("У вас нет прав администратора!");
+                        window.location.href = "profile.html";
+                    }
+                    return;
+                }
+
+                const data = await res.json();
+                const newHash = JSON.stringify(data.tickets || {});
+                
+                if (newHash !== rawDataHash) {
+                    rawDataHash = newHash;
+                    
+                    globalTickets = [];
+                    for (const [id, tData] of Object.entries(data.tickets || {})) {
+                        globalTickets.push({ id, ...tData });
+                    }
+                    renderTickets();
+                }
+            } catch (e) { 
+                if (isFirstLoad) document.getElementById('admin-tickets').innerHTML = '<p style="color: #ff5555;">Ошибка соединения с сервером.</p>'; 
+            }
+        }
+
+        function renderTickets() {
+            let activeForms = {};
+            document.querySelectorAll('.action-section.active').forEach(sec => {
+                let textarea = sec.querySelector('textarea');
+                if (textarea) activeForms[sec.id] = textarea.value;
+            });
+
+            const cont = document.getElementById('admin-tickets');
+            cont.innerHTML = '';
+
+            const statusFilter = document.getElementById('status-filter').value;
+            const sortMethod = document.getElementById('sort-select').value;
+            
+            let filteredTickets = globalTickets.filter(t => t.status === statusFilter);
+
+            if (filteredTickets.length === 0) {
+                const emptyMsg = statusFilter === 'open' 
+                    ? "Все тикеты разобраны.<br>Новых вопросов от игроков пока нет." 
+                    : "Список отвеченных тикетов пуст.";
+                    
+                cont.innerHTML = `
+                    <div class="empty-state">
+                        <span class="empty-state-icon">❖</span>
+                        ${emptyMsg}
+                    </div>
+                `;
+                return;
+            }
+
+            filteredTickets.sort((a, b) => {
+                const dateA = new Date(a.date).getTime();
+                const dateB = new Date(b.date).getTime();
+                return sortMethod === 'new' ? dateB - dateA : dateA - dateB;
+            });
+
+            filteredTickets.forEach(tData => {
+                const dateStr = new Date(tData.date).toLocaleString('ru-RU', { 
+                    day: '2-digit', month: '2-digit', year: 'numeric', 
+                    hour: '2-digit', minute: '2-digit' 
+                });
+                
+                const safeMessage = formatText(tData.message);
+                let html = '';
+
+                if (statusFilter === 'open') {
+                    html = `
+                        <div class="ticket-item" id="ticket-wrapper-${tData.id}">
+                            <div class="ticket-header">
+                                <div class="ticket-user"><span class="ticket-user-label">Вопрос от:</span>${tData.user}</div>
+                                <span>${dateStr}</span>
+                            </div>
+                            <div class="ticket-msg">${safeMessage}</div>
+                            
+                            <div class="ticket-actions">
+                                <button class="btn btn-toggle-reply" onclick="toggleForm('${tData.id}', 'reply')">Ответить</button>
+                                <button class="btn btn-reject" onclick="toggleForm('${tData.id}', 'reject')">Отклонить</button>
+                                <button class="btn btn-delete" onclick="deleteTicket('${tData.id}')">Удалить</button>
+                            </div>
+
+                            <div class="action-section" id="form-reply-${tData.id}">
+                                <textarea id="input-reply-${tData.id}" class="reply-input" placeholder="Введите ответ для игрока..."></textarea>
+                                <button class="btn-submit-reply" onclick="submitReply('${tData.id}')">Отправить ответ</button>
+                            </div>
+
+                            <div class="action-section" id="form-reject-${tData.id}">
+                                <textarea id="input-reject-${tData.id}" class="reply-input" style="border-color: rgba(255, 68, 68, 0.3);" placeholder="Укажите причину отклонения..."></textarea>
+                                <button class="btn-submit-reject" onclick="submitReject('${tData.id}')">Отклонить тикет</button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const safeReply = formatText(tData.reply);
+                    
+                    let statusLabel = "Статус: Отвечено";
+                    let labelColor = "rgba(255, 255, 255, 0.5)";
+                    let bgStyle = "background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.2);";
+                    
+                    if (tData.reply && tData.reply.startsWith("Отклонено")) {
+                        statusLabel = "Статус: Отклонено";
+                        labelColor = "#ff5555";
+                        bgStyle = "background: rgba(255, 68, 68, 0.05); border: 1px dashed rgba(255, 68, 68, 0.3);";
+                    }
+
+                    html = `
+                        <div class="ticket-item answered-item" id="ticket-wrapper-${tData.id}">
+                            <div class="ticket-header">
+                                <div class="ticket-user"><span class="ticket-user-label">Вопрос от:</span>${tData.user}</div>
+                                <span>${dateStr}</span>
+                            </div>
+                            <div class="ticket-msg">${safeMessage}</div>
+                            <div class="ticket-reply-msg" style="${bgStyle}">
+                                <span style="color: ${labelColor};">${statusLabel}</span>
+                                ${safeReply}
+                            </div>
+                            <div class="ticket-actions">
+                                <button class="btn btn-delete" onclick="deleteTicket('${tData.id}')">Удалить навсегда</button>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                cont.innerHTML += html;
+            });
+
+            for (let secId in activeForms) {
+                let sec = document.getElementById(secId);
+                if (sec) {
+                    sec.classList.add('active');
+                    let ta = sec.querySelector('textarea');
+                    if (ta) ta.value = activeForms[secId];
+                }
+            }
+        }
+
+        function toggleForm(ticketId, type) {
+            document.querySelectorAll('.action-section').forEach(el => el.classList.remove('active'));
+            const targetSection = document.getElementById(`form-${type}-${ticketId}`);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                document.getElementById(`input-${type}-${ticketId}`).focus();
+            }
+        }
+
+        async function submitReply(ticketId) {
+            const replyText = document.getElementById(`input-reply-${ticketId}`).value.trim();
+            if (replyText.length < 2) { alert("Ответ слишком короткий!"); return; }
+            
+            const finalReply = `Ответил администратор @${savedUser}:\n${replyText}`;
+            await executeReplyAction(ticketId, finalReply, "Ответ отправлен");
+        }
+
+        async function submitReject(ticketId) {
+            const reasonText = document.getElementById(`input-reject-${ticketId}`).value.trim();
+            if (reasonText.length < 2) { alert("Укажите причину отклонения!"); return; }
+            
+            const rejectMsg = `Отклонено администратором @${savedUser}\nПричина: ${reasonText}`;
+            await executeReplyAction(ticketId, rejectMsg, "Тикет отклонен");
+        }
+
+        async function executeReplyAction(ticketId, replyText, successMsg) {
+            try {
+                const res = await fetch(`${API_URL}/reply_ticket`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        username: savedUser, token: savedToken, 
+                        ticket_id: ticketId, reply: replyText 
+                    })
+                });
+                if (res.ok) {
+                    showToast(successMsg);
+                    pollAdminTickets(false); 
+                } else { alert("Ошибка при обработке запроса."); }
+            } catch(e) { alert("Ошибка сети."); }
+        }
+
+        async function deleteTicket(ticketId) {
+            if (!confirm("ВЫ УВЕРЕНЫ? Тикет будет полностью удален с сервера и исчезнет у пользователя навсегда.")) return;
+            try {
+                const res = await fetch(`${API_URL}/delete_ticket`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken, ticket_id: ticketId })
+                });
+                if (res.ok) {
+                    showToast("Удалено с сервера");
+                    pollAdminTickets(false); 
+                } else { alert("Ошибка при удалении тикета."); }
+            } catch(e) { alert("Ошибка сети."); }
+        }
+
+        window.onload = initAdmin;
+    </script>
+</body>
+</html>

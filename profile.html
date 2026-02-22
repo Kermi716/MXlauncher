@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет | MX Launcher</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-user-select: none; user-select: none; }
+        body { background-color: #0a0a0c; font-family: 'Segoe UI', Arial, sans-serif; color: #ffffff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        .blooms-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; filter: blur(80px); opacity: 0.4; border-radius: 50%; animation: float 10s infinite alternate ease-in-out; }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(255, 255, 255, 0.1); animation-duration: 15s; }
+        .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: rgba(200, 200, 200, 0.08); animation-duration: 12s; animation-direction: alternate-reverse; }
+        .bg-texture { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('background.jpg'); background-size: cover; background-position: center; opacity: 0.2; z-index: -1; }
+        
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; opacity: 0; animation: fadeInUp 0.8s ease forwards; }
+        
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; margin-bottom: 30px; transition: all 0.3s ease; }
+        .glass-panel:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 0 30px rgba(255, 255, 255, 0.05); }
+        
+        .nav-links { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; }
+        .nav-links a { color: rgba(255, 255, 255, 0.5); text-decoration: none; font-family: 'Segoe UI Light', sans-serif; font-size: 12px; font-weight: 300; text-transform: uppercase; letter-spacing: 2px; transition: color 0.4s ease, text-shadow 0.4s ease; }
+        .nav-links a:hover { color: #fff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.4); }
+        
+        h1 { font-family: 'Segoe UI Light', sans-serif; font-weight: 300; font-size: 36px; letter-spacing: 3px; color: #ffffff; text-shadow: 0 0 20px rgba(255, 255, 255, 0.3); margin-bottom: 25px; text-transform: uppercase; text-align: center;}
+        .simple-header { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-family: 'Segoe UI Light', sans-serif; font-size: 22px; font-weight: 300; color: #fff; display: flex; justify-content: space-between; align-items: center;}
+        
+        #premium-panel h2 {
+            font-family: 'Segoe UI Light', sans-serif;
+            font-weight: 300;
+            font-size: 28px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed rgba(255,255,255,0.05); font-size: 14px;}
+        .info-label { color: rgba(255,255,255,0.6); text-transform: uppercase; font-size: 12px; letter-spacing: 1px;}
+        .info-value { font-weight: 600; color: #fff; transition: color 0.3s ease; }
+        
+        .btn-group { display: flex; gap: 15px; margin-top: 25px; flex-direction: column; }
+        
+        .btn { padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; text-align: center; text-decoration: none; display: block; width: 100%; border: 1px solid transparent; }
+        
+        .btn-logout { background: rgba(255, 68, 68, 0.05); color: #ff5555; border-color: rgba(255, 68, 68, 0.3); }
+        .btn-logout:hover { background: #ff5555; color: #fff; box-shadow: 0 0 20px rgba(255, 68, 68, 0.4); border-color: #ff5555; transform: translateY(-2px); }
+        .btn-admin { background: rgba(255, 255, 255, 0.05); color: #fff; border-color: rgba(255, 255, 255, 0.2); display: none; }
+        .btn-admin:hover { background: #ffffff; color: #000000; box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); border-color: #ffffff; transform: translateY(-2px); }
+
+        .btn-trial { background: transparent; color: #ccc; border: 1px solid #555; padding: 6px 15px; border-radius: 6px; font-size: 11px; text-transform: uppercase; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-trial:hover:not(:disabled) { background: #fff; color: #000; border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+        .btn-trial:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .pricing-cards { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px; padding: 10px 0;}
+        
+        .price-card { 
+            width: 230px; 
+            height: 320px; 
+            border-radius: 16px; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 20px 15px; 
+            text-align: center; 
+            transition: all 0.25s cubic-bezier(0.215, 0.610, 0.355, 1); 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
+            display: flex; 
+            flex-direction: column; 
+            cursor: pointer; 
+        }
+        
+        .price-card:hover { transform: translateY(-6px); }
+
+        .price-card.start { background: linear-gradient(to bottom, rgb(45, 45, 50), rgb(25, 25, 30)); }
+        .price-card.start:hover { 
+            border-color: rgba(255, 255, 255, 0.6); 
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1); 
+        }
+        
+        .price-card.medium { background: linear-gradient(to bottom, rgb(40, 50, 70), rgb(20, 25, 30)); }
+        .price-card.medium:hover { 
+            border-color: #3399ff; 
+            box-shadow: 0 8px 25px rgba(51, 153, 255, 0.2); 
+        }
+        
+        .price-card.ultimate { background: linear-gradient(to bottom, rgb(70, 60, 20), rgb(25, 20, 10)); }
+        .price-card.ultimate:hover { 
+            border-color: #FFD700; 
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.15); 
+        }
+        
+        .price-title { font-family: 'Segoe UI Light', sans-serif; font-size: 24px; font-weight: 300; letter-spacing: 4px; color: white; margin-bottom: 2px; text-transform: uppercase; }
+        .price-card.ultimate .price-title { color: #FFD700; }
+        
+        .price-wrapper { display: flex; justify-content: center; align-items: baseline; gap: 5px; margin-bottom: 5px; }
+        .price-amount { font-family: 'Segoe UI Light', sans-serif; font-size: 32px; font-weight: 300; color: white; }
+        .price-period { font-family: 'Segoe UI Light', sans-serif; font-size: 12px; font-weight: 300; color: rgba(255, 255, 255, 0.4); margin-top: 10px; }
+        
+        .price-line { height: 1px; background-color: rgba(255, 255, 255, 0.1); border: none; margin: 10px 0 15px 0; }
+        
+        .price-features { list-style: none; padding: 0; margin-bottom: auto; display: flex; flex-direction: column; gap: 8px; text-align: left; }
+        .price-features li { display: flex; align-items: center; gap: 10px; color: #dddddd; font-family: 'Segoe UI Light', sans-serif; font-size: 12px; }
+        
+        .feature-icon { 
+            width: 14px; 
+            height: 14px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #1a1a20; 
+            flex-shrink: 0; 
+        }
+        .feature-icon svg { width: 10px; height: 10px; }
+        
+        .price-card.start .feature-icon, .price-card.medium .feature-icon { background-color: #ffffff; }
+        .price-card.ultimate .feature-icon { background-color: #FFD700; }
+
+        .btn-buy { 
+            height: 40px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            font-size: 11px; 
+            letter-spacing: 1px;
+            text-transform: uppercase; 
+            cursor: pointer; 
+            transition: all 0.2s cubic-bezier(0.215, 0.610, 0.355, 1); 
+            background: rgba(255, 255, 255, 0.1); 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            color: white; 
+            width: 100%; 
+            margin-top: 15px;
+        }
+        .price-card.start .btn-buy:hover { background: #ffffff; color: black; border-color: #ffffff; }
+        .price-card.medium .btn-buy:hover { background: #3399ff; color: white; border-color: #3399ff; }
+        .price-card.ultimate .btn-buy { background: rgba(255, 255, 255, 0.1); color: white; }
+        .price-card.ultimate .btn-buy:hover { background: #FFD700; color: black; border-color: #FFD700; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .payment-modal { background: #121215; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; width: 100%; max-width: 400px; padding: 30px; text-align: center; transform: translateY(20px); transition: transform 0.3s ease; }
+        .modal-overlay.active .payment-modal { transform: translateY(0); }
+        
+        .coin-buttons { display: flex; gap: 15px; margin: 25px 0; }
+        .coin-btn { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 20px 10px; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; color: #fff; }
+        .coin-btn:hover { background: rgba(255,255,255,0.1); }
+        .coin-btn.active { background: rgba(46, 204, 113, 0.15); border-color: #2ecc71; color: #2ecc71; }
+        .payment-modal .btn-buy:hover:not(:disabled) { background: #fff; color: #000; border-color: #fff; }
+
+        .ticket-item { background: rgba(255, 255, 255, 0.02); border-left: 3px solid rgba(255, 255, 255, 0.3); border-radius: 4px 8px 8px 4px; padding: 20px; margin-bottom: 15px; transition: all 0.3s ease; text-align: left; }
+        .ticket-item:hover { background: rgba(255, 255, 255, 0.04); border-left-color: #fff; }
+        .ticket-status { font-size: 10px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 15px; }
+        .status-open { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .status-answered { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .ticket-q { font-size: 14px; margin-bottom: 15px; color: rgba(255,255,255,0.9); line-height: 1.5; }
+        .ticket-q span { display: block; font-size: 11px; text-transform: uppercase; color: rgba(255, 255, 255, 0.4); margin-bottom: 8px; font-weight: 600; letter-spacing: 1px; }
+        .ticket-a { font-size: 14px; padding: 15px; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border: 1px dashed rgba(255, 255, 255, 0.2); line-height: 1.5; color: #fff; margin-bottom: 15px; }
+        .ticket-a span { display: block; font-size: 11px; text-transform: uppercase; color: rgba(255, 255, 255, 0.5); margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-weight: 600; letter-spacing: 1px; }
+        .ticket-a.rejected-reply { background: rgba(255, 68, 68, 0.05); border-color: rgba(255, 68, 68, 0.3); }
+        .ticket-a.rejected-reply span { color: #ff5555; border-bottom-color: rgba(255, 68, 68, 0.2); }
+        .btn-read { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 8px 15px; border-radius: 6px; font-size: 11px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; cursor: pointer; transition: all 0.3s;}
+        .btn-read:hover { background: #fff; color: #000; box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
+
+        .toast { position: fixed; top: 50px; right: 20px; background: rgba(20, 20, 20, 0.95); padding: 15px 25px; border-radius: 4px; color: white; z-index: 99999; transform: translateX(200%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 5px 20px rgba(0,0,0,0.8); display: flex; align-items: center; gap: 15px; border: 1px solid rgba(255, 255, 255, 0.3); border-left: 4px solid #ffffff; }
+        .toast.show { transform: translateX(0); }
+        .toast-icon { font-weight: bold; font-size: 22px; color: #ffffff; }
+
+        footer { text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.2); font-size: 12px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+
+        @media (max-width: 768px) {
+            .pricing-cards { flex-direction: column; align-items: center; }
+            .price-card { width: 100%; max-width: 280px; height: auto; }
+            .glass-panel { padding: 20px; }
+            h1 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="blooms-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+    <div class="bg-texture"></div>
+
+    <div class="container">
+        <div class="nav-links">
+            <a href="index.html">Вернуться на главную</a>
+            <a href="support.html">Служба поддержки</a>
+        </div>
+
+        <h1>Профиль</h1>
+
+        <div class="glass-panel">
+            <h2 class="simple-header">Информация об аккаунте</h2>
+            <div class="info-row">
+                <span class="info-label">Никнейм</span>
+                <span class="info-value" id="prof-name">Загрузка...</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Статус аккаунта</span>
+                <span class="info-value" id="prof-role">Загрузка...</span>
+            </div>
+            <div class="btn-group">
+                <a href="admin.html" class="btn btn-admin" id="adminBtn">Перейти в Админ-Панель</a>
+                <button class="btn btn-logout" onclick="logout()">Выйти из аккаунта</button>
+            </div>
+        </div>
+
+        <div class="glass-panel" id="premium-panel">
+            <div class="simple-header">
+                <h2>MX Launcher Premium</h2>
+                <button class="btn-trial" id="btn-trial" onclick="activateTrial()" style="display: none;">Получить тест на 10ч</button>
+            </div>
+            
+            <div class="pricing-cards">
+                <div class="price-card start">
+                    <div class="price-title">START</div>
+                    <div class="price-wrapper">
+                        <div class="price-amount">199₽</div>
+                        <div class="price-period">/ мес</div>
+                    </div>
+                    <hr class="price-line">
+                    <ul class="price-features">
+                        <li><span class="feature-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span> Добавление читов</li>
+                        <li><span class="feature-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span> Добавление ресурспаков</li>
+                        <li><span class="feature-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span> Нет рекламы</li>
+                    </ul>
+                    <button class="btn-buy" onclick="openPaymentModal('START')">ВЫБРАТЬ</button>
+                </div>
+
+                <div class="price-card medium">
+                    <div class="price-title">MEDIUM</div>
+                    <div class="price-wrapper">
+                        <div class="price-amount">499₽</div>
+                        <div class="price-period">/ 6 мес</div>
+                    </div>
+                    <hr class="price-line">
+                    <ul class="price-features">
+                        <li><span class="feature-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span> Всё из тарифа Start</li>
+                        <li><span class="feature-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span> Особая роль в Discord</li>
+                        <li><span class="feature-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span> Ранний доступ к бете</li>
+                    </ul>
+                    <button class="btn-buy" onclick="openPaymentModal('MEDIUM')">ВЫБРАТЬ</button>
+                </div>
+
+                <div class="price-card ultimate">
+                    <div class="price-title">ULTIMATE</div>
+                    <div class="price-wrapper">
+                        <div class="price-amount">999₽</div>
+                        <div class="price-period">/ навсегда</div>
+                    </div>
+                    <hr class="price-line">
+                    <ul class="price-features">
+                        <li><span class="feature-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span> Всё из тарифа Start</li>
+                        <li><span class="feature-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span> Всё из тарифа MEDIUM</li>
+                        <li><span class="feature-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span> Приоритет поддержки</li>
+                    </ul>
+                    <button class="btn-buy" onclick="openPaymentModal('ULTIMATE')">ВЫБРАТЬ</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h2 class="simple-header">Мои обращения в поддержку</h2>
+            <div id="tickets-container">
+                <p style="font-size: 13px; color: rgba(255,255,255,0.5);">Загрузка тикетов...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        MX Launcher Project © 2025<br>All rights reserved
+    </footer>
+
+    <div id="toast" class="toast">
+        <span class="toast-icon">✓</span>
+        <div id="toast-text" style="font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Выполнено</div>
+    </div>
+
+    <div class="modal-overlay" id="paymentModal">
+        <div class="payment-modal">
+            <h2 style="font-weight: 300; font-family: 'Segoe UI Light'; font-size: 26px; margin-bottom: 5px;" id="pay-title">Оплата</h2>
+            <p style="color: #888; font-size: 13px; margin-bottom: 10px;">Выберите криптовалюту (CryptoBot)</p>
+            
+            <div class="coin-buttons">
+                <div class="coin-btn" id="btn-usdt" onclick="selectCoin('USDT')">USDT</div>
+                <div class="coin-btn" id="btn-ton" onclick="selectCoin('TON')">TON</div>
+            </div>
+            
+            <button class="btn-buy" id="btn-confirm-pay" style="margin-bottom: 15px; padding: 15px; width: 100%;" disabled onclick="startPayment()">Выберите валюту</button>
+            <button style="background: transparent; border: none; color: #666; cursor: pointer; text-decoration: underline;" onclick="closePaymentModal()">Отмена</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://ultrafucker3.pythonanywhere.com";
+        const savedUser = localStorage.getItem('mx_username');
+        const savedToken = localStorage.getItem('mx_token');
+        
+        let rawTicketsHash = "";
+        let selectedPlan = "";
+        let selectedCoin = "";
+        let paymentInterval = null;
+
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = text;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+
+        function formatText(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
+        }
+
+        async function initProfile() {
+            if (!savedUser || !savedToken) { window.location.href = "index.html"; return; }
+            document.getElementById('prof-name').innerText = savedUser;
+            await checkRole();
+            await pollProfileTickets(); 
+            setInterval(pollProfileTickets, 10000); 
+        }
+
+        async function checkRole() {
+            try {
+                const resRole = await fetch(`${API_URL}/heartbeat`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken })
+                });
+                
+                if (resRole.ok) {
+                    const dataRole = await resRole.json();
+                    let baseRoleText = dataRole.current_role.toUpperCase();
+                    let displayRoleText = baseRoleText;
+                    let roleElement = document.getElementById('prof-role');
+                    let trialBtn = document.getElementById('btn-trial');
+                    
+                    if (baseRoleText === 'ADMIN') {
+                        document.getElementById('adminBtn').style.display = 'block';
+                        roleElement.style.color = '#ff5555';
+                        trialBtn.style.display = 'none';
+                    } else if (baseRoleText === 'PREMIUM') {
+                        roleElement.style.color = '#ffcc00';
+                        trialBtn.style.display = 'none';
+                    } else if (baseRoleText === 'BETA') {
+                        roleElement.style.color = '#2aabee'; 
+                        trialBtn.style.display = 'none';
+                    } else {
+                        roleElement.style.color = 'rgba(255, 255, 255, 0.5)';
+                        trialBtn.style.display = 'block';
+                        if(dataRole.trial_used) {
+                            trialBtn.innerText = "Тест использован";
+                            trialBtn.disabled = true;
+                        }
+                    }
+
+                    if (dataRole.premium_until) { displayRoleText += ` (до ${new Date(dataRole.premium_until).toLocaleDateString()})`; }
+                    roleElement.innerText = displayRoleText;
+                } else { 
+                    logout(); 
+                }
+            } catch(e) {}
+        }
+
+        async function activateTrial() {
+            const btn = document.getElementById('btn-trial');
+            btn.disabled = true;
+            btn.innerText = "Обработка...";
+            
+            try {
+                const res = await fetch(`${API_URL}/activate_trial`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast("Premium активирован на 10 часов!");
+                    checkRole(); 
+                } else {
+                    alert(data.error || "Ошибка активации");
+                    btn.innerText = "Получить тест на 10ч";
+                    btn.disabled = false;
+                }
+            } catch(e) {
+                alert("Ошибка соединения");
+                btn.innerText = "Получить тест на 10ч";
+                btn.disabled = false;
+            }
+        }
+
+        function openPaymentModal(plan) {
+            selectedPlan = plan;
+            selectedCoin = "";
+            document.getElementById('pay-title').innerText = `Покупка ${plan}`;
+            document.getElementById('btn-usdt').classList.remove('active');
+            document.getElementById('btn-ton').classList.remove('active');
+            
+            const btnPay = document.getElementById('btn-confirm-pay');
+            btnPay.innerText = "Выберите валюту";
+            btnPay.disabled = true;
+            btnPay.style.background = "rgba(255,255,255,0.1)";
+            btnPay.style.color = "#fff";
+
+            document.getElementById('paymentModal').classList.add('active');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+            if(paymentInterval) clearInterval(paymentInterval);
+        }
+
+        function selectCoin(coin) {
+            selectedCoin = coin;
+            document.getElementById('btn-usdt').classList.toggle('active', coin === 'USDT');
+            document.getElementById('btn-ton').classList.toggle('active', coin === 'TON');
+            
+            const btnPay = document.getElementById('btn-confirm-pay');
+            btnPay.innerText = `Оплатить через ${coin}`;
+            btnPay.disabled = false;
+            btnPay.style.background = "#fff";
+            btnPay.style.color = "#000";
+        }
+
+        async function startPayment() {
+            const btnPay = document.getElementById('btn-confirm-pay');
+            btnPay.innerText = "Создание ссылки...";
+            btnPay.disabled = true;
+
+            try {
+                const res = await fetch(`${API_URL}/create_payment`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken, plan: selectedPlan, coin: selectedCoin })
+                });
+                const data = await res.json();
+
+                if (data.pay_url) {
+                    window.open(data.pay_url, '_blank');
+                    btnPay.innerText = "Ожидание оплаты...";
+                    startCheckingPayment(data.invoice_id);
+                } else {
+                    alert(data.error || "Ошибка создания платежа");
+                    closePaymentModal();
+                }
+            } catch(e) {
+                alert("Ошибка соединения с сервером");
+                closePaymentModal();
+            }
+        }
+
+        function startCheckingPayment(invoiceId) {
+            if(paymentInterval) clearInterval(paymentInterval);
+            let checks = 0;
+            
+            paymentInterval = setInterval(async () => {
+                checks++;
+                if(checks > 300) { 
+                    clearInterval(paymentInterval);
+                    document.getElementById('btn-confirm-pay').innerText = "Таймаут ожидания";
+                    setTimeout(closePaymentModal, 2000);
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`${API_URL}/check_payment_status`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: savedUser, invoice_id: invoiceId, plan: selectedPlan })
+                    });
+                    const data = await res.json();
+
+                    if (data.status === "paid") {
+                        clearInterval(paymentInterval);
+                        document.getElementById('btn-confirm-pay').innerText = "УСПЕШНО!";
+                        document.getElementById('btn-confirm-pay').style.background = "#2ecc71";
+                        document.getElementById('btn-confirm-pay').style.color = "#fff";
+                        showToast("Оплата прошла успешно!");
+                        setTimeout(() => {
+                            closePaymentModal();
+                            checkRole(); 
+                        }, 2000);
+                    }
+                } catch(e) {}
+            }, 2000); 
+        }
+
+        async function pollProfileTickets() {
+            try {
+                const resTickets = await fetch(`${API_URL}/get_my_tickets`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken })
+                });
+                
+                if (!resTickets.ok) return;
+                
+                const dataTickets = await resTickets.json();
+                const newHash = JSON.stringify(dataTickets.tickets || {});
+                
+                if (newHash === rawTicketsHash) return;
+                rawTicketsHash = newHash;
+
+                const cont = document.getElementById('tickets-container');
+                cont.innerHTML = '';
+                
+                if (Object.keys(dataTickets.tickets || {}).length === 0) {
+                    cont.innerHTML = '<p style="font-size: 13px; color: rgba(255,255,255,0.5);">У вас нет активных обращений.</p>';
+                    return;
+                }
+
+                const sortedTickets = Object.entries(dataTickets.tickets).sort((a, b) => {
+                    return new Date(b[1].date).getTime() - new Date(a[1].date).getTime();
+                });
+
+                for (const [tId, tData] of sortedTickets) {
+                    const isAnswered = tData.status === 'answered';
+                    const safeMessage = formatText(tData.message);
+                    
+                    let rawReply = tData.reply || "";
+                    let isRejected = rawReply.includes("Отклонено");
+                    
+                    if (isRejected) {
+                        rawReply = rawReply.replace(/^Отклонено администратором @[^\n\r]+[\n\r]*/i, '');
+                    } else {
+                        rawReply = rawReply.replace(/^Ответил администратор @[^\n\r]+:[\n\r]*/i, '');
+                    }
+                    
+                    const safeReply = formatText(rawReply);
+                    
+                    let replyBlock = '';
+                    if (isAnswered) {
+                        if (isRejected) {
+                            replyBlock = `<div class="ticket-a rejected-reply"><span>СТАТУС: ОТКЛОНЕНО</span>${safeReply}</div>`;
+                        } else {
+                            replyBlock = `<div class="ticket-a"><span>ОТВЕТ ПОДДЕРЖКИ:</span>${safeReply}</div>`;
+                        }
+                    }
+
+                    const html = `
+                        <div class="ticket-item" id="ticket-${tId}">
+                            <div class="ticket-status ${isAnswered ? 'status-answered' : 'status-open'}">
+                                ${isAnswered ? (isRejected ? 'Отклонено' : 'Отвечен поддержкой') : 'Ожидает ответа'}
+                            </div>
+                            <div class="ticket-q"><span>Ваш вопрос:</span>${safeMessage}</div>
+                            ${replyBlock}
+                            ${isAnswered ? `<button class="btn-read" onclick="markRead('${tId}')">Ознакомлен (Удалить тикет)</button>` : ''}
+                        </div>
+                    `;
+                    cont.innerHTML += html;
+                }
+            } catch (e) { 
+                document.getElementById('tickets-container').innerText = "Ошибка связи с сервером."; 
+            }
+        }
+
+        async function markRead(ticketId) {
+            try {
+                const res = await fetch(`${API_URL}/delete_ticket`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken, ticket_id: ticketId })
+                });
+                if (res.ok) {
+                    showToast("Тикет удален");
+                    pollProfileTickets();
+                }
+            } catch(e) {}
+        }
+
+        window.onload = initProfile;
+    </script>
+</body>
+</html>
