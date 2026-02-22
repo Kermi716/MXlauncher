@@ -407,6 +407,8 @@
                 if (res.ok) {
                     const data = await res.json();
                     renderRP(data.rp_data.pending || {});
+                } else if (res.status === 403) {
+                    document.getElementById('admin-rp').innerHTML = '<p style="font-size: 14px; color: rgba(255,255,255,0.3);">У вас нет прав для модерации ресурспаков.</p>';
                 }
             } catch (e) { console.error(e); }
         }

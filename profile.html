@@ -261,8 +261,6 @@
                     <hr class="price-line">
                     <ul class="price-features">
                         <li><span class="feature-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span> Всё из тарифа Start</li>
-                        <li><span class="feature-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span> Особая роль в Discord</li>
-                        <li><span class="feature-icon"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span> Ранний доступ к бете</li>
                     </ul>
                     <button class="btn-buy" onclick="openPaymentModal('MEDIUM')">ВЫБРАТЬ</button>
                 </div>
@@ -439,9 +437,9 @@
                     let roleElement = document.getElementById('prof-role');
                     let trialBtn = document.getElementById('btn-trial');
                     
-                    if (baseRoleText === 'ADMIN') {
+                   if (baseRoleText === 'ADMIN' || baseRoleText === 'HELPER') {
                         document.getElementById('adminBtn').style.display = 'block';
-                        roleElement.style.color = '#ff5555';
+                        roleElement.style.color = baseRoleText === 'ADMIN' ? '#ff5555' : '#2ecc71'; 
                         trialBtn.style.display = 'none';
                     } else if (baseRoleText === 'PREMIUM') {
                         roleElement.style.color = '#ffcc00';
