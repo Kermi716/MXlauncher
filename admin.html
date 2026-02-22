@@ -80,6 +80,23 @@
         .toast { position: fixed; top: 50px; right: 20px; background: rgba(20, 20, 20, 0.95); padding: 15px 25px; border-radius: 4px; color: white; z-index: 99999; transform: translateX(200%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 5px 20px rgba(0,0,0,0.8); display: flex; align-items: center; gap: 15px; border: 1px solid rgba(255, 255, 255, 0.3); border-left: 4px solid #ffffff; }
         .toast.show { transform: translateX(0); }
         .toast-icon { font-weight: bold; font-size: 22px; color: #ffffff; }
+
+        @media (max-width: 768px) {
+            .toast {
+                top: auto;
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+                transform: translateY(200%);
+                justify-content: flex-start;
+                padding: 12px 15px;
+                gap: 12px;
+                width: auto;
+            }
+            .toast.show {
+                transform: translateY(0);
+            }
+        }
         
         .empty-state { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.5); font-size: 14px; letter-spacing: 0.5px;}
         .empty-state-icon { display: block; font-size: 24px; margin-bottom: 15px; opacity: 0.3; }

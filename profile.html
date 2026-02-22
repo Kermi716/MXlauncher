@@ -171,6 +171,23 @@
         .toast.show { transform: translateX(0); }
         .toast-icon { font-weight: bold; font-size: 22px; color: #ffffff; }
 
+        @media (max-width: 768px) {
+            .toast {
+                top: auto;
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+                transform: translateY(200%);
+                justify-content: flex-start;
+                padding: 12px 15px;
+                gap: 12px;
+                width: auto;
+            }
+            .toast.show {
+                transform: translateY(0);
+            }
+        }
+
         footer { text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.2); font-size: 12px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.05); }
 
         @media (max-width: 768px) {
