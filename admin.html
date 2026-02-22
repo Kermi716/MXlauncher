@@ -65,7 +65,18 @@
 
         .action-section { display: none; margin-top: 15px; animation: fadeIn 0.3s ease; }
         .action-section.active { display: block; }
-        
+
+        .chat-link {
+            color: #ffffff;
+            text-decoration: underline;
+            word-break: break-all; 
+            transition: opacity 0.3s ease;
+        }
+
+        .chat-link:hover {
+            opacity: 0.7; 
+        }
+                
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         .reply-input { width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 12px; color: #fff; font-family: inherit; font-size: 14px; resize: vertical; min-height: 80px; margin-bottom: 10px; -webkit-user-select: text; user-select: text; transition: 0.3s;}
@@ -201,11 +212,18 @@
 
         function formatText(str) {
             if (!str) return '';
-            return str
+            
+            let safeStr = str
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/\n/g, '<br>');
+                .replace(/>/g, "&gt;");
+
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            safeStr = safeStr.replace(urlRegex, function(url) {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="chat-link">${url}</a>`;
+            });
+
+            return safeStr.replace(/\n/g, '<br>');
         }
 
         async function initAdmin() {
