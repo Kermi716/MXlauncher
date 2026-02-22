@@ -81,6 +81,24 @@
         .toast.show { transform: translateX(0); }
         .toast-icon { font-weight: bold; font-size: 22px; color: #ffffff; }
 
+        .ticket-item.premium {
+            border-left: 3px solid #ffaa00;
+            background: rgba(255, 170, 0, 0.04);
+        }
+        .ticket-item.premium .ticket-user {
+            color: #ffaa00;
+        }
+        .premium-badge {
+            background: #ffaa00;
+            color: #000;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 8px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
         @media (max-width: 768px) {
             .toast {
                 top: auto;
@@ -260,6 +278,13 @@
             }
 
             filteredTickets.sort((a, b) => {
+                const premiumA = a.is_premium ? 1 : 0;
+                const premiumB = b.is_premium ? 1 : 0;
+                
+                if (premiumA !== premiumB) {
+                    return premiumB - premiumA; 
+                }
+
                 const dateA = new Date(a.date).getTime();
                 const dateB = new Date(b.date).getTime();
                 return sortMethod === 'new' ? dateB - dateA : dateA - dateB;
@@ -274,11 +299,14 @@
                 const safeMessage = formatText(tData.message);
                 let html = '';
 
+                const premiumClass = tData.is_premium ? ' premium' : '';
+                const premiumBadge = tData.is_premium ? '<span class="premium-badge">PREMIUM</span> ' : '';
+
                 if (statusFilter === 'open') {
                     html = `
-                        <div class="ticket-item" id="ticket-wrapper-${tData.id}">
+                        <div class="ticket-item${premiumClass}" id="ticket-wrapper-${tData.id}">
                             <div class="ticket-header">
-                                <div class="ticket-user"><span class="ticket-user-label">Вопрос от:</span>${tData.user}</div>
+                                <div class="ticket-user">${premiumBadge}<span class="ticket-user-label">Вопрос от:</span>${tData.user}</div>
                                 <span>${dateStr}</span>
                             </div>
                             <div class="ticket-msg">${safeMessage}</div>
@@ -314,9 +342,9 @@
                     }
 
                     html = `
-                        <div class="ticket-item answered-item" id="ticket-wrapper-${tData.id}">
+                        <div class="ticket-item answered-item${premiumClass}" id="ticket-wrapper-${tData.id}">
                             <div class="ticket-header">
-                                <div class="ticket-user"><span class="ticket-user-label">Вопрос от:</span>${tData.user}</div>
+                                <div class="ticket-user">${premiumBadge}<span class="ticket-user-label">Вопрос от:</span>${tData.user}</div>
                                 <span>${dateStr}</span>
                             </div>
                             <div class="ticket-msg">${safeMessage}</div>
