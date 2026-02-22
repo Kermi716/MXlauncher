@@ -145,6 +145,16 @@
                 <p style="font-size: 14px; color: rgba(255,255,255,0.5);">Проверка прав и загрузка данных...</p>
             </div>
         </div>
+
+        <div class="glass-panel" style="margin-top: 30px;">
+            <div class="panel-header">
+                <h2>Модерация Ресурспаков</h2>
+            </div>
+            <div id="admin-rp">
+                <p style="font-size: 14px; color: rgba(255,255,255,0.5);">Проверка прав и загрузка данных...</p>
+            </div>
+        </div>
+        
     </div>
 
     <footer>
@@ -183,7 +193,9 @@
         async function initAdmin() {
             if (!savedUser || !savedToken) { window.location.href = "index.html"; return; }
             await pollAdminTickets(true); 
+            await pollAdminRP(); 
             setInterval(() => pollAdminTickets(false), 10000); 
+            setInterval(() => pollAdminRP(), 10000); 
         }
 
         async function pollAdminTickets(isFirstLoad = false) {
@@ -384,6 +396,68 @@
                     showToast("Удалено с сервера");
                     pollAdminTickets(false); 
                 } else { alert("Ошибка при удалении тикета."); }
+            } catch(e) { alert("Ошибка сети."); }
+        }
+        async function pollAdminRP() {
+            try {
+                const res = await fetch(`${API_URL}/admin_rp`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    renderRP(data.rp_data.pending || {});
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function renderRP(pendingPacks) {
+            const cont = document.getElementById('admin-rp');
+            cont.innerHTML = '';
+            
+            const entries = Object.entries(pendingPacks);
+            if (entries.length === 0) {
+                cont.innerHTML = `
+                    <div class="empty-state">
+                        <span class="empty-state-icon">❖</span>
+                        Очередь ресурспаков пуста.
+                    </div>`;
+                return;
+            }
+
+            entries.forEach(([id, pack]) => {
+                const dateStr = new Date(pack.date).toLocaleString('ru-RU');
+                cont.innerHTML += `
+                    <div class="ticket-item">
+                        <div class="ticket-header">
+                            <div class="ticket-user"><span class="ticket-user-label">Автор:</span>${pack.author}</div>
+                            <span>${dateStr}</span>
+                        </div>
+                        <div class="ticket-msg">
+                            <b>Название:</b> ${pack.name} <span style="color: #888;">(v${pack.version})</span><br><br>
+                            <a href="${pack.url}" target="_blank" style="color: #55aaff; text-decoration: none; margin-right: 15px;">📥 Скачать .zip</a>
+                            <a href="${pack.image}" target="_blank" style="color: #55aaff; text-decoration: none;">🖼 Посмотреть скриншот</a>
+                        </div>
+                        <div class="ticket-actions">
+                            <button class="btn btn-toggle-reply" style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; border-color: #2ecc71;" onclick="reviewRP('${id}', 'approve')">Одобрить</button>
+                            <button class="btn btn-reject" onclick="reviewRP('${id}', 'reject')">Отклонить</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function reviewRP(id, action) {
+            if (action === 'reject' && !confirm('Точно отклонить этот ресурспак?')) return;
+            try {
+                const res = await fetch(`${API_URL}/review_rp`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken, rp_id: id, action: action })
+                });
+                if (res.ok) {
+                    showToast(action === 'approve' ? "Пак одобрен!" : "Пак отклонен");
+                    pollAdminRP();
+                } else { alert("Ошибка при обработке запроса."); }
             } catch(e) { alert("Ошибка сети."); }
         }
 
