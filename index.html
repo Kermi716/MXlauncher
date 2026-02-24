@@ -8,6 +8,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
         body { background-color: #0a0a0c; font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; color: #ffffff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
@@ -18,7 +19,233 @@
         .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(255, 255, 255, 0.1); animation-duration: 15s; }
         .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: rgba(200, 200, 200, 0.08); animation-duration: 12s; animation-direction: alternate-reverse; }
         .blob-3 { top: 40%; left: 40%; width: 30vw; height: 30vw; background: rgba(255, 255, 255, 0.05); animation-duration: 18s; }
+
+        .download-counter-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px; 
+            padding: 6px 16px 6px 10px;
+            min-width: 60px;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.02); 
+            transition: all 0.3s ease;
+        }
+
+        .download-counter-box:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.05); 
+        }
+
+        .download-arrow {
+            width: 14px;
+            height: 14px;
+            margin-right: 8px;
+            opacity: 0.8;
+            object-fit: contain;
+        }
+
+        .download-number {
+            font-family: 'Consolas', 'Courier New', monospace; 
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #ffffff 0%, #888888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .swiper-container-wrapper {
+            position: relative;
+            width: 100%;
+            padding: 20px 0 40px 0;
+        }
         
+        .swiper {
+            width: 100%;
+            padding-top: 10px;
+            padding-bottom: 40px;
+        }
+
+        .swiper-slide {
+            width: 400px; 
+            height: 250px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            transition: transform 0.5s ease;
+        }
+
+        .swiper-slide-active {
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+        }
+
+        .swiper-slide-active img {
+            transform: scale(1.05); 
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            color: rgba(255, 255, 255, 0.8) !important;
+            transition: 0.3s;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+        
+        .swiper-button-next:hover, .swiper-button-prev:hover {
+            color: #ffffff !important;
+            transform: scale(1.1);
+        }
+
+        .swiper-pagination-bullet {
+            background: rgba(255, 255, 255, 0.4) !important;
+            opacity: 1 !important;
+            transition: 0.3s;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: #ffffff !important;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+            width: 20px !important; 
+            border-radius: 5px !important;
+        }
+
+        .screenshots-disclaimer {
+            text-align: center; 
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35); 
+            margin-top: 5px;  
+            font-weight: 300;   
+            letter-spacing: 0.5px; 
+        }
+
+        @media (max-width: 768px) {
+            .swiper-slide {
+                width: 280px;
+                height: 175px;
+            }
+        }
+
+        .sys-req-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .req-item {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .req-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .req-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-right: 15px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .req-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+        
+        .req-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .req-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        
+        .req-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.online { 
+            background: rgba(76, 175, 80, 0.1); 
+            border-color: rgba(76, 175, 80, 0.3); 
+            color: #4CAF50; 
+        }
+        .status-dot.online { 
+            background-color: #4CAF50; 
+            box-shadow: 0 0 10px #4CAF50; 
+            animation: pulse-green 2s infinite; 
+        }
+        @keyframes pulse-green { 
+            0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); } 
+            70% { box-shadow: 0 0 0 6px rgba(76, 175, 80, 0); } 
+            100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); } 
+        }
+
+        .rating-container { margin-top: 5px; }
+        .rating-controls { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        
+        .btn-rate { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            color: rgba(255, 255, 255, 0.7); 
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            transition: all 0.3s ease; 
+            font-family: inherit; 
+            font-size: 14px; 
+            font-weight: 600;
+        }
+        .btn-rate svg { width: 18px; height: 18px; fill: currentColor; transition: transform 0.2s; }
+        
+        .btn-rate.like:hover { color: #4CAF50; border-color: rgba(76, 175, 80, 0.5); background: rgba(76, 175, 80, 0.1); }
+        .btn-rate.like:hover svg { transform: translateY(-2px); }
+        .btn-rate.dislike:hover { color: #F44336; border-color: rgba(244, 67, 54, 0.5); background: rgba(244, 67, 54, 0.1); }
+        .btn-rate.dislike:hover svg { transform: translateY(2px); }
+
+        .rating-bar { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; overflow: hidden; display: flex; }
+        .rating-like-fill { height: 100%; background: #4CAF50; transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .rating-dislike-fill { height: 100%; background: #F44336; transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); }
+
         @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
         
         .bg-texture { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('background.jpg'); background-size: cover; background-position: center; opacity: 0.2; z-index: -1; }
@@ -116,14 +343,31 @@
             .toast.show { transform: translateY(0); }
             .top-alert-bar { font-size: 11px; padding: 10px; }
             .auth-modal { max-width: 90%; padding: 30px 20px; }
+            .swiper-slide {
+                width: 80% !important; 
+                height: auto;
+                aspect-ratio: 16 / 9; 
+            }
+            .status-header-row {
+                flex-direction: row; 
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+                width: 100%;
+            }
+
+            h2 {
+                font-size: 16px; 
+                white-space: nowrap; 
+            }
+
+            .download-counter-box {
+                min-width: fit-content; 
+            }
         }
     </style>
 </head>
 <body>
-
-    <div class="top-alert-bar">
-        В данный момент скачать лаунчер не получится, так как идет полный ребилд лаунчера. Следите за новостями в нашем телеграм канале.
-    </div>
 
     <div class="blooms-container">
         <div class="blob blob-1"></div>
@@ -148,7 +392,10 @@
     <div class="container">
         
         <div class="btn-group">
-            <a href="#" class="btn btn-white" onclick="showDownloadError(event)">
+            <a href="#" class="btn btn-white" onclick="handleDownload(event)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 Скачать для Windows
             </a>
             
@@ -161,34 +408,164 @@
         </div>
 
         <div class="glass-panel">
-            <div class="status-header-row">
-                <h2>Статус Серверов</h2>
-                <div class="status-badge">
-                    <div class="status-dot"></div> OFFLINE
+            <h2 class="simple-header">Интерфейс</h2>
+            <div class="swiper-container-wrapper">
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="screen/1.jpg" alt="Скриншот 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="screen/2.jpg" alt="Скриншот 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="screen/3.jpg" alt="Скриншот 3">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="screen/4.jpg" alt="Скриншот 4">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="screen/5.jpg" alt="Скриншот 5">
+                        </div>
+                        </div>
+                    
+                    <div class="swiper-pagination"></div>
+                    
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
                 </div>
             </div>
-            <p>
-                Мы полностью переписываем код лаунчера для улучшения производительности. В связи с этим серверы авторизации и загрузки временно отключены. Следите за новостями.
+            <p class="screenshots-disclaimer">
+                Внешний вид лаунчера может незначительно отличаться от представленных скриншотов в связи с регулярными обновлениями.
             </p>
         </div>
 
         <div class="glass-panel">
-            <h2 class="simple-header">Интерфейс</h2>
-            <div class="gallery-placeholder">
-                <div class="gallery-icon">?</div>
-                <div style="font-size: 16px; margin-bottom: 5px; color: #fff;">Временно недоступно</div>
-                <div style="font-size: 13px;">Обновляем дизайн.<br>Скриншоты появятся в ближайшее время.</div>
+            <div class="status-header-row">
+                <h2>Статус Серверов</h2>
+                <div class="status-badge" id="server-badge">
+                    <div class="status-dot" id="server-dot"></div> 
+                    <span id="server-text">ПРОВЕРКА...</span>
+                </div>
+            </div>
+            <div class="status-header-row" style="margin-bottom: 5px; padding-bottom: 0; border-bottom: none;">
+                <h2 style="font-size: 18px;">Скачиваний лаунчера</h2>
+                <div class="download-counter-box">
+                    <img src="arrow.png" class="download-arrow" alt="">
+                    <span id="download-counter" class="download-number">...</span>
+                </div>
+            </div>
+
+            <div class="status-header-row" style="margin-top: 7px; margin-bottom: 15px; border-bottom: none;">
+                <h2 style="font-size: 18px;">Игроков онлайн</h2>
+                <div class="download-counter-box">
+                    <svg class="download-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span id="online-counter" class="download-number">...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h2 class="simple-header">Оценка пользователей</h2>
+            <p style="margin-bottom: 15px; font-size: 13px;">Нравится ли вам MX Launcher? Оставьте свой голос.</p>
+            
+            <div class="rating-container">
+                <div class="rating-controls">
+                    <button class="btn-rate like" onclick="handleRate('like')">
+                        <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                        <span id="like-count">0</span>
+                    </button>
+                    
+                    <button class="btn-rate dislike" onclick="handleRate('dislike')">
+                        <svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                        <span id="dislike-count">0</span>
+                    </button>
+                </div>
+                
+                <div class="rating-bar">
+                    <div class="rating-like-fill" id="rating-bar-like" style="width: 50%;"></div>
+                    <div class="rating-dislike-fill" id="rating-bar-dislike" style="width: 50%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h2 class="simple-header">Системные требования</h2>
+            <p style="font-size: 13px; margin-bottom: 10px;">Минимальные характеристики для комфортной работы лаунчера.</p>
+            
+            <div class="sys-req-grid">
+                <div class="req-item">
+                    <div class="req-icon">
+                        <svg viewBox="0 0 24 24"><path d="M3 5.414V11h7V4.5l-7 .914zM12 4.364V11h9V3l-9 1.364zM3 13v5.586l7 .914V13H3zm9 0v6.636l9 1.364V13h-9z"/></svg>
+                    </div>
+                    <div class="req-info">
+                        <span class="req-label">ОС</span>
+                        <span class="req-value">Windows 10 (64-bit)</span>
+                    </div>
+                </div>
+
+                <div class="req-item">
+                    <div class="req-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 2h8v2h-8v-2zm-6 6h2v8h-2v-8zm16 0h2v8h-2v-8zm-10-6h4v2h-4v-2zm-6 6h2v-2h2v-2h8v2h2v2h2v8h-2v2h-2v2h-8v-2h-2v-2h-2v-8zm4 0v8h8v-8h-8z"/></svg>
+                    </div>
+                    <div class="req-info">
+                        <span class="req-label">Процессор (CPU)</span>
+                        <span class="req-value">Intel Core i3 / AMD Ryzen 3</span>
+                    </div>
+                </div>
+
+                <div class="req-item">
+                    <div class="req-icon">
+                        <svg viewBox="0 0 24 24"><path d="M2 7h2v2h-2v-2zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zm20-8h-2v2h2v-2zm0 4h-2v2h2v-2zm0 4h-2v2h2v-2zM4 5h16v14H4V5zm2 2v10h12V7H6zm2 2h2v6H8V9zm4 0h2v6h-2V9z"/></svg>
+                    </div>
+                    <div class="req-info">
+                        <span class="req-label">Память (RAM)</span>
+                        <span class="req-value">4 GB (Рекомендуется 8 GB)</span>
+                    </div>
+                </div>
+
+                <div class="req-item">
+                    <div class="req-icon">
+                        <svg viewBox="0 0 24 24"><path d="M4 6h16v12H4V6zm2 2v8h12V8H6zm2 2h2v4H8v-4zm4 0h4v4h-4v-4z"/></svg>
+                    </div>
+                    <div class="req-info">
+                        <span class="req-label">Место на диске</span>
+                        <span class="req-value">5 GB+ (Для лаунчера и игры)</span>
+                    </div>
+                </div>
+                <div class="req-item">
+                    <div class="req-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg>
+                    </div>
+                    <div class="req-info">
+                        <span class="req-label">Видеокарта (GPU)</span>
+                        <span class="req-value">Intel HD Graphics 4000+</span>
+                    </div>
+                </div>
+
+                <div class="req-item">
+                    <div class="req-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
+                    </div>
+                    <div class="req-info">
+                        <span class="req-label">Дополнительное ПО</span>
+                        <span class="req-value">Java 8 / 17 / 21</span>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="glass-panel">
             <h2 class="simple-header">Безопасность</h2>
             <p style="margin-bottom: 20px;">
-                MX Launcher остается проверенным и безопасным программным обеспечением. Вы можете ознакомиться с результатами проверок предыдущих версий:
+                MX Launcher остается проверенным и безопасным программным обеспечением. Вы можете ознакомиться с результатами проверок:
             </p>
             <ul class="link-list">
                 <li><a href="https://www.youtube.com/watch?v=1maKKxoljtU" target="_blank">Видео проверки безопасности</a></li>
-                <li><a href="https://www.virustotal.com/gui/file/a0f76d25640982e4b1b3b28b6e9b65183d2679d4262360d8b1690fe5f7f149d5/detection" target="_blank">Отчет VirusTotal</a></li>
+                <li><a href="https://www.virustotal.com/gui/file/b0142a493e98c43ea9d944fd0b37c13de5131dc120d8213449493ecd07cd3e8a?nocache=1" target="_blank">Отчет VirusTotal</a></li>
             </ul>
         </div>
     </div>
@@ -432,7 +809,146 @@
         }
     }
 
+        async function fetchDownloadCount() {
+            try {
+                const res = await fetch(`${API_URL}/get_downloads`);
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    document.getElementById('download-counter').innerText = data.count;
+                }
+            } catch (e) {
+                console.error("Не удалось загрузить счетчик скачиваний", e);
+            }
+        }
+
+        async function handleDownload(e) {
+            e.preventDefault();
+            
+            try {
+                await fetch(`${API_URL}/increment_downloads`, { method: 'POST' });
+                fetchDownloadCount();
+            } catch (e) {
+                console.error("Ошибка обновления счетчика", e);
+            }
+
+            showNotification("Загрузка", "Скачивание файла началось...", true);
+
+            window.location.href = "https://github.com/Kermi716/MXlauncher/releases/download/mxupdate/MXSetup.exe";
+        }
+
+        async function fetchLauncherRating() {
+            try {
+                const res = await fetch(`${API_URL}/get_launcher_rating`);
+                const data = await res.json();
+                
+                if (data.status === 'ok') {
+                    const likes = data.likes || 0;
+                    const dislikes = data.dislikes || 0;
+                    const total = likes + dislikes;
+                    
+                    document.getElementById('like-count').innerText = likes;
+                    document.getElementById('dislike-count').innerText = dislikes;
+                    
+                    let likePercent = 50;
+                    let dislikePercent = 50;
+                    
+                    if (total > 0) {
+                        likePercent = (likes / total) * 100;
+                        dislikePercent = (dislikes / total) * 100;
+                    }
+                    
+                    document.getElementById('rating-bar-like').style.width = `${likePercent}%`;
+                    document.getElementById('rating-bar-dislike').style.width = `${dislikePercent}%`;
+                }
+            } catch (e) {
+                console.error("Ошибка загрузки рейтинга", e);
+            }
+        }
+
+        async function handleRate(action) {
+            const token = localStorage.getItem('mx_token');
+            const username = localStorage.getItem('mx_username');
+            
+            if (!token || !username) {
+                showNotification("Доступ закрыт", "Только зарегистрированные пользователи могут ставить оценки.", false);
+                document.getElementById('authModal').classList.add('active');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/rate_launcher`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, token, action })
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.status === 'ok') {
+                        showNotification("Успешно", "Твой голос учтен!", true);
+                        fetchLauncherRating(); 
+                    } else if (data.error === "unauthorized") {
+                        showNotification("Ошибка сессии", "Пожалуйста, перезайдите в аккаунт", false);
+                        localStorage.removeItem('mx_token');
+                        localStorage.removeItem('mx_username');
+                        document.getElementById('authModal').classList.add('active');
+                    }
+                } else {
+                    showNotification("Ошибка", "Не удалось отправить голос.", false);
+                }
+            } catch (e) {
+                showNotification("Ошибка сети", "Сервер недоступен", false);
+            }
+        }
+
+        async function checkServerStatus() {
+            const badge = document.getElementById('server-badge');
+            const dot = document.getElementById('server-dot');
+            const text = document.getElementById('server-text');
+
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000); 
+
+                const response = await fetch(`${API_URL}/get_downloads?t=${new Date().getTime()}`, {
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId); 
+
+                if (response.ok) {
+                    badge.classList.add('online');
+                    dot.classList.add('online');
+                    text.innerText = 'ONLINE';
+                } else {
+                    throw new Error('Сервер вернул ошибку');
+                }
+            } catch (error) {
+                badge.classList.remove('online');
+                dot.classList.remove('online');
+                text.innerText = 'OFFLINE';
+            }
+        }
+
+        async function fetchOnlineCount() {
+            try {
+                const res = await fetch(`${API_URL}/online?t=${new Date().getTime()}`);
+                const data = await res.json();
+                
+                if (data.online !== undefined) {
+                    document.getElementById('online-counter').innerText = data.online;
+                }
+            } catch (e) {
+                console.error("Не удалось загрузить онлайн", e);
+                document.getElementById('online-counter').innerText = "—";
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            fetchDownloadCount();
+            fetchLauncherRating();
+            checkServerStatus();
+            fetchOnlineCount();
             const savedUser = localStorage.getItem('mx_username');
             if (savedUser) {
                 const authBtn = document.getElementById('auth-btn-footer');
@@ -443,6 +959,36 @@
                 }
             }
         });
+        document.addEventListener('DOMContentLoaded', () => {
+            const swiper = new Swiper('.mySwiper', {
+                effect: 'coverflow', 
+                grabCursor: true, 
+                centeredSlides: true, 
+                slidesPerView: 'auto', 
+                loop: true, 
+                autoplay: {
+                    delay: 3500, 
+                    disableOnInteraction: false, 
+                },
+                coverflowEffect: {
+                    rotate: 20, 
+                    stretch: 0, 
+                    depth: 150, 
+                    modifier: 1.2, 
+                    slideShadows: true, 
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    dynamicBullets: true, 
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+        });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 </body>
 </html>
