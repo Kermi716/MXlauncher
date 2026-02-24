@@ -198,6 +198,17 @@
                     <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Пароль</label>
                     <input type="password" id="login-password" class="form-control" required minlength="5">
                 </div>
+                
+                <div class="form-group">
+                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Введите код с картинки</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                        <img id="login-captcha-image" src="" alt="Загрузка капчи..." style="height: 50px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #fff; width: 100%; object-fit: contain;">
+                        <button type="button" onclick="loadCaptcha('login')" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 0 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; height: 50px; font-size: 18px;" title="Обновить картинку">↻</button>
+                    </div>
+                    <input type="text" id="login-captcha-text" class="form-control" required autocomplete="off" placeholder="Код">
+                    <input type="hidden" id="login-captcha-id">
+                </div>
+
                 <button type="submit" class="btn-auth">Войти</button>
             </form>
 
@@ -210,6 +221,17 @@
                     <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Придумайте Пароль</label>
                     <input type="password" id="reg-password" class="form-control" required minlength="5">
                 </div>
+
+                <div class="form-group">
+                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Введите код с картинки</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                        <img id="reg-captcha-image" src="" alt="Загрузка капчи..." style="height: 50px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #fff; width: 100%; object-fit: contain;">
+                        <button type="button" onclick="loadCaptcha('reg')" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 0 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; height: 50px; font-size: 18px;" title="Обновить картинку">↻</button>
+                    </div>
+                    <input type="text" id="reg-captcha-text" class="form-control" required autocomplete="off" placeholder="Код">
+                    <input type="hidden" id="reg-captcha-id">
+                </div>
+
                 <button type="submit" class="btn-auth">Создать аккаунт</button>
             </form>
         </div>
@@ -237,7 +259,11 @@
             setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
-        function openAuthModal(e) { e.preventDefault(); document.getElementById('authModal').classList.add('active'); }
+        function openAuthModal(e) { 
+            e.preventDefault(); 
+            document.getElementById('authModal').classList.add('active'); 
+            loadCaptcha('login');
+        }
         function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
         function switchTab(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -245,9 +271,35 @@
             if (tab === 'login') {
                 document.querySelectorAll('.auth-tab')[0].classList.add('active');
                 document.getElementById('form-login').classList.add('active');
+                loadCaptcha('login'); 
             } else {
                 document.querySelectorAll('.auth-tab')[1].classList.add('active');
                 document.getElementById('form-register').classList.add('active');
+                loadCaptcha('reg');
+            }
+        }
+
+        async function loadCaptcha(type) {
+            const img = document.getElementById(`${type}-captcha-image`);
+            const idInput = document.getElementById(`${type}-captcha-id`);
+            const textInput = document.getElementById(`${type}-captcha-text`);
+            
+            if (!img) return;
+
+            img.style.opacity = '0.5';
+            textInput.value = ''; 
+            
+            try {
+                const res = await fetch(`${API_URL}/get_captcha`);
+                const data = await res.json();
+                
+                if (data.status === 'ok') {
+                    img.src = data.image_base64;
+                    idInput.value = data.captcha_id;
+                    img.style.opacity = '1';
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки капчи', e);
             }
         }
 
@@ -255,12 +307,19 @@
             e.preventDefault();
             const user = document.getElementById('login-username').value;
             const pass = document.getElementById('login-password').value;
+            const captcha_text = document.getElementById('login-captcha-text').value;
+            const captcha_id = document.getElementById('login-captcha-id').value;
 
             try {
                 const response = await fetch(`${API_URL}/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: user, password: pass })
+                    body: JSON.stringify({ 
+                        username: user, 
+                        password: pass,
+                        captcha_id: captcha_id,
+                        captcha_text: captcha_text
+                    })
                 });
 
                 let data;
@@ -279,75 +338,69 @@
                     setTimeout(() => window.location.reload(), 1500);
                 } else {
                     showNotification("Ошибка входа", data.error || "Неверный логин или пароль");
+                    loadCaptcha('login'); 
                 }
             } catch (err) {
                 showNotification("Нет связи", "Сервер недоступен. Проверь CORS или включен ли сервер.");
             }
         }
 
-    async function handleRegister(e) {
-        e.preventDefault();
-        const user = document.getElementById('reg-username').value;
-        const pass = document.getElementById('reg-password').value;
-        
-        const btn = e.target.querySelector('.btn-auth');
-        btn.disabled = true;
-        btn.innerText = "Создание...";
+        async function handleRegister(e) {
+            e.preventDefault();
+            const user = document.getElementById('reg-username').value;
+            const pass = document.getElementById('reg-password').value;
+            const captcha_text = document.getElementById('reg-captcha-text').value;
+            const captcha_id = document.getElementById('reg-captcha-id').value;
+            
+            const btn = e.target.querySelector('.btn-auth');
+            btn.disabled = true;
+            btn.innerText = "Создание...";
 
-        try {
-            const response = await fetch(`${API_URL}/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: user, password: pass })
-            });
+            try {
+                const response = await fetch(`${API_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        username: user, 
+                        password: pass,
+                        captcha_id: captcha_id,
+                        captcha_text: captcha_text
+                    })
+                });
 
-            let data;
-            try { 
-                data = await response.json(); 
-            } catch (jsonErr) {
-                showNotification("Сервер выдал ошибку", "Внутренняя ошибка сервера.");
-                btn.disabled = false; btn.innerText = "Создать аккаунт";
-                return;
-            }
+                let data;
+                try { 
+                    data = await response.json(); 
+                } catch (jsonErr) {
+                    showNotification("Сервер выдал ошибку", "Внутренняя ошибка сервера.");
+                    btn.disabled = false; btn.innerText = "Создать аккаунт";
+                    loadCaptcha('reg');
+                    return;
+                }
 
-            if (response.ok) {
-                btn.innerText = "Вход...";
-                
-                try {
-                    const loginResponse = await fetch(`${API_URL}/login`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username: user, password: pass })
-                    });
-
-                    if (loginResponse.ok) {
-                        const loginData = await loginResponse.json();
-                        localStorage.setItem('mx_token', loginData.token);
-                        localStorage.setItem('mx_username', loginData.username);
-                        
-                        closeAuthModal();
-                        showNotification("Успешно!", `Аккаунт создан. Добро пожаловать, ${user}!`, true);
-                        
-                        setTimeout(() => window.location.reload(), 1500);
-                    } else {
+                if (response.ok) {
+                    btn.innerText = "Вход...";
+                    try {
                         showNotification("Аккаунт создан!", "Пожалуйста, войдите в аккаунт.", true);
                         switchTab('login');
                         document.getElementById('login-username').value = user;
+                        btn.disabled = false;
+                        btn.innerText = "Создать аккаунт";
+                    } catch (loginErr) {
+                        switchTab('login');
+                        document.getElementById('login-username').value = user;
                     }
-                } catch (loginErr) {
-                    switchTab('login');
-                    document.getElementById('login-username').value = user;
+                } else {
+                    showNotification("Ошибка", data.error || "Ошибка создания аккаунта");
+                    btn.disabled = false; btn.innerText = "Создать аккаунт";
+                    loadCaptcha('reg'); 
                 }
-
-            } else {
-                showNotification("Ошибка", data.error || "Ошибка создания аккаунта");
+            } catch (err) {
+                showNotification("Нет связи", "Сервер недоступен.");
                 btn.disabled = false; btn.innerText = "Создать аккаунт";
+                loadCaptcha('reg');
             }
-        } catch (err) {
-            showNotification("Нет связи", "Сервер недоступен.");
-            btn.disabled = false; btn.innerText = "Создать аккаунт";
         }
-    }
 
         function toggleSubmitButton() {
             const checkbox = document.getElementById('rules-checkbox');
