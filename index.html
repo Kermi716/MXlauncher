@@ -5,904 +5,838 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MX Launcher</title>
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
-        body { background-color: #0a0a0c; font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; color: #ffffff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        .top-alert-bar { background-color: #d32f2f; color: #ffffff; text-align: center; padding: 8px 10px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; position: relative; z-index: 9999; box-shadow: 0 5px 20px rgba(0,0,0,0.5); border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .blooms-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; pointer-events: none; }
-        .blob { position: absolute; filter: blur(80px); opacity: 0.4; border-radius: 50%; animation: float 10s infinite alternate ease-in-out; }
-        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(255, 255, 255, 0.1); animation-duration: 15s; }
-        .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: rgba(200, 200, 200, 0.08); animation-duration: 12s; animation-direction: alternate-reverse; }
-        .blob-3 { top: 40%; left: 40%; width: 30vw; height: 30vw; background: rgba(255, 255, 255, 0.05); animation-duration: 18s; }
-
-        .download-counter-box {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 6px; 
-            padding: 6px 16px 6px 10px;
-            min-width: 60px;
-            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.02); 
-            transition: all 0.3s ease;
+        :root {
+            --black: #0a0a0a;
+            --white: #f5f5f0;
+            --gray-100: #e8e8e3;
+            --gray-200: #c8c8c2;
+            --gray-400: #888882;
+            --gray-600: #444440;
+            --gray-800: #1a1a18;
+            --gray-900: #111110;
+            --accent: #f5f5f0;
+            --border: rgba(245, 245, 240, 0.12);
+            --border-strong: rgba(245, 245, 240, 0.28);
         }
 
-        .download-counter-box:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.05); 
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-user-select: none; user-select: none; }
+        html { scroll-behavior: smooth; }
 
-        .download-arrow {
-            width: 14px;
-            height: 14px;
-            margin-right: 8px;
-            opacity: 0.8;
-            object-fit: contain;
-        }
-
-        .download-number {
-            font-family: 'Consolas', 'Courier New', monospace; 
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            background: linear-gradient(135deg, #ffffff 0%, #888888 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-        }
-
-        .swiper-container-wrapper {
-            position: relative;
-            width: 100%;
-            padding: 20px 0 40px 0;
-        }
-        
-        .swiper {
-            width: 100%;
-            padding-top: 10px;
-            padding-bottom: 40px;
-        }
-
-        .swiper-slide {
-            width: 400px; 
-            height: 250px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            transition: all 0.3s ease;
-        }
-
-        .swiper-slide img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
-            transition: transform 0.5s ease;
-        }
-
-        .swiper-slide-active {
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
-        }
-
-        .swiper-slide-active img {
-            transform: scale(1.05); 
-        }
-
-        .swiper-button-next, .swiper-button-prev {
-            color: rgba(255, 255, 255, 0.8) !important;
-            transition: 0.3s;
-            text-shadow: 0 0 10px rgba(0,0,0,0.8);
-        }
-        
-        .swiper-button-next:hover, .swiper-button-prev:hover {
-            color: #ffffff !important;
-            transform: scale(1.1);
-        }
-
-        .swiper-pagination-bullet {
-            background: rgba(255, 255, 255, 0.4) !important;
-            opacity: 1 !important;
-            transition: 0.3s;
-        }
-
-        .swiper-pagination-bullet-active {
-            background: #ffffff !important;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
-            width: 20px !important; 
-            border-radius: 5px !important;
-        }
-
-        .screenshots-disclaimer {
-            text-align: center; 
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.35); 
-            margin-top: 5px;  
-            font-weight: 300;   
-            letter-spacing: 0.5px; 
-        }
-
-        @media (max-width: 768px) {
-            .swiper-slide {
-                width: 280px;
-                height: 175px;
-            }
-        }
-
-        .sys-req-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .req-item {
-            display: flex;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.25);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .req-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .req-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            margin-right: 15px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .req-icon svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-        
-        .req-info {
+        body {
+            background-color: var(--black);
+            font-family: 'DM Sans', sans-serif;
+            color: var(--white);
+            overflow-x: hidden;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-        }
-        
-        .req-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
-        
-        .req-value {
-            font-size: 14px;
-            font-weight: 600;
-            color: #ffffff;
-            letter-spacing: 0.5px;
-        }
-
-        .status-badge.online { 
-            background: rgba(76, 175, 80, 0.1); 
-            border-color: rgba(76, 175, 80, 0.3); 
-            color: #4CAF50; 
-        }
-        .status-dot.online { 
-            background-color: #4CAF50; 
-            box-shadow: 0 0 10px #4CAF50; 
-            animation: pulse-green 2s infinite; 
-        }
-        @keyframes pulse-green { 
-            0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); } 
-            70% { box-shadow: 0 0 0 6px rgba(76, 175, 80, 0); } 
-            100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); } 
-        }
-
-        /* --- Стили для блока Безопасности --- */
-        .security-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .sec-item {
-            display: flex;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.25);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .sec-item:hover {
-            transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .sec-item.yt:hover {
-            border-color: rgba(255, 0, 0, 0.4);
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.15);
-        }
-        .sec-item.yt:hover .sec-icon { color: #ff4444; }
-
-        .sec-item.vt:hover {
-            border-color: rgba(57, 78, 203, 0.4);
-            box-shadow: 0 5px 15px rgba(57, 78, 203, 0.15);
-        }
-        .sec-item.vt:hover .sec-icon { color: #5c73ff; }
-        
-        .sec-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            margin-right: 15px;
-            color: rgba(255, 255, 255, 0.6);
-            transition: color 0.3s ease;
-        }
-        
-        .sec-icon svg {
-            width: 22px;
-            height: 22px;
-            fill: currentColor;
-        }
-        
-        .sec-info {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .sec-title {
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            letter-spacing: 0.5px;
-        }
-        
-        .sec-desc {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        .panel-title {
-            display: flex;
-            align-items: center;
-            gap: 15px; 
             cursor: default;
         }
 
-        .icon-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 9999;
         }
 
-        .panel-title:hover .icon-wrapper {
-            filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
-            transform: scale(1.05);
+        .top-alert-bar {
+            background: var(--white);
+            color: var(--black);
+            text-align: center;
+            padding: 9px 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
         }
 
-        .separator-line {
-            width: 2px;
-            height: 24px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.3), rgba(255,255,255,0));
-            border-radius: 2px;
-            transform-origin: center;
-            transform: scaleY(0); 
-            animation: growLine 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-            animation-delay: 0.6s; 
-        }
-
-        @keyframes growLine {
-            from { transform: scaleY(0); opacity: 0; }
-            to { transform: scaleY(1); opacity: 1; }
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .stat-card {
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 20px 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        .site-header {
             position: relative;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
             overflow: hidden;
         }
-        
-        .stat-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+
+        .header-video-wrap { position: absolute; inset: 0; z-index: 0; }
+        .header-video-wrap video { width: 100%; height: 100%; object-fit: cover; opacity: 0.18; filter: grayscale(100%) contrast(1.2); }
+        .header-video-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,10,10,0) 40%, rgba(10,10,10,1) 100%); }
+
+        .header-inner {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: end;
+            padding: 80px 60px 50px;
+            min-height: 360px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            gap: 40px;
         }
 
-        .stat-icon {
-            margin-bottom: 12px;
-            color: rgba(255, 255, 255, 0.4);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover .stat-icon {
-            color: #ffffff;
-            transform: scale(1.1);
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
-        }
-
-        .stat-icon svg {
-            width: 28px;
-            height: 28px;
-        }
-        
-        .stat-value {
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 28px;
-            font-weight: 700;
-            color: #ffffff;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            margin-bottom: 6px;
-            letter-spacing: 1px;
-        }
-        
-        .stat-label {
+        .header-eyebrow {
+            font-family: 'DM Mono', monospace;
             font-size: 11px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.5);
-            letter-spacing: 1.5px;
-            font-weight: 600;
+            color: var(--gray-400);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        .rating-container { margin-top: 5px; }
-        .rating-controls { display: flex; justify-content: space-between; margin-bottom: 12px; }
-        
-        .btn-rate { 
-            background: rgba(255, 255, 255, 0.03); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            color: rgba(255, 255, 255, 0.7); 
-            padding: 8px 16px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            transition: all 0.3s ease; 
-            font-family: inherit; 
-            font-size: 14px; 
-            font-weight: 600;
+        .header-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--gray-600); }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(72px, 12vw, 140px);
+            letter-spacing: 4px;
+            color: var(--white);
+            line-height: 0.9;
+            margin-bottom: 20px;
         }
-        .btn-rate svg { width: 18px; height: 18px; fill: currentColor; transition: transform 0.2s; }
-        
-        .btn-rate.like:hover { color: #4CAF50; border-color: rgba(76, 175, 80, 0.5); background: rgba(76, 175, 80, 0.1); }
+
+        .header-sub { font-size: 15px; color: var(--gray-400); font-weight: 300; letter-spacing: 0.3px; max-width: 400px; line-height: 1.5; }
+
+        .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; padding-bottom: 4px; }
+
+        .header-meta-item { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gray-600); letter-spacing: 1px; text-transform: uppercase; }
+
+        .nav-strip {
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .nav-strip-inner { width: 100%; display: flex; align-items: center; justify-content: space-between; }
+        .nav-left { display: flex; }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px 16px 0;
+            margin-right: 24px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover { color: var(--white); }
+
+        .nav-link.download-btn {
+            color: var(--gray-200);
+            border: 1px solid var(--border);
+            padding: 8px 16px 8px 12px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            border-radius: 2px;
+            transition: all 0.2s;
+        }
+
+        .nav-link.download-btn:hover {
+            color: var(--white);
+            border-color: var(--border-strong);
+            background: rgba(245,245,240,0.05);
+        }
+
+        .nav-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+
+        .tg-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            transition: all 0.2s;
+        }
+
+        .tg-link:hover { color: var(--white); border-color: var(--border-strong); }
+        .tg-link svg { width: 14px; height: 14px; fill: currentColor; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 60px; width: 100%; flex: 1; }
+
+        .section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+        .section:last-child { border-bottom: none; }
+
+        .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 36px; }
+
+        .section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gray-600); margin-right: 20px; }
+
+        .section-title { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.5px; color: var(--gray-200); text-transform: uppercase; }
+
+        .section-rule { flex: 1; height: 1px; background: var(--border); margin: 0 20px; }
+
+        .stats-row { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--border); }
+
+        .stat-block { padding: 36px 40px; border-right: 1px solid var(--border); transition: background 0.2s; }
+        .stat-block:last-child { border-right: none; }
+        .stat-block:hover { background: rgba(245,245,240,0.02); }
+
+        .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 64px; letter-spacing: 2px; color: var(--white); line-height: 1; margin-bottom: 8px; }
+        .stat-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gray-600); }
+
+        .stat-status { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; }
+
+        .s-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gray-600); }
+        .s-dot.online { background: var(--white); box-shadow: 0 0 0 0 rgba(245,245,240,0.4); animation: pulse-w 2.5s infinite; }
+
+        @keyframes pulse-w {
+            0% { box-shadow: 0 0 0 0 rgba(245,245,240,0.4); }
+            60% { box-shadow: 0 0 0 6px rgba(245,245,240,0); }
+            100% { box-shadow: 0 0 0 0 rgba(245,245,240,0); }
+        }
+
+        .status-text { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-400); }
+
+        .swiper { width: 100%; padding-bottom: 40px !important; }
+
+        .swiper-slide { width: 480px; height: 280px; overflow: hidden; border: 1px solid var(--border); filter: grayscale(20%); transition: all 0.4s ease; }
+        .swiper-slide img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, filter 0.4s; filter: brightness(0.85); }
+        .swiper-slide-active { border-color: var(--border-strong); filter: grayscale(0%); }
+        .swiper-slide-active img { transform: scale(1.03); filter: brightness(1); }
+        .swiper-button-next, .swiper-button-prev { color: var(--gray-400) !important; transition: color 0.2s; }
+        .swiper-button-next:hover, .swiper-button-prev:hover { color: var(--white) !important; }
+        .swiper-pagination-bullet { background: var(--gray-600) !important; opacity: 1 !important; }
+        .swiper-pagination-bullet-active { background: var(--white) !important; width: 20px !important; border-radius: 2px !important; }
+        .screenshots-note { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1px; margin-top: 16px; }
+
+        .rating-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .rating-desc { font-size: 13px; color: var(--gray-400); font-weight: 300; }
+        .rating-btns { display: flex; gap: 8px; }
+
+        .btn-rate { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; border: 1px solid var(--border); background: transparent; color: var(--gray-400); cursor: pointer; transition: all 0.2s; }
+        .btn-rate svg { width: 14px; height: 14px; fill: currentColor; transition: transform 0.2s; }
+        .btn-rate.like:hover { color: var(--white); border-color: var(--border-strong); background: rgba(245,245,240,0.04); }
         .btn-rate.like:hover svg { transform: translateY(-2px); }
-        .btn-rate.dislike:hover { color: #F44336; border-color: rgba(244, 67, 54, 0.5); background: rgba(244, 67, 54, 0.1); }
+        .btn-rate.dislike:hover { color: var(--gray-200); border-color: rgba(245,245,240,0.2); background: rgba(245,245,240,0.02); }
         .btn-rate.dislike:hover svg { transform: translateY(2px); }
 
-        .rating-bar { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; overflow: hidden; display: flex; }
-        .rating-like-fill { height: 100%; background: #4CAF50; transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); }
-        .rating-dislike-fill { height: 100%; background: #F44336; transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .rating-track { height: 2px; background: var(--gray-800); display: flex; overflow: hidden; }
+        .rating-like-fill { height: 100%; background: var(--white); transition: width 0.6s ease; }
+        .rating-dislike-fill { height: 100%; background: var(--gray-600); transition: width 0.6s ease; }
 
-        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
-        
-        .bg-texture { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('background.jpg'); background-size: cover; background-position: center; opacity: 0.2; z-index: -1; }
-        
-        .video-header { position: relative; width: 100%; height: 350px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.5); margin-bottom: 40px; }
-        .bg-video { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: 1; object-fit: cover; opacity: 0.6; }
-        .header-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(10, 10, 12, 0.3), #0a0a0c); z-index: 2; }
-        .header-content { position: relative; z-index: 3; text-align: center; animation: fadeInDown 1s ease forwards; }
-        
-        h1 { font-family: 'Segoe UI Light', 'Segoe UI', sans-serif; font-weight: 300; font-size: 56px; letter-spacing: 4px; color: #ffffff; text-shadow: 0 0 20px rgba(255, 255, 255, 0.3); margin-bottom: 5px; }
-        .subtitle { font-size: 14px; color: rgba(255, 255, 255, 0.7); letter-spacing: 1px; text-transform: uppercase; }
-        
-        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; flex: 1; opacity: 0; animation: fadeInUp 0.8s ease 0.3s forwards; }
-        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; margin-bottom: 30px; transition: all 0.3s ease; }
-        .glass-panel:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 0 30px rgba(255, 255, 255, 0.05); }
-        
-        .status-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        .status-badge { display: flex; align-items: center; background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.3); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; color: #ff5555; letter-spacing: 1px; }
-        .status-dot { width: 8px; height: 8px; background-color: #ff4444; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 10px #ff4444; animation: pulse-red 2s infinite; }
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(255, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); } }
-        
-        .btn-group { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; flex-wrap: wrap; }
-        .btn { padding: 14px 35px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; border: 1px solid transparent; position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-white { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); }
-        .btn-white:hover { background: #fff; color: #000; box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); transform: translateY(-2px); }
-        .btn-telegram { background: rgba(42, 171, 238, 0.15); color: #2aabee; border: 1px solid rgba(42, 171, 238, 0.4); }
-        .btn-telegram:hover { background: #2aabee; color: #fff; box-shadow: 0 0 30px rgba(42, 171, 238, 0.5); border-color: #2aabee; transform: translateY(-2px); }
-        .btn-telegram svg { fill: currentColor; width: 18px; height: 18px; }
-        
-        h2 { font-family: 'Segoe UI Light', sans-serif; font-weight: 300; font-size: 22px; color: #fff; margin: 0; }
-        .simple-header { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        p, li { font-size: 14px; color: rgba(255, 255, 255, 0.6); line-height: 1.6; }
-        .gallery-placeholder { height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 8px; color: rgba(255, 255, 255, 0.3); }
-        .gallery-icon { font-size: 32px; margin-bottom: 10px; }
-        .link-list { list-style: none; margin-top: 15px; }
-        .link-list li { margin-bottom: 10px; }
-        .link-list a { color: #fff; text-decoration: none; font-size: 13px; opacity: 0.7; transition: opacity 0.2s; border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 2px; }
-        .link-list a:hover { opacity: 1; border-color: #fff; }
-        
-        footer { text-align: center; padding: 25px 20px 35px 20px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.05); }
-        .footer-links { display: flex; justify-content: center; gap: 30px; margin-bottom: 15px; flex-wrap: wrap; }
-        .footer-links a { 
-            color: rgba(255, 255, 255, 0.5); 
-            text-decoration: none; 
-            font-family: 'Segoe UI Light', sans-serif; 
-            font-size: 12px; 
-            font-weight: 300; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            transition: color 0.4s ease, text-shadow 0.4s ease; 
+        .sec-list { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); }
+        .sec-item { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); text-decoration: none; color: var(--gray-200); transition: background 0.2s, color 0.2s; }
+        .sec-item:last-child { border-bottom: none; }
+        .sec-item:hover { background: rgba(245,245,240,0.04); color: var(--white); }
+        .sec-left { display: flex; align-items: center; gap: 16px; }
+        .sec-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1px; min-width: 24px; }
+        .sec-name { font-size: 14px; font-weight: 400; }
+        .sec-right { display: flex; align-items: center; gap: 20px; }
+        .sec-tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-600); }
+        .sec-arrow { font-size: 16px; color: var(--gray-600); transition: transform 0.2s, color 0.2s; }
+        .sec-item:hover .sec-arrow { transform: translate(3px, -3px); color: var(--white); }
+
+        .req-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); }
+        .req-table tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+        .req-table tr:last-child { border-bottom: none; }
+        .req-table tr:hover { background: rgba(245,245,240,0.025); }
+        .req-table td { padding: 16px 24px; font-size: 13px; }
+        .req-table td:first-child { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; width: 200px; border-right: 1px solid var(--border); }
+        .req-table td:last-child { color: var(--gray-200); font-weight: 300; }
+
+        .toast { position: fixed; bottom: 30px; right: 30px; background: var(--white); color: var(--black); padding: 16px 24px; z-index: 99999; transform: translateY(120%); opacity: 0; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s; border-left: 3px solid var(--black); max-width: 320px; }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast-title { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 3px; }
+        .toast-desc { font-size: 11px; color: var(--gray-600); font-family: 'DM Mono', monospace; }
+        .toast.toast-error { background: var(--black); color: var(--white); border-left-color: var(--white); }
+        .toast.toast-error .toast-desc { color: var(--gray-400); }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
         }
-        .footer-links a:hover { 
-            color: #fff; 
-            text-shadow: 0 0 12px rgba(255, 255, 255, 0.4); 
-        }
-        .footer-copy { color: rgba(255, 255, 255, 0.3); font-size: 12px; line-height: 1.5; font-weight: 300; }
-        
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .toast { position: fixed; top: 50px; right: 20px; background: rgba(20, 20, 20, 0.95); padding: 15px 25px; border-radius: 4px; color: white; z-index: 99999; transform: translateX(200%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 5px 20px rgba(0,0,0,0.8); display: flex; align-items: center; gap: 15px; border: 1px solid transparent; border-left: 4px solid transparent; }
-        .toast.show { transform: translateX(0); }
-        .toast-success { border-color: rgba(255, 255, 255, 0.3); border-left-color: #ffffff; }
-        .toast-success .toast-icon { color: #ffffff; font-weight: bold; font-size: 20px; }
-        .toast-error { border-color: rgba(255, 50, 50, 0.3); border-left-color: #ff4444; }
-        .toast-error .toast-icon { color: #ff4444; font-size: 20px; }
-
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .auth-modal { background: #0f0f11; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; width: 100%; max-width: 400px; padding: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); transform: translateY(20px); transition: transform 0.3s ease; position: relative; }
-        .modal-overlay.active .auth-modal { transform: translateY(0); }
-        .close-modal { position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 20px; transition: color 0.2s; }
-        .close-modal:hover { color: #fff; }
-        .auth-tabs { display: flex; margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        .auth-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; color: rgba(255,255,255,0.4); font-weight: 600; font-size: 14px; text-transform: uppercase; transition: all 0.2s; border-bottom: 2px solid transparent; }
-        .auth-tab.active { color: #fff; border-bottom-color: #fff; }
+
+        .auth-modal {
+            background: var(--gray-900);
+            border: 1px solid var(--border-strong);
+            width: 100%;
+            max-width: 356px;
+            padding: 32px 30px 28px;
+            transform: translateY(10px) scale(0.985);
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .modal-overlay.active .auth-modal { transform: translateY(0) scale(1); }
+
+        .auth-modal-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .auth-modal-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            color: var(--gray-600);
+            cursor: pointer;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+            padding: 4px 7px;
+            border: 1px solid transparent;
+            border-radius: 2px;
+        }
+
+        .close-modal:hover { color: var(--white); border-color: var(--border); }
+
+        .auth-tabs { display: flex; margin-bottom: 22px; border-bottom: 1px solid var(--border); }
+
+        .auth-tab {
+            padding: 8px 0;
+            margin-right: 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            margin-bottom: -1px;
+            transition: all 0.2s;
+        }
+
+        .auth-tab.active { color: var(--white); border-bottom-color: var(--white); }
+        .auth-tab:hover:not(.active) { color: var(--gray-400); }
+
         .auth-form { display: none; }
-        .auth-form.active { display: block; animation: fadeInUp 0.3s ease; }
-        .form-group { margin-bottom: 20px; }
-        .form-label { display: block; font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 8px; text-transform: uppercase;}
-        .form-control { width: 100%; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 12px 15px; color: #fff; font-family: inherit; font-size: 14px; transition: all 0.3s; -webkit-user-select: text; user-select: text;}
-        .form-control:focus { background: rgba(0, 0, 0, 0.4); border-color: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
-        .btn-auth { width: 100%; background: #ffffff; color: #000000; border: none; padding: 14px; border-radius: 8px; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; margin-top: 10px;}
-        .btn-auth:hover { background: #cccccc; box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
+        .auth-form.active { display: block; }
+
+        .form-group { margin-bottom: 15px; }
+
+        .form-label { display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px; }
+
+        .form-control {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 11px 13px;
+            color: var(--white);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            transition: border-color 0.2s, background 0.2s;
+            -webkit-user-select: text;
+            user-select: text;
+            border-radius: 0;
+        }
+
+        .form-control:focus { border-color: rgba(245, 245, 240, 0.35); background: rgba(255,255,255,0.05); }
+
+        .btn-auth {
+            width: 100%;
+            background: var(--white);
+            color: var(--black);
+            border: none;
+            padding: 13px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+            margin-top: 6px;
+        }
+
+        .btn-auth:hover { background: var(--gray-100); }
+        .btn-auth:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .captcha-row { display: flex; gap: 8px; margin-bottom: 10px; align-items: stretch; }
+        .captcha-img { flex: 1; height: 42px; border: 1px solid var(--border); background: var(--white); object-fit: contain; }
+        .captcha-refresh { background: transparent; border: 1px solid var(--border); color: var(--gray-400); width: 42px; height: 42px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+        .captcha-refresh:hover { border-color: var(--border-strong); color: var(--white); }
+
+        footer { border-top: 1px solid var(--border); padding: 32px 60px; }
+
+        .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .footer-copy { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-600); text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--white); }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .anim-in { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+        .anim-in-1 { animation-delay: 0.1s; }
+        .anim-in-2 { animation-delay: 0.2s; }
+        .anim-in-3 { animation-delay: 0.3s; }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-d1 { transition-delay: 0.05s; }
+        .reveal-d2 { transition-delay: 0.12s; }
+        .reveal-d3 { transition-delay: 0.19s; }
+        .reveal-d4 { transition-delay: 0.26s; }
+        .reveal-d5 { transition-delay: 0.33s; }
+
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10,10,10,0.95);
+            z-index: 8000;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .mobile-nav-overlay.open { display: flex; }
+
+        .mobile-nav-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .mobile-nav-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 3px;
+            color: var(--white);
+        }
+
+        .mobile-nav-close {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            cursor: pointer;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            transition: all 0.2s;
+            background: transparent;
+        }
+
+        .mobile-nav-close:hover { color: var(--white); border-color: var(--border-strong); }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            flex: 1;
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .mobile-nav-link:hover, .mobile-nav-link.highlight { color: var(--white); }
+        .mobile-nav-link svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+        .mobile-nav-footer {
+            margin-top: 32px;
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            color: var(--gray-600);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hamburger {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--gray-400);
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            border-radius: 2px;
+            transition: all 0.2s;
+            padding: 0;
+        }
+
+        .hamburger:hover { border-color: var(--border-strong); color: var(--white); }
+
+        .hamburger span {
+            display: block;
+            width: 16px;
+            height: 1px;
+            background: currentColor;
+            transition: all 0.2s;
+        }
 
         @media (max-width: 768px) {
-            .video-header { height: 250px; margin-bottom: 25px; }
-            h1 { font-size: 36px; letter-spacing: 2px; }
-            .subtitle { font-size: 12px; }
-            .btn-group { flex-direction: column; gap: 15px; margin-bottom: 25px; }
-            .btn { width: 100%; padding: 15px; }
-            .glass-panel { padding: 18px; margin-bottom: 20px; }
-            .status-header-row { flex-direction: column; align-items: flex-start; gap: 12px; }
-            .toast { top: auto; bottom: 20px; left: 20px; right: 20px; transform: translateY(200%); justify-content: flex-start; padding: 12px 15px; gap: 12px; }
-            .toast.show { transform: translateY(0); }
-            .top-alert-bar { font-size: 11px; padding: 10px; }
-            .auth-modal { max-width: 90%; padding: 30px 20px; }
-            .swiper-slide {
-                width: 80% !important; 
-                height: auto;
-                aspect-ratio: 16 / 9; 
-            }
-            .status-header-row {
-                flex-direction: row; 
-                align-items: center;
-                justify-content: space-between;
-                gap: 10px;
-                width: 100%;
+            .header-inner { grid-template-columns: 1fr; padding: 40px 20px 32px; min-height: 240px; gap: 0; }
+            .header-right { display: none; }
+
+            .container { padding: 0 20px; }
+            footer { padding: 24px 20px; }
+
+            .nav-strip { padding: 0 20px; }
+            .nav-left { display: none; }
+            .nav-right .tg-link { display: none; }
+            .hamburger { display: flex; }
+
+            .section { padding: 40px 0; }
+            .section-header { flex-wrap: wrap; gap: 6px; }
+            .section-rule { display: none; }
+            .section-label { font-size: 9px; }
+
+            .stats-row { grid-template-columns: 1fr; }
+            .stat-block { border-right: none; border-bottom: 1px solid var(--border); padding: 24px 20px; }
+            .stat-block:last-child { border-bottom: none; }
+            .stat-num { font-size: 52px; }
+
+            .rating-row { flex-direction: column; align-items: flex-start; gap: 16px; }
+
+            .swiper-slide { width: 85% !important; height: auto; aspect-ratio: 16/9; }
+            .swiper-button-next, .swiper-button-prev { display: none !important; }
+
+            .sec-item { padding: 16px; flex-wrap: wrap; gap: 8px; }
+            .sec-right { width: 100%; justify-content: flex-end; }
+
+            .req-table td { padding: 12px 16px; font-size: 12px; }
+            .req-table td:first-child { width: 110px; font-size: 9px; }
+
+            .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
+            .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+
+            .auth-modal {
+                max-width: 100%;
+                height: 100%;
+                max-height: 100%;
+                border: none;
+                border-top: 1px solid var(--border-strong);
+                border-radius: 0;
+                padding: 28px 24px 40px;
+                overflow-y: auto;
+                align-self: flex-end;
+                transform: translateY(100%);
             }
 
-            h2 {
-                font-size: 16px; 
-                white-space: nowrap; 
-            }
+            .modal-overlay { align-items: flex-end; }
+            .modal-overlay.active .auth-modal { transform: translateY(0); }
 
-            .download-counter-box {
-                min-width: fit-content; 
-            }
+            .toast { right: 16px; left: 16px; max-width: none; bottom: 16px; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 64px; }
+            .header-sub { font-size: 13px; }
+            .stat-num { font-size: 44px; }
+            .req-table td:first-child { width: 90px; }
         }
     </style>
 </head>
 <body>
+    <header class="site-header">
+        <div class="header-video-wrap">
+            <video autoplay muted loop playsinline>
+                <source src="video.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="header-inner">
+            <div class="header-left anim-in anim-in-1">
+                <div class="header-eyebrow">Minecraft Launcher</div>
+                <h1>MX<br>LAUNCHER</h1>
+                <p class="header-sub">Бесплатный лаунчер для запуска читов и визуальных модификаций.</p>
+            </div>
+            <div class="header-right anim-in anim-in-2">
+                <div class="header-meta-item" id="version-label">Ver. —</div>
+                <div class="header-meta-item">Free Forever</div>
+                <div class="header-meta-item">Windows 64-bit</div>
+            </div>
+        </div>
+    </header>
 
-    <div class="blooms-container">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
-    
-    <div class="bg-texture"></div>
-
-    <div class="video-header">
-        <video class="bg-video" autoplay muted loop playsinline>
-            <source src="video.mp4" type="video/mp4">
-        </video>
-        <div class="header-overlay"></div>
-        
-        <div class="header-content">
-            <h1>MX LAUNCHER</h1>
-            <div class="subtitle">Бесплатный лаунчер софтов на Minecraft</div>
+    <div style="border-bottom: 1px solid var(--border);">
+        <div class="nav-strip anim-in anim-in-2">
+            <div class="nav-strip-inner">
+                <nav class="nav-left">
+                    <a class="nav-link download-btn" href="#" onclick="handleDownload(event)">
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        Скачать для Windows
+                    </a>
+                    <a class="nav-link" href="support.html">Поддержка</a>
+                    <a class="nav-link" href="#" id="auth-btn-footer" onclick="openAuthModal(event)">Войти</a>
+                </nav>
+                <div class="nav-right">
+                    <a class="tg-link" href="https://t.me/mxlauncher" target="_blank">
+                        <svg viewBox="0 0 24 24"><path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z"/></svg>
+                        Telegram
+                    </a>
+                    <button class="hamburger" onclick="openMobileNav()" aria-label="Меню">
+                        <span></span><span></span><span></span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="container">
-        
-        <div class="btn-group">
-            <a href="#" class="btn btn-white" onclick="handleDownload(event)">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Скачать для Windows
-            </a>
-            
-            <a href="https://t.me/mxlauncher" class="btn btn-telegram" target="_blank">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                </svg>
-                Telegram канал
-            </a>
-            <div class="footer-links">
-                <a href="support.html">Служба поддержки</a>
-                <a href="#" id="auth-btn-footer" onclick="openAuthModal(event)">Войти в аккаунт</a>
+        <section class="section anim-in anim-in-3">
+            <div class="section-header reveal">
+                <span class="section-label">01</span>
+                <span class="section-title">Статистика</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Серверы / Загрузки</span>
             </div>
-        </div>
-
-        <div class="glass-panel">
-            <h2 class="simple-header panel-title">
-                <div class="icon-wrapper">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                        <line x1="8" y1="21" x2="16" y2="21"></line>
-                        <line x1="12" y1="17" x2="12" y2="21"></line>
-                    </svg>
-                </div>
-                <div class="separator-line"></div>
-                <span>Интерфейс</span>
-            </h2>
-            <div class="swiper-container-wrapper">
-                <div class="swiper mySwiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="screen/1.jpg" alt="Скриншот 1">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="screen/2.jpg" alt="Скриншот 2">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="screen/3.jpg" alt="Скриншот 3">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="screen/4.jpg" alt="Скриншот 4">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="screen/5.jpg" alt="Скриншот 5">
-                        </div>
-                        </div>
-                    
-                    <div class="swiper-pagination"></div>
-                    
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                </div>
-            </div>
-            <p class="screenshots-disclaimer">
-                Внешний вид лаунчера может незначительно отличаться от представленных скриншотов в связи с регулярными обновлениями.
-            </p>
-        </div>
-
-        <div class="glass-panel">
-            <div class="status-header-row">
-                <h2 class="panel-title">
-                    <div class="icon-wrapper">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-                            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-                            <line x1="6" y1="6" x2="6.01" y2="6"></line>
-                            <line x1="6" y1="18" x2="6.01" y2="18"></line>
-                        </svg>
-                    </div>
-                    <div class="separator-line"></div>
-                    <span>Статус Серверов</span>
-                </h2>
-                
-                <div class="status-badge" id="server-badge">
-                    <div class="status-dot" id="server-dot"></div> 
-                    <span id="server-text">ПРОВЕРКА...</span>
-                </div>
-            </div>
-
-            <div class="stats-grid">
-                
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                    </div>
-                    <div class="stat-value" id="online-counter">...</div>
+            <div class="stats-row">
+                <div class="stat-block reveal reveal-d1">
+                    <div class="stat-num" id="online-counter">—</div>
                     <div class="stat-label">Игроков онлайн</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
-                        </svg>
+                    <div class="stat-status">
+                        <div class="s-dot" id="server-dot"></div>
+                        <span class="status-text" id="server-text">Проверка...</span>
                     </div>
-                    <div class="stat-value" id="download-counter">...</div>
+                </div>
+                <div class="stat-block reveal reveal-d2">
+                    <div class="stat-num" id="download-counter">—</div>
                     <div class="stat-label">Скачиваний</div>
                 </div>
-
             </div>
-        </div>
+        </section>
 
-        <div class="glass-panel">
-            <h2 class="simple-header panel-title">
-                <div class="icon-wrapper">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                    </svg>
+        <section class="section">
+            <div class="section-header reveal">
+                <span class="section-label">02</span>
+                <span class="section-title">Интерфейс</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Скриншоты</span>
+            </div>
+            <div class="reveal reveal-d1">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="screen/1.jpg" alt="Скриншот 1"></div>
+                    <div class="swiper-slide"><img src="screen/2.jpg" alt="Скриншот 2"></div>
+                    <div class="swiper-slide"><img src="screen/3.jpg" alt="Скриншот 3"></div>
+                    <div class="swiper-slide"><img src="screen/4.jpg" alt="Скриншот 4"></div>
+                    <div class="swiper-slide"><img src="screen/5.jpg" alt="Скриншот 5"></div>
                 </div>
-                <div class="separator-line"></div>
-                <span>Оценка пользователей</span>
-            </h2>
-            <p style="margin-bottom: 15px; font-size: 13px;">Нравится ли вам MX Launcher? Оставьте свой голос.</p>
-            
-            <div class="rating-container">
-                <div class="rating-controls">
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+            </div>
+            <p class="screenshots-note">* Внешний вид может незначительно отличаться от скриншотов</p>
+        </section>
+
+        <section class="section">
+            <div class="section-header reveal">
+                <span class="section-label">03</span>
+                <span class="section-title">Оценка пользователей</span>
+                <div class="section-rule"></div>
+            </div>
+            <div class="rating-row reveal reveal-d1">
+                <p class="rating-desc">Нравится ли вам MX Launcher?</p>
+                <div class="rating-btns">
                     <button class="btn-rate like" onclick="handleRate('like')">
                         <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
                         <span id="like-count">0</span>
                     </button>
-                    
                     <button class="btn-rate dislike" onclick="handleRate('dislike')">
                         <svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
                         <span id="dislike-count">0</span>
                     </button>
                 </div>
-                
-                <div class="rating-bar">
-                    <div class="rating-like-fill" id="rating-bar-like" style="width: 50%;"></div>
-                    <div class="rating-dislike-fill" id="rating-bar-dislike" style="width: 50%;"></div>
-                </div>
             </div>
-        </div>
+            <div class="rating-track reveal reveal-d2">
+                <div class="rating-like-fill" id="rating-bar-like" style="width: 50%;"></div>
+                <div class="rating-dislike-fill" id="rating-bar-dislike" style="width: 50%;"></div>
+            </div>
+        </section>
 
-        <div class="glass-panel">
-            <h2 class="simple-header panel-title">
-                <div class="icon-wrapper">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    </svg>
-                </div>
-                <div class="separator-line"></div>
-                <span>Безопасность</span>
-            </h2>
-            <p style="font-size: 13px; margin-bottom: 20px;">
-                MX Launcher остается проверенным и безопасным программным обеспечением. Вы можете ознакомиться с результатами независимых проверок:
+        <section class="section">
+            <div class="section-header reveal">
+                <span class="section-label">04</span>
+                <span class="section-title">Безопасность</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Независимые проверки</span>
+            </div>
+            <p class="reveal reveal-d1" style="font-size: 13px; color: var(--gray-400); font-weight: 300; margin-bottom: 20px; max-width: 520px;">
+                MX Launcher проверен независимыми сервисами. Ложные срабатывания антивируса — стандартная ситуация для любого лаунчера.
             </p>
-            
-            <div class="security-grid">
-                <a href="https://www.youtube.com/watch?v=1maKKxoljtU" target="_blank" class="sec-item yt">
-                    <div class="sec-icon">
-                        <svg viewBox="0 0 24 24"><path d="M21.582 6.186a2.506 2.506 0 0 0-1.762-1.766C18.265 4 12 4 12 4s-6.264 0-7.818.42a2.506 2.506 0 0 0-1.762 1.766C2 7.74 2 12 2 12s0 4.26.42 5.814a2.506 2.506 0 0 0 1.762 1.766C5.735 20 12 20 12 20s6.265 0 7.82-.42a2.506 2.506 0 0 0 1.762-1.766C22 16.26 22 12 22 12s0-4.26-.418-5.814zM10 15.464V8.536L16 12l-6 3.464z"/></svg>
-                    </div>
-                    <div class="sec-info">
-                        <span class="sec-title">Видео-проверка</span>
-                        <span class="sec-desc">Смотреть на YouTube</span>
-                    </div>
+            <div class="sec-list reveal reveal-d2">
+                <a href="https://www.youtube.com/watch?v=1maKKxoljtU" target="_blank" class="sec-item">
+                    <div class="sec-left"><span class="sec-num">01</span><span class="sec-name">Видео-проверка на YouTube</span></div>
+                    <div class="sec-right"><span class="sec-tag">YouTube</span><span class="sec-arrow">↗</span></div>
                 </a>
-
-                <a href="https://www.virustotal.com/gui/file/b0142a493e98c43ea9d944fd0b37c13de5131dc120d8213449493ecd07cd3e8a?nocache=1" target="_blank" class="sec-item vt">
-                    <div class="sec-icon">
-                        <svg viewBox="0 0 24 24"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
-                    </div>
-                    <div class="sec-info">
-                        <span class="sec-title">Отчет: Лаунчер</span>
-                        <span class="sec-desc">VirusTotal (3 / 72)</span>
-                    </div>
+                <a href="https://www.virustotal.com/gui/file/b0142a493e98c43ea9d944fd0b37c13de5131dc120d8213449493ecd07cd3e8a?nocache=1" target="_blank" class="sec-item">
+                    <div class="sec-left"><span class="sec-num">02</span><span class="sec-name">Отчёт VirusTotal — Лаунчер</span></div>
+                    <div class="sec-right"><span class="sec-tag">3 / 72</span><span class="sec-arrow">↗</span></div>
                 </a>
-
-                <a href="https://www.virustotal.com/gui/file/3053b4b2e5d38061ddddcad2925bb94dc472215729ba81977c738f6613548380?nocache=1" target="_blank" class="sec-item vt">
-                    <div class="sec-icon">
-                        <svg viewBox="0 0 24 24"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
-                    </div>
-                    <div class="sec-info">
-                        <span class="sec-title">Отчет: MXSetup</span>
-                        <span class="sec-desc">VirusTotal (3 / 72)</span>
-                    </div>
+                <a href="https://www.virustotal.com/gui/file/3053b4b2e5d38061ddddcad2925bb94dc472215729ba81977c738f6613548380?nocache=1" target="_blank" class="sec-item">
+                    <div class="sec-left"><span class="sec-num">03</span><span class="sec-name">Отчёт VirusTotal — MXSetup</span></div>
+                    <div class="sec-right"><span class="sec-tag">3 / 72</span><span class="sec-arrow">↗</span></div>
                 </a>
             </div>
-        </div>
+        </section>
 
-        <div class="glass-panel">
-            <h2 class="simple-header panel-title">
-                <div class="icon-wrapper">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
-                        <rect x="9" y="9" width="6" height="6"></rect>
-                        <line x1="9" y1="1" x2="9" y2="4"></line>
-                        <line x1="15" y1="1" x2="15" y2="4"></line>
-                        <line x1="9" y1="20" x2="9" y2="23"></line>
-                        <line x1="15" y1="20" x2="15" y2="23"></line>
-                        <line x1="20" y1="9" x2="23" y2="9"></line>
-                        <line x1="20" y1="14" x2="23" y2="14"></line>
-                        <line x1="1" y1="9" x2="4" y2="9"></line>
-                        <line x1="1" y1="14" x2="4" y2="14"></line>
-                    </svg>
-                </div>
-                <div class="separator-line"></div>
-                <span>Системные требования</span>
-            </h2>
-            <p style="font-size: 13px; margin-bottom: 10px;">Минимальные характеристики для комфортной работы лаунчера.</p>
-            
-            <div class="sys-req-grid">
-                <div class="req-item">
-                    <div class="req-icon">
-                        <svg viewBox="0 0 24 24"><path d="M3 5.414V11h7V4.5l-7 .914zM12 4.364V11h9V3l-9 1.364zM3 13v5.586l7 .914V13H3zm9 0v6.636l9 1.364V13h-9z"/></svg>
-                    </div>
-                    <div class="req-info">
-                        <span class="req-label">ОС</span>
-                        <span class="req-value">Windows 10 (64-bit)</span>
-                    </div>
-                </div>
-
-                <div class="req-item">
-                    <div class="req-icon">
-                        <svg viewBox="0 0 24 24"><path d="M8 2h8v2h-8v-2zm-6 6h2v8h-2v-8zm16 0h2v8h-2v-8zm-10-6h4v2h-4v-2zm-6 6h2v-2h2v-2h8v2h2v2h2v8h-2v2h-2v2h-8v-2h-2v-2h-2v-8zm4 0v8h8v-8h-8z"/></svg>
-                    </div>
-                    <div class="req-info">
-                        <span class="req-label">Процессор (CPU)</span>
-                        <span class="req-value">Intel Core i3 / AMD Ryzen 3</span>
-                    </div>
-                </div>
-
-                <div class="req-item">
-                    <div class="req-icon">
-                        <svg viewBox="0 0 24 24"><path d="M2 7h2v2h-2v-2zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zm20-8h-2v2h2v-2zm0 4h-2v2h2v-2zm0 4h-2v2h2v-2zM4 5h16v14H4V5zm2 2v10h12V7H6zm2 2h2v6H8V9zm4 0h2v6h-2V9z"/></svg>
-                    </div>
-                    <div class="req-info">
-                        <span class="req-label">Память (RAM)</span>
-                        <span class="req-value">4 GB (Рекомендуется 8 GB)</span>
-                    </div>
-                </div>
-
-                <div class="req-item">
-                    <div class="req-icon">
-                        <svg viewBox="0 0 24 24"><path d="M4 6h16v12H4V6zm2 2v8h12V8H6zm2 2h2v4H8v-4zm4 0h4v4h-4v-4z"/></svg>
-                    </div>
-                    <div class="req-info">
-                        <span class="req-label">Место на диске</span>
-                        <span class="req-value">5 GB+ (Для лаунчера и игры)</span>
-                    </div>
-                </div>
-                <div class="req-item">
-                    <div class="req-icon">
-                        <svg viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg>
-                    </div>
-                    <div class="req-info">
-                        <span class="req-label">Видеокарта (GPU)</span>
-                        <span class="req-value">Intel HD Graphics 4000+</span>
-                    </div>
-                </div>
-
-                <div class="req-item">
-                    <div class="req-icon">
-                        <svg viewBox="0 0 24 24"><path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/></svg>
-                    </div>
-                    <div class="req-info">
-                        <span class="req-label">Дополнительное ПО</span>
-                        <span class="req-value">Java 8 / 17 / 21</span>
-                    </div>
-                </div>
+        <section class="section">
+            <div class="section-header reveal">
+                <span class="section-label">05</span>
+                <span class="section-title">Системные требования</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Минимальные</span>
             </div>
-        </div>
+            <table class="req-table reveal reveal-d1">
+                <tbody>
+                    <tr><td>ОС</td><td>Windows 10 (64-bit)</td></tr>
+                    <tr><td>Процессор (CPU)</td><td>Intel Core i3 / AMD Ryzen 3</td></tr>
+                    <tr><td>Память (RAM)</td><td>4 GB — рекомендуется 8 GB</td></tr>
+                    <tr><td>Место на диске</td><td>5 GB+ (лаунчер + софты)</td></tr>
+                    <tr><td>Видеокарта (GPU)</td><td>Intel HD Graphics 4000+</td></tr>
+                    <tr><td>Доп. ПО</td><td>Java 8 / 17 / 21</td></tr>
+                </tbody>
+            </table>
+        </section>
     </div>
 
     <footer>
-        <div class="footer-copy">
-            MX Launcher Project © 2026<br>All rights reserved
+        <div class="footer-inner reveal">
+            <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+            <div class="footer-links">
+                <a href="support.html">Поддержка</a>
+                <a href="https://t.me/mxlauncher" target="_blank">Telegram</a>
+                <a href="#" onclick="openAuthModal(event)">Войти</a>
+            </div>
         </div>
     </footer>
 
     <div id="notificationToast" class="toast">
-        <span class="toast-icon">✓</span>
-        <div>
-            <div id="toastTitle" style="font-weight: 600; font-size: 14px;">Успешно</div>
-            <div id="toastDesc" style="font-size: 12px; color: #ccc;">Действие выполнено.</div>
-        </div>
+        <div class="toast-title" id="toastTitle">Уведомление</div>
+        <div class="toast-desc" id="toastDesc">—</div>
     </div>
 
     <div class="modal-overlay" id="authModal">
         <div class="auth-modal">
-            <div class="close-modal" onclick="closeAuthModal()">✕</div>
-            
+            <div class="close-modal" onclick="closeAuthModal()">ESC</div>
+
+            <div class="auth-modal-title" id="auth-modal-title-text">Добро пожаловать</div>
+            <div class="auth-modal-sub" id="auth-modal-sub-text">Войдите в свой аккаунт</div>
+
             <div class="auth-tabs">
-                <div class="auth-tab active" onclick="switchTab('login')">Вход</div>
+                <div class="auth-tab active" onclick="switchTab('login')">Войти</div>
                 <div class="auth-tab" onclick="switchTab('register')">Регистрация</div>
             </div>
 
             <form id="form-login" class="auth-form active" onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Никнейм</label>
+                    <label class="form-label">Никнейм</label>
                     <input type="text" id="login-username" class="form-control" required minlength="3">
                 </div>
                 <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Пароль</label>
+                    <label class="form-label">Пароль</label>
                     <input type="password" id="login-password" class="form-control" required minlength="5">
                 </div>
-                
                 <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Введите код с картинки</label>
-                    <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
-                        <img id="login-captcha-image" src="" alt="Загрузка капчи..." style="height: 50px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #fff; width: 100%; object-fit: contain;">
-                        <button type="button" onclick="loadCaptcha('login')" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 0 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; height: 50px; font-size: 18px;" title="Обновить картинку">↻</button>
+                    <label class="form-label">Код с картинки</label>
+                    <div class="captcha-row">
+                        <img id="login-captcha-image" src="" alt="Загрузка..." class="captcha-img">
+                        <button type="button" onclick="loadCaptcha('login')" class="captcha-refresh" title="Обновить">↻</button>
                     </div>
                     <input type="text" id="login-captcha-text" class="form-control" required autocomplete="off" placeholder="Код">
                     <input type="hidden" id="login-captcha-id">
                 </div>
-
                 <button type="submit" class="btn-auth">Войти</button>
             </form>
 
             <form id="form-register" class="auth-form" onsubmit="handleRegister(event)">
                 <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Придумайте Никнейм</label>
+                    <label class="form-label">Никнейм</label>
                     <input type="text" id="reg-username" class="form-control" required minlength="3">
                 </div>
                 <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Придумайте Пароль</label>
+                    <label class="form-label">Пароль</label>
                     <input type="password" id="reg-password" class="form-control" required minlength="5">
                 </div>
-
                 <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Введите код с картинки</label>
-                    <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
-                        <img id="reg-captcha-image" src="" alt="Загрузка капчи..." style="height: 50px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #fff; width: 100%; object-fit: contain;">
-                        <button type="button" onclick="loadCaptcha('reg')" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 0 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; height: 50px; font-size: 18px;" title="Обновить картинку">↻</button>
+                    <label class="form-label">Код с картинки</label>
+                    <div class="captcha-row">
+                        <img id="reg-captcha-image" src="" alt="Загрузка..." class="captcha-img">
+                        <button type="button" onclick="loadCaptcha('reg')" class="captcha-refresh" title="Обновить">↻</button>
                     </div>
                     <input type="text" id="reg-captcha-text" class="form-control" required autocomplete="off" placeholder="Код">
                     <input type="hidden" id="reg-captcha-id">
@@ -912,49 +846,83 @@
         </div>
     </div>
 
+    <div class="mobile-nav-overlay" id="mobileNav">
+        <div class="mobile-nav-header">
+            <div class="mobile-nav-title">MX LAUNCHER</div>
+            <button class="mobile-nav-close" onclick="closeMobileNav()">✕ Закрыть</button>
+        </div>
+        <div class="mobile-nav-links">
+            <a class="mobile-nav-link highlight" href="#" onclick="closeMobileNav(); handleDownload(event)">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                Скачать для Windows
+            </a>
+            <a class="mobile-nav-link" href="support.html">Поддержка</a>
+            <a class="mobile-nav-link" href="#" id="mobile-auth-link" onclick="closeMobileNav(); openAuthModal(event)">Войти</a>
+            <a class="mobile-nav-link" href="https://t.me/mxlauncher" target="_blank">
+                <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:16px;height:16px"><path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z"/></svg>
+                Telegram
+            </a>
+        </div>
+        <div class="mobile-nav-footer">MX Launcher © 2026 — Ver. 2026.1 — Free Forever</div>
+    </div>
+
     <script>
         const API_URL = "https://ultrafucker3.pythonanywhere.com";
 
+        function openMobileNav() {
+            document.getElementById('mobileNav').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileNav() {
+            document.getElementById('mobileNav').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
         function showNotification(title, text, isSuccess = false) {
             const toast = document.getElementById('notificationToast');
-            const icon = toast.querySelector('.toast-icon');
             document.getElementById('toastTitle').innerText = title;
             document.getElementById('toastDesc').innerText = text;
-            
-            toast.className = 'toast'; 
-            if (isSuccess) {
-                toast.classList.add('toast-success');
-                icon.innerText = "✓";
-            } else {
-                toast.classList.add('toast-error');
-                icon.innerText = "⚠";
-            }
-
+            toast.className = 'toast';
+            if (!isSuccess) toast.classList.add('toast-error');
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
-        function showDownloadError(e) {
-            e.preventDefault(); 
-            showNotification("Ошибка загрузки", "Лаунчер временно недоступен. Попробуйте позже.", false);
-        }
-
-        function openAuthModal(e) { 
-            e.preventDefault(); 
-            document.getElementById('authModal').classList.add('active'); 
+        function openAuthModal(e) {
+            e.preventDefault();
+            document.getElementById('authModal').classList.add('active');
             loadCaptcha('login');
         }
-        function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        document.getElementById('authModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAuthModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeAuthModal();
+        });
+
         function switchTab(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            const titleEl = document.getElementById('auth-modal-title-text');
+            const subEl = document.getElementById('auth-modal-sub-text');
             if (tab === 'login') {
                 document.querySelectorAll('.auth-tab')[0].classList.add('active');
                 document.getElementById('form-login').classList.add('active');
+                titleEl.textContent = 'Добро пожаловать';
+                subEl.textContent = 'Войдите в свой аккаунт';
                 loadCaptcha('login');
             } else {
                 document.querySelectorAll('.auth-tab')[1].classList.add('active');
                 document.getElementById('form-register').classList.add('active');
+                titleEl.textContent = 'Создать аккаунт';
+                subEl.textContent = 'Регистрация займёт минуту';
                 loadCaptcha('reg');
             }
         }
@@ -963,24 +931,18 @@
             const img = document.getElementById(`${type}-captcha-image`);
             const idInput = document.getElementById(`${type}-captcha-id`);
             const textInput = document.getElementById(`${type}-captcha-text`);
-            
             if (!img) return;
-
-            img.style.opacity = '0.5';
-            textInput.value = ''; 
-            
+            img.style.opacity = '0.4';
+            textInput.value = '';
             try {
                 const res = await fetch(`${API_URL}/get_captcha`);
                 const data = await res.json();
-                
                 if (data.status === 'ok') {
                     img.src = data.image_base64;
                     idInput.value = data.captcha_id;
                     img.style.opacity = '1';
                 }
-            } catch (e) {
-                console.error('Ошибка загрузки капчи', e);
-            }
+            } catch (e) { img.style.opacity = '1'; }
         }
 
         async function handleLogin(e) {
@@ -989,118 +951,73 @@
             const pass = document.getElementById('login-password').value;
             const captcha_text = document.getElementById('login-captcha-text').value;
             const captcha_id = document.getElementById('login-captcha-id').value;
-
             try {
                 const response = await fetch(`${API_URL}/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        username: user, 
-                        password: pass,
-                        captcha_id: captcha_id,
-                        captcha_text: captcha_text
-                    })
+                    body: JSON.stringify({ username: user, password: pass, captcha_id, captcha_text })
                 });
-
                 let data;
-                try { data = await response.json(); } catch (err) {
-                    showNotification("Ошибка сервера", "Внутренняя ошибка."); return;
-                }
-
+                try { data = await response.json(); } catch { showNotification("Ошибка", "Внутренняя ошибка сервера"); return; }
                 if (response.ok) {
                     localStorage.setItem('mx_token', data.token);
                     localStorage.setItem('mx_username', data.username);
                     closeAuthModal();
-                    showNotification("Успешный вход", `Добро пожаловать, ${data.username}!`, true);
+                    showNotification("Добро пожаловать", data.username, true);
                     setTimeout(() => window.location.reload(), 1500);
                 } else {
-                    showNotification("Ошибка", data.error || "Неверный логин или пароль");
+                    showNotification("Ошибка входа", data.error || "Неверный логин или пароль");
                     loadCaptcha('login');
                 }
-            } catch (err) {
-                showNotification("Нет связи", "Сервер недоступен.");
-            }
+            } catch { showNotification("Нет связи", "Сервер недоступен"); }
         }
 
-    async function handleRegister(e) {
-        e.preventDefault();
-        const user = document.getElementById('reg-username').value;
-        const pass = document.getElementById('reg-password').value;
-        const captcha_text = document.getElementById('reg-captcha-text').value;
-        const captcha_id = document.getElementById('reg-captcha-id').value;
-        
-        const btn = e.target.querySelector('.btn-auth');
-        btn.disabled = true;
-        btn.innerText = "Создание...";
-
-        try {
-            const response = await fetch(`${API_URL}/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    username: user, 
-                    password: pass,
-                    captcha_id: captcha_id,
-                    captcha_text: captcha_text
-                })
-            });
-
-            let data;
-            try { data = await response.json(); } catch (jsonErr) {
-                showNotification("Сервер выдал ошибку", "Внутренняя ошибка сервера.");
-                btn.disabled = false; btn.innerText = "Создать аккаунт";
-                loadCaptcha('reg');
-                return;
-            }
-
-            if (response.ok) {
-                btn.innerText = "Вход...";
-                try {
-                    showNotification("Аккаунт создан!", "Пожалуйста, войдите в аккаунт.", true);
-                    switchTab('login');
-                    document.getElementById('login-username').value = user;
-                    btn.disabled = false;
-                    btn.innerText = "Создать аккаунт";
-                } catch (loginErr) {
-                    switchTab('login');
-                    document.getElementById('login-username').value = user;
+        async function handleRegister(e) {
+            e.preventDefault();
+            const user = document.getElementById('reg-username').value;
+            const pass = document.getElementById('reg-password').value;
+            const captcha_text = document.getElementById('reg-captcha-text').value;
+            const captcha_id = document.getElementById('reg-captcha-id').value;
+            const btn = e.target.querySelector('.btn-auth');
+            btn.disabled = true; btn.innerText = "Создание...";
+            try {
+                const response = await fetch(`${API_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user, password: pass, captcha_id, captcha_text })
+                });
+                let data;
+                try { data = await response.json(); } catch {
+                    showNotification("Ошибка сервера", "Внутренняя ошибка");
+                    btn.disabled = false; btn.innerText = "Создать аккаунт"; return;
                 }
-            } else {
-                showNotification("Ошибка", data.error || "Ошибка создания аккаунта");
+                if (response.ok) {
+                    showNotification("Аккаунт создан", "Теперь войдите в систему", true);
+                    switchTab('login');
+                    document.getElementById('login-username').value = user;
+                } else {
+                    showNotification("Ошибка", data.error || "Ошибка создания аккаунта");
+                    loadCaptcha('reg');
+                }
                 btn.disabled = false; btn.innerText = "Создать аккаунт";
-                loadCaptcha('reg'); 
+            } catch {
+                showNotification("Нет связи", "Сервер недоступен");
+                btn.disabled = false; btn.innerText = "Создать аккаунт";
             }
-        } catch (err) {
-            showNotification("Нет связи", "Сервер недоступен.");
-            btn.disabled = false; btn.innerText = "Создать аккаунт";
-            loadCaptcha('reg');
         }
-    }
 
         async function fetchDownloadCount() {
             try {
                 const res = await fetch(`${API_URL}/get_downloads`);
                 const data = await res.json();
-                if (data.status === 'ok') {
-                    document.getElementById('download-counter').innerText = data.count;
-                }
-            } catch (e) {
-                console.error("Не удалось загрузить счетчик скачиваний", e);
-            }
+                if (data.status === 'ok') document.getElementById('download-counter').innerText = data.count.toLocaleString('ru');
+            } catch {}
         }
 
         async function handleDownload(e) {
             e.preventDefault();
-            
-            try {
-                await fetch(`${API_URL}/increment_downloads`, { method: 'POST' });
-                fetchDownloadCount();
-            } catch (e) {
-                console.error("Ошибка обновления счетчика", e);
-            }
-
-            showNotification("Загрузка", "Скачивание файла началось...", true);
-
+            try { await fetch(`${API_URL}/increment_downloads`, { method: 'POST' }); fetchDownloadCount(); } catch {}
+            showNotification("Загрузка", "Скачивание началось...", true);
             window.location.href = "https://github.com/Kermi716/MXlauncher/releases/download/mxupdate/MXSetup.exe";
         }
 
@@ -1108,108 +1025,92 @@
             try {
                 const res = await fetch(`${API_URL}/get_launcher_rating`);
                 const data = await res.json();
-                
                 if (data.status === 'ok') {
-                    const likes = data.likes || 0;
-                    const dislikes = data.dislikes || 0;
+                    const likes = data.likes || 0, dislikes = data.dislikes || 0;
                     const total = likes + dislikes;
-                    
                     document.getElementById('like-count').innerText = likes;
                     document.getElementById('dislike-count').innerText = dislikes;
-                    
-                    let likePercent = 50;
-                    let dislikePercent = 50;
-                    
-                    if (total > 0) {
-                        likePercent = (likes / total) * 100;
-                        dislikePercent = (dislikes / total) * 100;
-                    }
-                    
-                    document.getElementById('rating-bar-like').style.width = `${likePercent}%`;
-                    document.getElementById('rating-bar-dislike').style.width = `${dislikePercent}%`;
+                    const lp = total > 0 ? (likes / total) * 100 : 50;
+                    document.getElementById('rating-bar-like').style.width = `${lp}%`;
+                    document.getElementById('rating-bar-dislike').style.width = `${100 - lp}%`;
                 }
-            } catch (e) {
-                console.error("Ошибка загрузки рейтинга", e);
-            }
+            } catch {}
         }
 
         async function handleRate(action) {
             const token = localStorage.getItem('mx_token');
             const username = localStorage.getItem('mx_username');
-            
             if (!token || !username) {
-                showNotification("Доступ закрыт", "Только зарегистрированные пользователи могут ставить оценки.", false);
-                document.getElementById('authModal').classList.add('active');
-                return;
+                showNotification("Требуется вход", "Оценки доступны только для зарегистрированных пользователей");
+                openAuthModal({ preventDefault: () => {} }); return;
             }
-
             try {
                 const res = await fetch(`${API_URL}/rate_launcher`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, token, action })
                 });
-                
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.status === 'ok') {
-                        showNotification("Успешно", "Твой голос учтен!", true);
-                        fetchLauncherRating(); 
-                    } else if (data.error === "unauthorized") {
-                        showNotification("Ошибка сессии", "Пожалуйста, перезайдите в аккаунт", false);
-                        localStorage.removeItem('mx_token');
-                        localStorage.removeItem('mx_username');
-                        document.getElementById('authModal').classList.add('active');
+                    if (data.status === 'ok') { showNotification("Голос учтён", "", true); fetchLauncherRating(); }
+                    else if (data.error === "unauthorized") {
+                        showNotification("Сессия истекла", "Войдите снова");
+                        localStorage.removeItem('mx_token'); localStorage.removeItem('mx_username');
+                        openAuthModal({ preventDefault: () => {} });
                     }
-                } else {
-                    showNotification("Ошибка", "Не удалось отправить голос.", false);
                 }
-            } catch (e) {
-                showNotification("Ошибка сети", "Сервер недоступен", false);
-            }
+            } catch { showNotification("Ошибка", "Сервер недоступен"); }
         }
 
         async function checkServerStatus() {
-            const badge = document.getElementById('server-badge');
             const dot = document.getElementById('server-dot');
             const text = document.getElementById('server-text');
-
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000); 
-
-                const response = await fetch(`${API_URL}/get_downloads?t=${new Date().getTime()}`, {
-                    signal: controller.signal
-                });
-                
-                clearTimeout(timeoutId); 
-
-                if (response.ok) {
-                    badge.classList.add('online');
-                    dot.classList.add('online');
-                    text.innerText = 'ONLINE';
-                } else {
-                    throw new Error('Сервер вернул ошибку');
-                }
-            } catch (error) {
-                badge.classList.remove('online');
-                dot.classList.remove('online');
-                text.innerText = 'OFFLINE';
-            }
+                const t = setTimeout(() => controller.abort(), 5000);
+                const res = await fetch(`${API_URL}/get_downloads?t=${Date.now()}`, { signal: controller.signal });
+                clearTimeout(t);
+                if (res.ok) { dot.classList.add('online'); text.innerText = 'ONLINE'; } else throw new Error();
+            } catch { text.innerText = 'OFFLINE'; }
         }
 
         async function fetchOnlineCount() {
             try {
-                const res = await fetch(`${API_URL}/online?t=${new Date().getTime()}`);
+                const res = await fetch(`${API_URL}/online?t=${Date.now()}`);
                 const data = await res.json();
-                
-                if (data.online !== undefined) {
-                    document.getElementById('online-counter').innerText = data.online;
+                if (data.online !== undefined) document.getElementById('online-counter').innerText = data.online;
+            } catch { document.getElementById('online-counter').innerText = "—"; }
+        }
+
+        async function fetchVersion() {
+            try {
+                const res = await fetch(`${API_URL}/check_update`);
+                const data = await res.json();
+                const ver = data.latest_version || data.version;
+                if (ver) {
+                    const el = document.getElementById('version-label');
+                    if (el) el.textContent = `Ver. ${ver}`;
                 }
-            } catch (e) {
-                console.error("Не удалось загрузить онлайн", e);
-                document.getElementById('online-counter').innerText = "—";
-            }
+            } catch {}
+        }
+
+        function initScrollReveal() {
+            const els = document.querySelectorAll('.reveal');
+            if (!els.length) return;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            els.forEach(el => observer.observe(el));
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1217,43 +1118,27 @@
             fetchLauncherRating();
             checkServerStatus();
             fetchOnlineCount();
+            fetchVersion();
+            initScrollReveal();
+
             const savedUser = localStorage.getItem('mx_username');
             if (savedUser) {
-                const authBtn = document.getElementById('auth-btn-footer');
-                if (authBtn) {
-                    authBtn.innerHTML = `Личный кабинет`;
-                    authBtn.onclick = null; 
-                    authBtn.href = "profile.html"; 
-                }
+                const btn = document.getElementById('auth-btn-footer');
+                if (btn) { btn.textContent = 'Личный кабинет'; btn.onclick = null; btn.href = "profile.html"; }
+                const mobileBtn = document.getElementById('mobile-auth-link');
+                if (mobileBtn) { mobileBtn.textContent = 'Личный кабинет'; mobileBtn.onclick = null; mobileBtn.href = "profile.html"; }
             }
-        });
-        document.addEventListener('DOMContentLoaded', () => {
-            const swiper = new Swiper('.mySwiper', {
-                effect: 'coverflow', 
-                grabCursor: true, 
-                centeredSlides: true, 
-                slidesPerView: 'auto', 
-                loop: true, 
-                autoplay: {
-                    delay: 3500, 
-                    disableOnInteraction: false, 
-                },
-                coverflowEffect: {
-                    rotate: 20, 
-                    stretch: 0, 
-                    depth: 150, 
-                    modifier: 1.2, 
-                    slideShadows: true, 
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                    dynamicBullets: true, 
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
+
+            new Swiper('.mySwiper', {
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: 'auto',
+                loop: true,
+                autoplay: { delay: 3500, disableOnInteraction: false },
+                coverflowEffect: { rotate: 15, stretch: 0, depth: 120, modifier: 1, slideShadows: false },
+                pagination: { el: '.swiper-pagination', clickable: true, dynamicBullets: true },
+                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
             });
         });
     </script>

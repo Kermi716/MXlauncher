@@ -8,230 +8,786 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --black: #0a0a0a;
+            --white: #f5f5f0;
+            --gray-100: #e8e8e3;
+            --gray-200: #c8c8c2;
+            --gray-400: #888882;
+            --gray-600: #444440;
+            --gray-800: #1a1a18;
+            --gray-900: #111110;
+            --border: rgba(245, 245, 240, 0.12);
+            --border-strong: rgba(245, 245, 240, 0.28);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-user-select: none; user-select: none; }
-        body { background-color: #0a0a0c; font-family: 'Segoe UI', Arial, sans-serif; color: #ffffff; overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        .blooms-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; pointer-events: none; }
-        .blob { position: absolute; filter: blur(80px); opacity: 0.4; border-radius: 50%; animation: float 10s infinite alternate ease-in-out; }
-        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(255, 255, 255, 0.1); animation-duration: 15s; }
-        .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: rgba(200, 200, 200, 0.08); animation-duration: 12s; animation-direction: alternate-reverse; }
-        .bg-texture { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('background.jpg'); background-size: cover; background-position: center; opacity: 0.2; z-index: -1; }
-        
-        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        html { scroll-behavior: smooth; }
 
-        .video-header { position: relative; width: 100%; height: 350px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.5); margin-bottom: 40px; }
-        .bg-video { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; object-fit: cover; opacity: 0.6; z-index: 1; }
-        .header-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(10, 10, 12, 0.3), #0a0a0c); z-index: 2; }
-        .header-content { position: relative; z-index: 3; text-align: center; animation: fadeInDown 1s ease forwards; }
-        h1 { font-family: 'Segoe UI Light', sans-serif; font-weight: 300; font-size: 56px; letter-spacing: 4px; color: #ffffff; text-shadow: 0 0 20px rgba(255, 255, 255, 0.3); margin-bottom: 5px; }
-        .subtitle { font-size: 14px; color: rgba(255, 255, 255, 0.7); letter-spacing: 1px; text-transform: uppercase; }
+        body {
+            background-color: var(--black);
+            font-family: 'DM Sans', sans-serif;
+            color: var(--white);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; flex: 1; opacity: 0; animation: fadeInUp 0.8s ease 0.3s forwards; width: 100%; }
-        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 30px; margin-bottom: 30px; transition: all 0.3s ease; }
-        .glass-panel:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 0 30px rgba(255, 255, 255, 0.05); }
-        h2 { font-family: 'Segoe UI Light', sans-serif; font-weight: 300; font-size: 22px; color: #fff; margin: 0; }
-        .simple-header { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        
-        .nav-links { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; }
-        .nav-links a { color: rgba(255, 255, 255, 0.5); text-decoration: none; font-family: 'Segoe UI Light', sans-serif; font-size: 12px; font-weight: 300; text-transform: uppercase; letter-spacing: 2px; transition: color 0.4s ease, text-shadow 0.4s ease; }
-        .nav-links a:hover { color: #fff; text-shadow: 0 0 12px rgba(255, 255, 255, 0.4); }
-        
-        .rules-box { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); border-left: 3px solid #ffaa00; border-radius: 6px; padding: 20px; margin-bottom: 25px; }
-        .rules-title { font-size: 13px; font-weight: 600; text-transform: uppercase; color: #ffaa00; margin-bottom: 12px; letter-spacing: 1px; }
-        .rules-list { list-style: none; margin-bottom: 15px; }
-        .rules-list li { font-size: 13px; color: rgba(255, 255, 255, 0.8); line-height: 1.6; margin-bottom: 8px; padding-left: 15px; position: relative; }
-        .rules-list li::before { content: '•'; position: absolute; left: 0; color: rgba(255, 255, 255, 0.4); }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 9999;
+        }
 
-        .checkbox-container { display: flex; align-items: center; margin-bottom: 20px; cursor: pointer; }
-        .checkbox-container input { display: none; }
-        .checkmark { width: 18px; height: 18px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; transition: 0.2s; background: rgba(0,0,0,0.3); }
-        .checkbox-container input:checked + .checkmark { background: #fff; border-color: #fff; }
-        .checkbox-container input:checked + .checkmark::after { content: '✓'; color: #000; font-size: 12px; font-weight: bold; }
-        .checkbox-label { font-size: 13px; color: rgba(255,255,255,0.7); transition: color 0.2s; }
-        .checkbox-container:hover .checkbox-label { color: #fff; }
+        .site-header {
+            position: relative;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .header-video-wrap { position: absolute; inset: 0; z-index: 0; }
+        .header-video-wrap video { width: 100%; height: 100%; object-fit: cover; opacity: 0.18; filter: grayscale(100%) contrast(1.2); }
+        .header-video-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,10,10,0) 40%, rgba(10,10,10,1) 100%); }
+
+        .header-inner {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: end;
+            padding: 60px 60px 40px;
+            min-height: 260px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            gap: 40px;
+        }
+
+        .header-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--gray-600); }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(52px, 8vw, 100px);
+            letter-spacing: 4px;
+            color: var(--white);
+            line-height: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .header-sub { font-size: 14px; color: var(--gray-400); font-weight: 300; max-width: 380px; line-height: 1.5; }
+
+        .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; padding-bottom: 4px; }
+        .header-meta-item { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gray-600); letter-spacing: 1px; text-transform: uppercase; }
+
+        .nav-strip-wrap { border-bottom: 1px solid var(--border); }
+
+        .nav-strip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .nav-left { display: flex; }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px 16px 0;
+            margin-right: 24px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover { color: var(--white); }
+        .nav-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+        .nav-link.back-link {
+            color: var(--gray-600);
+            padding-right: 0;
+            margin-right: 32px;
+            border-right: 1px solid var(--border);
+            padding-right: 32px;
+        }
+
+        .nav-link.back-link:hover { color: var(--gray-400); }
+
+        .nav-right { display: flex; align-items: center; gap: 16px; }
+
+        .tg-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            transition: all 0.2s;
+        }
+
+        .tg-link:hover { color: var(--white); border-color: var(--border-strong); }
+        .tg-link svg { width: 14px; height: 14px; fill: currentColor; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 60px; width: 100%; flex: 1; }
+
+        .section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+        .section:last-child { border-bottom: none; }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gray-600); margin-right: 20px; }
+        .section-title { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.5px; color: var(--gray-200); text-transform: uppercase; }
+        .section-rule { flex: 1; height: 1px; background: var(--border); margin: 0 20px; }
+
+        .notice-box {
+            border: 1px solid var(--border);
+            border-left: 2px solid var(--gray-600);
+            padding: 20px 24px;
+            margin-bottom: 28px;
+        }
+
+        .notice-title {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-bottom: 14px;
+        }
+
+        .notice-list { list-style: none; }
+        .notice-list li {
+            font-size: 13px;
+            color: var(--gray-400);
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .notice-list li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--gray-600);
+            font-size: 11px;
+        }
+
+        .sender-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 28px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+        }
+
+        .sender-tag strong {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: var(--white);
+            font-weight: 400;
+        }
+
+        .unauth-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .unauth-text {
+            font-size: 14px;
+            color: var(--gray-400);
+            font-weight: 300;
+            max-width: 420px;
+            line-height: 1.6;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--white);
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-action:hover { background: var(--gray-100); }
+        .btn-action:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .form-group { margin-bottom: 20px; }
-        .form-label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
-        .form-control { width: 100%; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 12px 15px; color: #fff; font-family: inherit; font-size: 14px; transition: all 0.3s; -webkit-user-select: text; user-select: text;}
-        .form-control:focus { background: rgba(0, 0, 0, 0.4); border-color: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
-        textarea.form-control { resize: vertical; min-height: 120px; }
-        
-        .btn-submit { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); padding: 12px 30px; border-radius: 8px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; width: 100%; }
-        .btn-submit:hover:not(:disabled) { background: #fff; color: #000; box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); transform: translateY(-2px); }
-        .btn-submit:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        .toast { position: fixed; top: 50px; right: 20px; background: rgba(20, 20, 20, 0.95); padding: 15px 25px; border-radius: 4px; color: white; z-index: 99999; transform: translateX(200%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 5px 20px rgba(0,0,0,0.8); display: flex; align-items: center; gap: 15px; border: 1px solid transparent; border-left: 4px solid transparent; }
-        .toast.show { transform: translateX(0); }
-        
-        .toast-success { border-color: rgba(255, 255, 255, 0.3); border-left-color: #ffffff; }
-        .toast-success .toast-icon { color: #ffffff; font-weight: bold; font-size: 20px; }
-        .toast-error { border-color: rgba(255, 50, 50, 0.3); border-left-color: #ff4444; }
-        .toast-error .toast-icon { color: #ff4444; font-size: 20px; }
+        .form-label {
+            display: block;
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .form-control {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 12px 14px;
+            color: var(--white);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            transition: border-color 0.2s, background 0.2s;
+            -webkit-user-select: text;
+            user-select: text;
+            border-radius: 0;
+            resize: none;
+        }
+
+        .form-control:focus { border-color: rgba(245, 245, 240, 0.35); background: rgba(255,255,255,0.05); }
+        textarea.form-control { min-height: 130px; resize: vertical; }
+
+        .check-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            cursor: pointer;
+        }
+
+        .check-box {
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+
+        .check-row input { display: none; }
+        .check-row input:checked + .check-box { border-color: var(--white); background: var(--white); }
+        .check-row input:checked + .check-box::after { content: ''; display: block; width: 8px; height: 5px; border-left: 1.5px solid var(--black); border-bottom: 1.5px solid var(--black); transform: rotate(-45deg) translateY(-1px); }
+
+        .check-label {
+            font-size: 12px;
+            color: var(--gray-400);
+            font-weight: 300;
+            line-height: 1.4;
+        }
+
+        .btn-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 32px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--white);
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+        }
+
+        .btn-submit:hover:not(:disabled) { background: var(--gray-100); }
+        .btn-submit:disabled { opacity: 0.35; cursor: not-allowed; }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--white);
+            color: var(--black);
+            padding: 16px 24px;
+            z-index: 99999;
+            transform: translateY(120%);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+            border-left: 3px solid var(--black);
+            max-width: 320px;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast-title { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 3px; }
+        .toast-desc { font-size: 11px; color: var(--gray-600); font-family: 'DM Mono', monospace; }
+        .toast.toast-error { background: var(--black); color: var(--white); border-left-color: var(--white); }
+        .toast.toast-error .toast-desc { color: var(--gray-400); }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .auth-modal { background: #0f0f11; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; width: 100%; max-width: 400px; padding: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); transform: translateY(20px); transition: transform 0.3s ease; position: relative; }
-        .modal-overlay.active .auth-modal { transform: translateY(0); }
-        .close-modal { position: absolute; top: 20px; right: 20px; color: rgba(255,255,255,0.5); cursor: pointer; font-size: 20px; transition: color 0.2s; }
-        .close-modal:hover { color: #fff; }
-        
-        .auth-tabs { display: flex; margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-        .auth-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; color: rgba(255,255,255,0.4); font-weight: 600; font-size: 14px; text-transform: uppercase; transition: all 0.2s; border-bottom: 2px solid transparent; }
-        .auth-tab.active { color: #fff; border-bottom-color: #fff; }
-        
-        .auth-form { display: none; }
-        .auth-form.active { display: block; animation: fadeInUp 0.3s ease; }
-        
-        .btn-auth { width: 100%; background: #ffffff; color: #000000; border: none; padding: 14px; border-radius: 8px; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; margin-top: 10px;}
-        .btn-auth:hover { background: #cccccc; box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
 
-        footer { text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.2); font-size: 12px; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+        .auth-modal {
+            background: var(--gray-900);
+            border: 1px solid var(--border-strong);
+            width: 100%;
+            max-width: 356px;
+            padding: 32px 30px 28px;
+            transform: translateY(10px) scale(0.985);
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .modal-overlay.active .auth-modal { transform: translateY(0) scale(1); }
+
+        .auth-modal-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .auth-modal-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            color: var(--gray-600);
+            cursor: pointer;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+            padding: 4px 7px;
+            border: 1px solid transparent;
+            border-radius: 2px;
+        }
+
+        .close-modal:hover { color: var(--white); border-color: var(--border); }
+
+        .auth-tabs { display: flex; margin-bottom: 22px; border-bottom: 1px solid var(--border); }
+
+        .auth-tab {
+            padding: 8px 0;
+            margin-right: 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            margin-bottom: -1px;
+            transition: all 0.2s;
+        }
+
+        .auth-tab.active { color: var(--white); border-bottom-color: var(--white); }
+        .auth-tab:hover:not(.active) { color: var(--gray-400); }
+
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+
+        .modal-form-label {
+            display: block;
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            margin-bottom: 7px;
+        }
+
+        .modal-form-group { margin-bottom: 15px; }
+
+        .modal-form-control {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 11px 13px;
+            color: var(--white);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            transition: border-color 0.2s, background 0.2s;
+            -webkit-user-select: text;
+            user-select: text;
+            border-radius: 0;
+        }
+
+        .modal-form-control:focus { border-color: rgba(245, 245, 240, 0.35); background: rgba(255,255,255,0.05); }
+
+        .captcha-row { display: flex; gap: 8px; margin-bottom: 10px; align-items: stretch; }
+        .captcha-img { flex: 1; height: 42px; border: 1px solid var(--border); background: var(--white); object-fit: contain; }
+        .captcha-refresh { background: transparent; border: 1px solid var(--border); color: var(--gray-400); width: 42px; height: 42px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+        .captcha-refresh:hover { border-color: var(--border-strong); color: var(--white); }
+
+        .btn-auth {
+            width: 100%;
+            background: var(--white);
+            color: var(--black);
+            border: none;
+            padding: 13px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+            margin-top: 6px;
+        }
+
+        .btn-auth:hover { background: var(--gray-100); }
+        .btn-auth:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        footer { border-top: 1px solid var(--border); padding: 32px 60px; margin-top: auto; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .footer-copy { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-600); text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--white); }
+
+        #auth-view { opacity: 0; }
+        #auth-view.visible { animation: fadeUp 0.5s ease forwards; opacity: 1; }
+        #auth-view.visible .sender-tag { animation: fadeUp 0.45s ease 0.05s both; }
+        #auth-view.visible .form-group { animation: fadeUp 0.45s ease 0.12s both; }
+        #auth-view.visible .check-row { animation: fadeUp 0.45s ease 0.2s both; }
+        #auth-view.visible .btn-submit { animation: fadeUp 0.45s ease 0.26s both; }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-d1 { transition-delay: 0.08s; }
+        .reveal-d2 { transition-delay: 0.16s; }
+        .reveal-d3 { transition-delay: 0.24s; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .anim-in { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+        .anim-in-1 { animation-delay: 0.1s; }
+        .anim-in-2 { animation-delay: 0.2s; }
+
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10,10,10,0.97);
+            z-index: 8000;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .mobile-nav-overlay.open { display: flex; }
+
+        .mobile-nav-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; }
+        .mobile-nav-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: var(--white); }
+        .mobile-nav-close { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-400); cursor: pointer; padding: 8px 12px; border: 1px solid var(--border); border-radius: 2px; transition: all 0.2s; background: transparent; }
+        .mobile-nav-close:hover { color: var(--white); border-color: var(--border-strong); }
+        .mobile-nav-links { display: flex; flex-direction: column; gap: 0; flex: 1; }
+        .mobile-nav-link { display: flex; align-items: center; gap: 12px; padding: 20px 0; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-400); text-decoration: none; cursor: pointer; transition: color 0.2s; }
+        .mobile-nav-link:hover, .mobile-nav-link.highlight { color: var(--white); }
+        .mobile-nav-footer { margin-top: 32px; font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gray-600); letter-spacing: 2px; text-transform: uppercase; }
+
+        .hamburger { display: none; background: transparent; border: 1px solid var(--border); color: var(--gray-400); width: 38px; height: 38px; cursor: pointer; align-items: center; justify-content: center; flex-direction: column; gap: 5px; border-radius: 2px; transition: all 0.2s; padding: 0; }
+        .hamburger:hover { border-color: var(--border-strong); color: var(--white); }
+        .hamburger span { display: block; width: 16px; height: 1px; background: currentColor; }
 
         @media (max-width: 768px) {
-            .video-header { height: 250px; margin-bottom: 25px; }
-            h1 { font-size: 36px; }
-            .glass-panel { padding: 18px; }
-            .toast { top: auto; bottom: 20px; left: 20px; right: 20px; transform: translateY(200%); justify-content: flex-start; padding: 12px 15px; gap: 12px; }
-            .toast.show { transform: translateY(0); }
-            .auth-modal { max-width: 90%; padding: 30px 20px; }
-            .nav-links { flex-direction: column; gap: 15px; text-align: center; }
+            .header-inner { grid-template-columns: 1fr; padding: 40px 20px 28px; min-height: 200px; }
+            .header-right { display: none; }
+            .container { padding: 0 20px; }
+            .nav-strip { padding: 0 20px; }
+            footer { padding: 24px 20px; }
+            .nav-left { display: none; }
+            .nav-right .tg-link { display: none; }
+            .hamburger { display: flex; }
+            .section { padding: 40px 0; }
+            .section-header { flex-wrap: wrap; gap: 6px; }
+            .section-rule { display: none; }
+            .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
+            .footer-links { flex-wrap: wrap; justify-content: center; }
+            .auth-modal { max-width: 100%; height: 100%; border: none; border-top: 1px solid var(--border-strong); padding: 28px 24px 40px; overflow-y: auto; align-self: flex-end; transform: translateY(100%); }
+            .modal-overlay { align-items: flex-end; }
+            .modal-overlay.active .auth-modal { transform: translateY(0); }
+            .toast { right: 16px; left: 16px; max-width: none; bottom: 16px; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 52px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="blooms-container">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
-    <div class="bg-texture"></div>
+    <header class="site-header">
+        <div class="header-video-wrap">
+            <video autoplay muted loop playsinline>
+                <source src="video.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="header-inner">
+            <div class="header-left anim-in anim-in-1">
+                <div class="header-eyebrow">MX Launcher — Служба поддержки</div>
+                <h1>ПОДДЕРЖКА</h1>
+                <p class="header-sub">Опишите вашу проблему, и мы постараемся помочь в кратчайшие сроки.</p>
+            </div>
+            <div class="header-right anim-in anim-in-2">
+                <div class="header-meta-item">Тикет-система</div>
+                <div class="header-meta-item">Ответ до 24 ч</div>
+                <div class="header-meta-item">Робочие время от 09:00 - 22:00 по МСК</div>
+            </div>
+        </div>
+    </header>
 
-    <div class="video-header">
-        <video class="bg-video" autoplay muted loop playsinline>
-            <source src="video.mp4" type="video/mp4">
-        </video>
-        <div class="header-overlay"></div>
-        <div class="header-content">
-            <h1>MX LAUNCHER</h1>
-            <div class="subtitle">Служба поддержки игроков</div>
+    <div class="nav-strip-wrap anim-in anim-in-2">
+        <div class="nav-strip">
+            <nav class="nav-left">
+                <a class="nav-link back-link" href="index.html">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+                    На главную
+                </a>
+                <a class="nav-link" href="#" id="auth-btn-nav" onclick="openAuthModal(event)">Войти</a>
+            </nav>
+            <div class="nav-right">
+                <a class="tg-link" href="https://t.me/mxlauncher" target="_blank">
+                    <svg viewBox="0 0 24 24"><path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z"/></svg>
+                    Telegram
+                </a>
+                <button class="hamburger" onclick="openMobileNav()" aria-label="Меню">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
         </div>
     </div>
 
     <div class="container">
-        <div class="nav-links">
-            <a href="index.html">Вернуться на главную</a>
-            <a href="#" id="auth-btn-support" onclick="openAuthModal(event)">Войти в аккаунт</a>
-        </div>
 
-        <div class="glass-panel">
-            <h2 class="simple-header">Создать обращение</h2>
-            
-            <div id="unauth-view" style="text-align: center; padding: 30px 0;">
-                <p style="margin-bottom: 25px; font-size: 16px;">Для обращения в службу поддержки необходимо авторизоваться.</p>
-                <button class="btn-submit" style="width: auto; display: inline-block;" onclick="openAuthModal(event)">Войти в аккаунт</button>
+        <section class="section reveal">
+            <div class="section-header">
+                <span class="section-label">01</span>
+                <span class="section-title">Правила обращения</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Перед отправкой</span>
             </div>
 
-            <div id="auth-view" style="display: none;">
-                
-                <div class="rules-box">
-                    <div class="rules-title">Внимание! Правила подачи тикета:</div>
-                    <ul class="rules-list">
-                        <li>Формулируйте проблему чётко и ясно. Опишите, после каких действий произошла ошибка.</li>
-                        <li>Укажите версию Windows и характеристики ПК (если проблема технического характера).</li>
-                        <li>Если у вас есть скриншот или видео проблемы, загрузите их на любой хостинг (Imgur, YouTube, Яндекс.Диск) и прикрепите ссылку в тексте обращения.</li>
-                        <li>Не спамьте тикетами и не пишите сообщения, не имеющие смысловой нагрузки. За флуд аккаунт может быть заблокирован.</li>
-                    </ul>
+            <div class="notice-box reveal reveal-d1">
+                <div class="notice-title">Прочитайте перед подачей тикета</div>
+                <ul class="notice-list">
+                    <li>Формулируйте проблему чётко. Опишите, после каких действий возникла ошибка.</li>
+                    <li>Укажите версию Windows и характеристики ПК, если проблема технического характера.</li>
+                    <li>Если есть скриншот или видео - загрузите на Imgur, YouTube или Яндекс.Диск и вставьте ссылку в текст обращения.</li>
+                    <li>Не спамьте тикетами и не отправляйте бессодержательные сообщения. За флуд аккаунт может быть заблокирован.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header reveal">
+                <span class="section-label">02</span>
+                <span class="section-title">Создать обращение</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Тикет-система</span>
+            </div>
+
+            <div id="unauth-view" class="unauth-box reveal reveal-d1">
+                <p class="unauth-text">Для создания обращения необходимо войти в аккаунт MX Launcher.</p>
+                <button class="btn-action" onclick="openAuthModal(event)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+                    Войти в аккаунт
+                </button>
+            </div>
+
+            <div id="auth-view" style="display:none;">
+
+                <div class="sender-tag">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+                    Отправитель:&nbsp;<strong id="display-username"></strong>
                 </div>
 
-                <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; font-size: 13px; border: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.5);">
-                    Обращение создается от имени: <strong id="display-username" style="color: #fff; margin-left: 5px;"></strong>
-                </div>
-                
                 <form id="supportForm" onsubmit="submitQuestion(event)">
                     <div class="form-group">
                         <label class="form-label">Опишите вашу проблему</label>
                         <textarea id="support-text" class="form-control" required placeholder="Здравствуйте! У меня возникла проблема при запуске... Ссылка на скриншот: https://imgur.com/..."></textarea>
                     </div>
 
-                    <label class="checkbox-container">
+                    <label class="check-row">
                         <input type="checkbox" id="rules-checkbox" onchange="toggleSubmitButton()">
-                        <div class="checkmark"></div>
-                        <span class="checkbox-label">Я прочитал(а) правила подачи и обязуюсь их соблюдать.</span>
+                        <div class="check-box"></div>
+                        <span class="check-label">Я прочитал(а) правила подачи и обязуюсь их соблюдать.</span>
                     </label>
 
-                    <button type="submit" id="submit-btn" class="btn-submit" disabled>Отправить сообщение</button>
+                    <button type="submit" id="submit-btn" class="btn-submit" disabled>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+                        Отправить обращение
+                    </button>
                 </form>
             </div>
-        </div>
+        </section>
+
     </div>
 
     <footer>
-        MX Launcher Project © 2026<br>All rights reserved
+        <div class="footer-inner reveal">
+            <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+            <div class="footer-links">
+                <a href="index.html">Главная</a>
+                <a href="https://t.me/mxlauncher" target="_blank">Telegram</a>
+            </div>
+        </div>
     </footer>
 
     <div id="notificationToast" class="toast">
-        <span class="toast-icon">✓</span>
-        <div>
-            <div id="toastTitle" style="font-weight: 600; font-size: 14px;">Успешно</div>
-            <div id="toastDesc" style="font-size: 12px; color: #ccc;">Действие выполнено.</div>
+        <div class="toast-title" id="toastTitle">Уведомление</div>
+        <div class="toast-desc" id="toastDesc">—</div>
+    </div>
+
+    <div class="mobile-nav-overlay" id="mobileNav">
+        <div class="mobile-nav-header">
+            <div class="mobile-nav-title">MX LAUNCHER</div>
+            <button class="mobile-nav-close" onclick="closeMobileNav()">✕ Закрыть</button>
         </div>
+        <div class="mobile-nav-links">
+            <a class="mobile-nav-link" href="index.html">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                На главную
+            </a>
+            <a class="mobile-nav-link highlight" href="#" id="mobile-auth-link-nav" onclick="closeMobileNav(); openAuthModal(event)">Войти в аккаунт</a>
+            <a class="mobile-nav-link" href="https://t.me/mxlauncher" target="_blank">
+                <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:16px;height:16px"><path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z"/></svg>
+                Telegram
+            </a>
+        </div>
+        <div class="mobile-nav-footer">MX Launcher © 2026 — Служба поддержки</div>
     </div>
 
     <div class="modal-overlay" id="authModal">
         <div class="auth-modal">
-            <div class="close-modal" onclick="closeAuthModal()">✕</div>
-            
+            <div class="close-modal" onclick="closeAuthModal()">ESC</div>
+
+            <div class="auth-modal-title" id="auth-modal-title-text">Добро пожаловать</div>
+            <div class="auth-modal-sub" id="auth-modal-sub-text">Войдите в свой аккаунт</div>
+
             <div class="auth-tabs">
-                <div class="auth-tab active" onclick="switchTab('login')">Вход</div>
+                <div class="auth-tab active" onclick="switchTab('login')">Войти</div>
                 <div class="auth-tab" onclick="switchTab('register')">Регистрация</div>
             </div>
 
             <form id="form-login" class="auth-form active" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Никнейм</label>
-                    <input type="text" id="login-username" class="form-control" required minlength="3">
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Никнейм</label>
+                    <input type="text" id="login-username" class="modal-form-control" required minlength="3">
                 </div>
-                <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Пароль</label>
-                    <input type="password" id="login-password" class="form-control" required minlength="5">
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Пароль</label>
+                    <input type="password" id="login-password" class="modal-form-control" required minlength="5">
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Введите код с картинки</label>
-                    <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
-                        <img id="login-captcha-image" src="" alt="Загрузка капчи..." style="height: 50px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #fff; width: 100%; object-fit: contain;">
-                        <button type="button" onclick="loadCaptcha('login')" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 0 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; height: 50px; font-size: 18px;" title="Обновить картинку">↻</button>
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Код с картинки</label>
+                    <div class="captcha-row">
+                        <img id="login-captcha-image" src="" alt="Загрузка..." class="captcha-img">
+                        <button type="button" onclick="loadCaptcha('login')" class="captcha-refresh" title="Обновить">↻</button>
                     </div>
-                    <input type="text" id="login-captcha-text" class="form-control" required autocomplete="off" placeholder="Код">
+                    <input type="text" id="login-captcha-text" class="modal-form-control" required autocomplete="off" placeholder="Код">
                     <input type="hidden" id="login-captcha-id">
                 </div>
-
                 <button type="submit" class="btn-auth">Войти</button>
             </form>
 
             <form id="form-register" class="auth-form" onsubmit="handleRegister(event)">
-                <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Придумайте Никнейм</label>
-                    <input type="text" id="reg-username" class="form-control" required minlength="3">
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Никнейм</label>
+                    <input type="text" id="reg-username" class="modal-form-control" required minlength="3">
                 </div>
-                <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Придумайте Пароль</label>
-                    <input type="password" id="reg-password" class="form-control" required minlength="5">
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Пароль</label>
+                    <input type="password" id="reg-password" class="modal-form-control" required minlength="5">
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label" style="text-transform: uppercase; font-size: 11px; color: rgba(255,255,255,0.7);">Введите код с картинки</label>
-                    <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
-                        <img id="reg-captcha-image" src="" alt="Загрузка капчи..." style="height: 50px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #fff; width: 100%; object-fit: contain;">
-                        <button type="button" onclick="loadCaptcha('reg')" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 0 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; height: 50px; font-size: 18px;" title="Обновить картинку">↻</button>
+                <div class="modal-form-group">
+                    <label class="modal-form-label">Код с картинки</label>
+                    <div class="captcha-row">
+                        <img id="reg-captcha-image" src="" alt="Загрузка..." class="captcha-img">
+                        <button type="button" onclick="loadCaptcha('reg')" class="captcha-refresh" title="Обновить">↻</button>
                     </div>
-                    <input type="text" id="reg-captcha-text" class="form-control" required autocomplete="off" placeholder="Код">
+                    <input type="text" id="reg-captcha-text" class="modal-form-control" required autocomplete="off" placeholder="Код">
                     <input type="hidden" id="reg-captcha-id">
                 </div>
-
                 <button type="submit" class="btn-auth">Создать аккаунт</button>
             </form>
         </div>
@@ -240,41 +796,51 @@
     <script>
         const API_URL = "https://ultrafucker3.pythonanywhere.com";
 
+        function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); document.body.style.overflow = 'hidden'; }
+        function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); document.body.style.overflow = ''; }
+
         function showNotification(title, text, isSuccess = false) {
             const toast = document.getElementById('notificationToast');
-            const icon = toast.querySelector('.toast-icon');
             document.getElementById('toastTitle').innerText = title;
             document.getElementById('toastDesc').innerText = text;
-            
-            toast.className = 'toast'; 
-            if (isSuccess) {
-                toast.classList.add('toast-success');
-                icon.innerText = "✓";
-            } else {
-                toast.classList.add('toast-error');
-                icon.innerText = "⚠";
-            }
-
+            toast.className = 'toast';
+            if (!isSuccess) toast.classList.add('toast-error');
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
-        function openAuthModal(e) { 
-            e.preventDefault(); 
-            document.getElementById('authModal').classList.add('active'); 
+        function openAuthModal(e) {
+            e.preventDefault();
+            document.getElementById('authModal').classList.add('active');
             loadCaptcha('login');
         }
+
         function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
+
+        document.getElementById('authModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAuthModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeAuthModal();
+        });
+
         function switchTab(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            const titleEl = document.getElementById('auth-modal-title-text');
+            const subEl = document.getElementById('auth-modal-sub-text');
             if (tab === 'login') {
                 document.querySelectorAll('.auth-tab')[0].classList.add('active');
                 document.getElementById('form-login').classList.add('active');
-                loadCaptcha('login'); 
+                titleEl.textContent = 'Добро пожаловать';
+                subEl.textContent = 'Войдите в свой аккаунт';
+                loadCaptcha('login');
             } else {
                 document.querySelectorAll('.auth-tab')[1].classList.add('active');
                 document.getElementById('form-register').classList.add('active');
+                titleEl.textContent = 'Создать аккаунт';
+                subEl.textContent = 'Регистрация займёт минуту';
                 loadCaptcha('reg');
             }
         }
@@ -283,24 +849,18 @@
             const img = document.getElementById(`${type}-captcha-image`);
             const idInput = document.getElementById(`${type}-captcha-id`);
             const textInput = document.getElementById(`${type}-captcha-text`);
-            
             if (!img) return;
-
-            img.style.opacity = '0.5';
-            textInput.value = ''; 
-            
+            img.style.opacity = '0.4';
+            textInput.value = '';
             try {
                 const res = await fetch(`${API_URL}/get_captcha`);
                 const data = await res.json();
-                
                 if (data.status === 'ok') {
                     img.src = data.image_base64;
                     idInput.value = data.captcha_id;
                     img.style.opacity = '1';
                 }
-            } catch (e) {
-                console.error('Ошибка загрузки капчи', e);
-            }
+            } catch { img.style.opacity = '1'; }
         }
 
         async function handleLogin(e) {
@@ -309,40 +869,25 @@
             const pass = document.getElementById('login-password').value;
             const captcha_text = document.getElementById('login-captcha-text').value;
             const captcha_id = document.getElementById('login-captcha-id').value;
-
             try {
                 const response = await fetch(`${API_URL}/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        username: user, 
-                        password: pass,
-                        captcha_id: captcha_id,
-                        captcha_text: captcha_text
-                    })
+                    body: JSON.stringify({ username: user, password: pass, captcha_id, captcha_text })
                 });
-
                 let data;
-                try {
-                    data = await response.json();
-                } catch (jsonErr) {
-                    showNotification("Сервер выдал ошибку", "Внутренняя ошибка. Проверь логи PythonAnywhere.");
-                    return;
-                }
-
+                try { data = await response.json(); } catch { showNotification("Ошибка", "Внутренняя ошибка сервера"); return; }
                 if (response.ok) {
                     localStorage.setItem('mx_token', data.token);
                     localStorage.setItem('mx_username', data.username);
                     closeAuthModal();
-                    showNotification("Успешный вход", `Добро пожаловать, ${data.username}!`, true);
+                    showNotification("Добро пожаловать", data.username, true);
                     setTimeout(() => window.location.reload(), 1500);
                 } else {
                     showNotification("Ошибка входа", data.error || "Неверный логин или пароль");
-                    loadCaptcha('login'); 
+                    loadCaptcha('login');
                 }
-            } catch (err) {
-                showNotification("Нет связи", "Сервер недоступен. Проверь CORS или включен ли сервер.");
-            }
+            } catch { showNotification("Нет связи", "Сервер недоступен"); }
         }
 
         async function handleRegister(e) {
@@ -351,128 +896,112 @@
             const pass = document.getElementById('reg-password').value;
             const captcha_text = document.getElementById('reg-captcha-text').value;
             const captcha_id = document.getElementById('reg-captcha-id').value;
-            
             const btn = e.target.querySelector('.btn-auth');
-            btn.disabled = true;
-            btn.innerText = "Создание...";
-
+            btn.disabled = true; btn.innerText = "Создание...";
             try {
                 const response = await fetch(`${API_URL}/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        username: user, 
-                        password: pass,
-                        captcha_id: captcha_id,
-                        captcha_text: captcha_text
-                    })
+                    body: JSON.stringify({ username: user, password: pass, captcha_id, captcha_text })
                 });
-
                 let data;
-                try { 
-                    data = await response.json(); 
-                } catch (jsonErr) {
-                    showNotification("Сервер выдал ошибку", "Внутренняя ошибка сервера.");
-                    btn.disabled = false; btn.innerText = "Создать аккаунт";
-                    loadCaptcha('reg');
-                    return;
+                try { data = await response.json(); } catch {
+                    showNotification("Ошибка сервера", "Внутренняя ошибка");
+                    btn.disabled = false; btn.innerText = "Создать аккаунт"; return;
                 }
-
                 if (response.ok) {
-                    btn.innerText = "Вход...";
-                    try {
-                        showNotification("Аккаунт создан!", "Пожалуйста, войдите в аккаунт.", true);
-                        switchTab('login');
-                        document.getElementById('login-username').value = user;
-                        btn.disabled = false;
-                        btn.innerText = "Создать аккаунт";
-                    } catch (loginErr) {
-                        switchTab('login');
-                        document.getElementById('login-username').value = user;
-                    }
+                    showNotification("Аккаунт создан", "Теперь войдите в систему", true);
+                    switchTab('login');
+                    document.getElementById('login-username').value = user;
                 } else {
                     showNotification("Ошибка", data.error || "Ошибка создания аккаунта");
-                    btn.disabled = false; btn.innerText = "Создать аккаунт";
-                    loadCaptcha('reg'); 
+                    loadCaptcha('reg');
                 }
-            } catch (err) {
-                showNotification("Нет связи", "Сервер недоступен.");
                 btn.disabled = false; btn.innerText = "Создать аккаунт";
-                loadCaptcha('reg');
+            } catch {
+                showNotification("Нет связи", "Сервер недоступен");
+                btn.disabled = false; btn.innerText = "Создать аккаунт";
             }
         }
 
         function toggleSubmitButton() {
             const checkbox = document.getElementById('rules-checkbox');
             const btn = document.getElementById('submit-btn');
-            btn.disabled = !checkbox.checked;
+            if (btn) btn.disabled = !checkbox.checked;
         }
 
         async function submitQuestion(e) {
-            e.preventDefault(); 
-            
+            e.preventDefault();
             const savedUser = localStorage.getItem('mx_username');
             const savedToken = localStorage.getItem('mx_token');
             const messageText = document.getElementById('support-text').value.trim();
 
-            if (!savedUser || !savedToken) {
-                showNotification("Ошибка", "Сначала войдите в аккаунт!");
-                openAuthModal(e);
-                return;
-            }
+            if (!savedUser || !savedToken) { showNotification("Ошибка", "Войдите в аккаунт"); openAuthModal(e); return; }
+            if (messageText.length < 10) { showNotification("Слишком коротко", "Опишите проблему подробнее (мин. 10 символов)"); return; }
 
-            if (messageText.length < 10) {
-                showNotification("Ошибка", "Опишите проблему подробнее (минимум 10 символов).");
-                return;
-            }
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Отправка...`;
 
             try {
                 const response = await fetch(`${API_URL}/create_ticket`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        username: savedUser, 
-                        token: savedToken,
-                        message: messageText
-                    })
+                    body: JSON.stringify({ username: savedUser, token: savedToken, message: messageText })
                 });
-                
                 const data = await response.json();
-
                 if (response.ok) {
-                    showNotification("Сообщение отправлено", "Мы свяжемся с вами в ближайшее время.", true);
-                    document.getElementById('support-text').value = ''; 
+                    showNotification("Обращение отправлено", "Ответим в ближайшее время", true);
+                    document.getElementById('support-text').value = '';
                     document.getElementById('rules-checkbox').checked = false;
                     toggleSubmitButton();
                 } else {
-                    showNotification("Ошибка", data.error || "Не удалось отправить сообщение.");
+                    showNotification("Ошибка", data.error || "Не удалось отправить");
+                    btn.disabled = false;
                 }
-            } catch (err) {
-                showNotification("Ошибка", "Сервер недоступен.");
+            } catch {
+                showNotification("Нет связи", "Сервер недоступен");
+                btn.disabled = false;
             }
+
+            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg> Отправить обращение`;
+        }
+
+        function initScrollReveal() {
+            const els = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            els.forEach(el => observer.observe(el));
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            initScrollReveal();
+
             const savedUser = localStorage.getItem('mx_username');
             const savedToken = localStorage.getItem('mx_token');
-            
-            const authBtn = document.getElementById('auth-btn-support');
+
+            const navBtn = document.getElementById('auth-btn-nav');
+            const mobileBtn = document.getElementById('mobile-auth-link-nav');
             const unauthView = document.getElementById('unauth-view');
             const authView = document.getElementById('auth-view');
             const displayUsername = document.getElementById('display-username');
 
             if (savedUser && savedToken) {
-                if (authBtn) {
-                    authBtn.innerHTML = `Личный кабинет`;
-                    authBtn.onclick = null; 
-                    authBtn.href = "profile.html"; 
-                }
-                
+                if (navBtn) { navBtn.textContent = 'Личный кабинет'; navBtn.onclick = null; navBtn.href = 'profile.html'; }
+                if (mobileBtn) { mobileBtn.textContent = 'Личный кабинет'; mobileBtn.onclick = null; mobileBtn.href = 'profile.html'; }
                 unauthView.style.display = 'none';
                 authView.style.display = 'block';
                 displayUsername.textContent = savedUser;
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        authView.classList.add('visible');
+                    });
+                });
             } else {
-                unauthView.style.display = 'block';
+                unauthView.style.display = 'flex';
                 authView.style.display = 'none';
             }
         });
