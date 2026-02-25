@@ -217,6 +217,180 @@
             100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); } 
         }
 
+        /* --- Стили для блока Безопасности --- */
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .sec-item {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .sec-item:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .sec-item.yt:hover {
+            border-color: rgba(255, 0, 0, 0.4);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.15);
+        }
+        .sec-item.yt:hover .sec-icon { color: #ff4444; }
+
+        .sec-item.vt:hover {
+            border-color: rgba(57, 78, 203, 0.4);
+            box-shadow: 0 5px 15px rgba(57, 78, 203, 0.15);
+        }
+        .sec-item.vt:hover .sec-icon { color: #5c73ff; }
+        
+        .sec-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-right: 15px;
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.3s ease;
+        }
+        
+        .sec-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+        
+        .sec-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sec-title {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+        
+        .sec-desc {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 15px; 
+            cursor: default;
+        }
+
+        .icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .panel-title:hover .icon-wrapper {
+            filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
+            transform: scale(1.05);
+        }
+
+        .separator-line {
+            width: 2px;
+            height: 24px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.3), rgba(255,255,255,0));
+            border-radius: 2px;
+            transform-origin: center;
+            transform: scaleY(0); 
+            animation: growLine 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+            animation-delay: 0.6s; 
+        }
+
+        @keyframes growLine {
+            from { transform: scaleY(0); opacity: 0; }
+            to { transform: scaleY(1); opacity: 1; }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-card {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .stat-icon {
+            margin-bottom: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            color: #ffffff;
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+        }
+
+        .stat-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+        
+        .stat-value {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
         .rating-container { margin-top: 5px; }
         .rating-controls { display: flex; justify-content: space-between; margin-bottom: 12px; }
         
@@ -405,10 +579,24 @@
                 </svg>
                 Telegram канал
             </a>
+            <div class="footer-links">
+                <a href="support.html">Служба поддержки</a>
+                <a href="#" id="auth-btn-footer" onclick="openAuthModal(event)">Войти в аккаунт</a>
+            </div>
         </div>
 
         <div class="glass-panel">
-            <h2 class="simple-header">Интерфейс</h2>
+            <h2 class="simple-header panel-title">
+                <div class="icon-wrapper">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                </div>
+                <div class="separator-line"></div>
+                <span>Интерфейс</span>
+            </h2>
             <div class="swiper-container-wrapper">
                 <div class="swiper mySwiper">
                     <div class="swiper-wrapper">
@@ -442,34 +630,65 @@
 
         <div class="glass-panel">
             <div class="status-header-row">
-                <h2>Статус Серверов</h2>
+                <h2 class="panel-title">
+                    <div class="icon-wrapper">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                        </svg>
+                    </div>
+                    <div class="separator-line"></div>
+                    <span>Статус Серверов</span>
+                </h2>
+                
                 <div class="status-badge" id="server-badge">
                     <div class="status-dot" id="server-dot"></div> 
                     <span id="server-text">ПРОВЕРКА...</span>
                 </div>
             </div>
-            <div class="status-header-row" style="margin-bottom: 5px; padding-bottom: 0; border-bottom: none;">
-                <h2 style="font-size: 18px;">Скачиваний лаунчера</h2>
-                <div class="download-counter-box">
-                    <img src="arrow.png" class="download-arrow" alt="">
-                    <span id="download-counter" class="download-number">...</span>
-                </div>
-            </div>
 
-            <div class="status-header-row" style="margin-top: 7px; margin-bottom: 15px; border-bottom: none;">
-                <h2 style="font-size: 18px;">Игроков онлайн</h2>
-                <div class="download-counter-box">
-                    <svg class="download-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    <span id="online-counter" class="download-number">...</span>
+            <div class="stats-grid">
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-value" id="online-counter">...</div>
+                    <div class="stat-label">Игроков онлайн</div>
                 </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </div>
+                    <div class="stat-value" id="download-counter">...</div>
+                    <div class="stat-label">Скачиваний</div>
+                </div>
+
             </div>
         </div>
 
         <div class="glass-panel">
-            <h2 class="simple-header">Оценка пользователей</h2>
+            <h2 class="simple-header panel-title">
+                <div class="icon-wrapper">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                </div>
+                <div class="separator-line"></div>
+                <span>Оценка пользователей</span>
+            </h2>
             <p style="margin-bottom: 15px; font-size: 13px;">Нравится ли вам MX Launcher? Оставьте свой голос.</p>
             
             <div class="rating-container">
@@ -493,7 +712,71 @@
         </div>
 
         <div class="glass-panel">
-            <h2 class="simple-header">Системные требования</h2>
+            <h2 class="simple-header panel-title">
+                <div class="icon-wrapper">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                </div>
+                <div class="separator-line"></div>
+                <span>Безопасность</span>
+            </h2>
+            <p style="font-size: 13px; margin-bottom: 20px;">
+                MX Launcher остается проверенным и безопасным программным обеспечением. Вы можете ознакомиться с результатами независимых проверок:
+            </p>
+            
+            <div class="security-grid">
+                <a href="https://www.youtube.com/watch?v=1maKKxoljtU" target="_blank" class="sec-item yt">
+                    <div class="sec-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21.582 6.186a2.506 2.506 0 0 0-1.762-1.766C18.265 4 12 4 12 4s-6.264 0-7.818.42a2.506 2.506 0 0 0-1.762 1.766C2 7.74 2 12 2 12s0 4.26.42 5.814a2.506 2.506 0 0 0 1.762 1.766C5.735 20 12 20 12 20s6.265 0 7.82-.42a2.506 2.506 0 0 0 1.762-1.766C22 16.26 22 12 22 12s0-4.26-.418-5.814zM10 15.464V8.536L16 12l-6 3.464z"/></svg>
+                    </div>
+                    <div class="sec-info">
+                        <span class="sec-title">Видео-проверка</span>
+                        <span class="sec-desc">Смотреть на YouTube</span>
+                    </div>
+                </a>
+
+                <a href="https://www.virustotal.com/gui/file/b0142a493e98c43ea9d944fd0b37c13de5131dc120d8213449493ecd07cd3e8a?nocache=1" target="_blank" class="sec-item vt">
+                    <div class="sec-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+                    </div>
+                    <div class="sec-info">
+                        <span class="sec-title">Отчет: Лаунчер</span>
+                        <span class="sec-desc">VirusTotal (3 / 72)</span>
+                    </div>
+                </a>
+
+                <a href="https://www.virustotal.com/gui/file/3053b4b2e5d38061ddddcad2925bb94dc472215729ba81977c738f6613548380?nocache=1" target="_blank" class="sec-item vt">
+                    <div class="sec-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+                    </div>
+                    <div class="sec-info">
+                        <span class="sec-title">Отчет: MXSetup</span>
+                        <span class="sec-desc">VirusTotal (3 / 72)</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="glass-panel">
+            <h2 class="simple-header panel-title">
+                <div class="icon-wrapper">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                        <rect x="9" y="9" width="6" height="6"></rect>
+                        <line x1="9" y1="1" x2="9" y2="4"></line>
+                        <line x1="15" y1="1" x2="15" y2="4"></line>
+                        <line x1="9" y1="20" x2="9" y2="23"></line>
+                        <line x1="15" y1="20" x2="15" y2="23"></line>
+                        <line x1="20" y1="9" x2="23" y2="9"></line>
+                        <line x1="20" y1="14" x2="23" y2="14"></line>
+                        <line x1="1" y1="9" x2="4" y2="9"></line>
+                        <line x1="1" y1="14" x2="4" y2="14"></line>
+                    </svg>
+                </div>
+                <div class="separator-line"></div>
+                <span>Системные требования</span>
+            </h2>
             <p style="font-size: 13px; margin-bottom: 10px;">Минимальные характеристики для комфортной работы лаунчера.</p>
             
             <div class="sys-req-grid">
@@ -557,24 +840,9 @@
                 </div>
             </div>
         </div>
-
-        <div class="glass-panel">
-            <h2 class="simple-header">Безопасность</h2>
-            <p style="margin-bottom: 20px;">
-                MX Launcher остается проверенным и безопасным программным обеспечением. Вы можете ознакомиться с результатами проверок:
-            </p>
-            <ul class="link-list">
-                <li><a href="https://www.youtube.com/watch?v=1maKKxoljtU" target="_blank">Видео проверки безопасности</a></li>
-                <li><a href="https://www.virustotal.com/gui/file/b0142a493e98c43ea9d944fd0b37c13de5131dc120d8213449493ecd07cd3e8a?nocache=1" target="_blank">Отчет VirusTotal</a></li>
-            </ul>
-        </div>
     </div>
 
     <footer>
-        <div class="footer-links">
-            <a href="support.html">Служба поддержки</a>
-            <a href="#" id="auth-btn-footer" onclick="openAuthModal(event)">Войти в аккаунт</a>
-        </div>
         <div class="footer-copy">
             MX Launcher Project © 2026<br>All rights reserved
         </div>
