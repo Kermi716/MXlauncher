@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MX Launcher</title>
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
@@ -412,9 +411,11 @@
         .captcha-refresh:hover { border-color: var(--border-strong); color: var(--white); }
 
         footer { border-top: 1px solid var(--border); padding: 32px 60px; }
-
         .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .footer-info { display: flex; flex-direction: column; gap: 8px; }
         .footer-copy { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; }
+        .footer-subtitle { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; }
+        
         .footer-links { display: flex; gap: 24px; }
         .footer-links a { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-600); text-decoration: none; transition: color 0.2s; }
         .footer-links a:hover { color: var(--white); }
@@ -428,14 +429,10 @@
         .reveal {
             opacity: 0;
             transform: translateY(28px);
-            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-                        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
         .reveal-d1 { transition-delay: 0.05s; }
         .reveal-d2 { transition-delay: 0.12s; }
@@ -454,71 +451,16 @@
         }
 
         .mobile-nav-overlay.open { display: flex; }
-
-        .mobile-nav-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 40px;
-        }
-
-        .mobile-nav-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 28px;
-            letter-spacing: 3px;
-            color: var(--white);
-        }
-
-        .mobile-nav-close {
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            cursor: pointer;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            transition: all 0.2s;
-            background: transparent;
-        }
-
+        .mobile-nav-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; }
+        .mobile-nav-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: var(--white); }
+        .mobile-nav-close { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-400); cursor: pointer; padding: 8px 12px; border: 1px solid var(--border); border-radius: 2px; transition: all 0.2s; background: transparent; }
         .mobile-nav-close:hover { color: var(--white); border-color: var(--border-strong); }
-
-        .mobile-nav-links {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            flex: 1;
-        }
-
-        .mobile-nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border);
-            font-family: 'DM Mono', monospace;
-            font-size: 13px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            text-decoration: none;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
+        .mobile-nav-links { display: flex; flex-direction: column; gap: 0; flex: 1; }
+        .mobile-nav-link { display: flex; align-items: center; gap: 12px; padding: 20px 0; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-400); text-decoration: none; cursor: pointer; transition: color 0.2s; }
         .mobile-nav-link:hover, .mobile-nav-link.highlight { color: var(--white); }
         .mobile-nav-link svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
 
-        .mobile-nav-footer {
-            margin-top: 32px;
-            font-family: 'DM Mono', monospace;
-            font-size: 9px;
-            color: var(--gray-600);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+        .mobile-nav-footer { margin-top: 32px; font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gray-600); letter-spacing: 2px; text-transform: uppercase; text-align: center; }
 
         .hamburger {
             display: none;
@@ -536,24 +478,14 @@
             transition: all 0.2s;
             padding: 0;
         }
-
         .hamburger:hover { border-color: var(--border-strong); color: var(--white); }
-
-        .hamburger span {
-            display: block;
-            width: 16px;
-            height: 1px;
-            background: currentColor;
-            transition: all 0.2s;
-        }
+        .hamburger span { display: block; width: 16px; height: 1px; background: currentColor; transition: all 0.2s; }
 
         @media (max-width: 768px) {
             .header-inner { grid-template-columns: 1fr; padding: 40px 20px 32px; min-height: 240px; gap: 0; }
             .header-right { display: none; }
-
             .container { padding: 0 20px; }
-            footer { padding: 24px 20px; }
-
+            
             .nav-strip { padding: 0 20px; }
             .nav-left { display: none; }
             .nav-right .tg-link { display: none; }
@@ -577,10 +509,16 @@
             .sec-item { padding: 16px; flex-wrap: wrap; gap: 8px; }
             .sec-right { width: 100%; justify-content: flex-end; }
 
-            .req-table td { padding: 12px 16px; font-size: 12px; }
-            .req-table td:first-child { width: 110px; font-size: 9px; }
+            .req-table, .req-table tbody, .req-table tr, .req-table td { display: block; width: 100%; }
+            .req-table tr { padding: 12px 0; border-bottom: 1px solid var(--border); background: transparent !important; transition: none; }
+            .req-table tr:hover { background: transparent; }
+            .req-table td { padding: 4px 16px !important; border: none !important; }
+            .req-table td:first-child { width: auto; color: var(--gray-400); font-size: 10px !important; margin-bottom: 2px; }
+            .req-table td:last-child { font-size: 14px !important; color: var(--white); }
 
+            footer { padding: 24px 20px; }
             .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
+            .footer-info { align-items: center; gap: 8px; }
             .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
 
             .auth-modal {
@@ -598,7 +536,6 @@
 
             .modal-overlay { align-items: flex-end; }
             .modal-overlay.active .auth-modal { transform: translateY(0); }
-
             .toast { right: 16px; left: 16px; max-width: none; bottom: 16px; }
         }
 
@@ -606,7 +543,6 @@
             h1 { font-size: 64px; }
             .header-sub { font-size: 13px; }
             .stat-num { font-size: 44px; }
-            .req-table td:first-child { width: 90px; }
         }
     </style>
 </head>
@@ -775,8 +711,11 @@
     </div>
 
     <footer>
-        <div class="footer-inner reveal">
-            <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+        <div class="footer-inner">
+            <div class="footer-info">
+                <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+                <div class="footer-subtitle"><span id="footer-version-label">Ver. —</span> — Free Forever</div>
+            </div>
             <div class="footer-links">
                 <a href="support.html">Поддержка</a>
                 <a href="https://t.me/mxlauncher" target="_blank">Telegram</a>
@@ -863,9 +802,11 @@
                 Telegram
             </a>
         </div>
-        <div class="mobile-nav-footer">MX Launcher © 2026 — Ver. 2026.1 — Free Forever</div>
+        <div class="mobile-nav-footer">MX Launcher © 2026 — Free Forever</div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    
     <script>
         const API_URL = "https://ultrafucker3.pythonanywhere.com";
 
@@ -1090,6 +1031,9 @@
                 if (ver) {
                     const el = document.getElementById('version-label');
                     if (el) el.textContent = `Ver. ${ver}`;
+                    
+                    const footerEl = document.getElementById('footer-version-label');
+                    if (footerEl) footerEl.textContent = `Ver. ${ver}`;
                 }
             } catch {}
         }
@@ -1118,7 +1062,7 @@
             fetchLauncherRating();
             checkServerStatus();
             fetchOnlineCount();
-            fetchVersion();
+            fetchVersion(); 
             initScrollReveal();
 
             const savedUser = localStorage.getItem('mx_username');
@@ -1142,6 +1086,5 @@
             });
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 </body>
 </html>

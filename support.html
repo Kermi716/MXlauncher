@@ -514,9 +514,12 @@
         .btn-auth:hover { background: var(--gray-100); }
         .btn-auth:disabled { opacity: 0.4; cursor: not-allowed; }
 
+        /* Стили для футера ПК и Мобильных */
         footer { border-top: 1px solid var(--border); padding: 32px 60px; margin-top: auto; }
         .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .footer-info { display: flex; flex-direction: column; gap: 8px; }
         .footer-copy { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; }
+        .footer-subtitle { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; }
         .footer-links { display: flex; gap: 24px; }
         .footer-links a { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-600); text-decoration: none; transition: color 0.2s; }
         .footer-links a:hover { color: var(--white); }
@@ -563,7 +566,7 @@
         .mobile-nav-links { display: flex; flex-direction: column; gap: 0; flex: 1; }
         .mobile-nav-link { display: flex; align-items: center; gap: 12px; padding: 20px 0; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-400); text-decoration: none; cursor: pointer; transition: color 0.2s; }
         .mobile-nav-link:hover, .mobile-nav-link.highlight { color: var(--white); }
-        .mobile-nav-footer { margin-top: 32px; font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gray-600); letter-spacing: 2px; text-transform: uppercase; }
+        .mobile-nav-footer { margin-top: 32px; font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gray-600); letter-spacing: 2px; text-transform: uppercase; text-align: center; }
 
         .hamburger { display: none; background: transparent; border: 1px solid var(--border); color: var(--gray-400); width: 38px; height: 38px; cursor: pointer; align-items: center; justify-content: center; flex-direction: column; gap: 5px; border-radius: 2px; transition: all 0.2s; padding: 0; }
         .hamburger:hover { border-color: var(--border-strong); color: var(--white); }
@@ -574,15 +577,18 @@
             .header-right { display: none; }
             .container { padding: 0 20px; }
             .nav-strip { padding: 0 20px; }
-            footer { padding: 24px 20px; }
             .nav-left { display: none; }
             .nav-right .tg-link { display: none; }
             .hamburger { display: flex; }
             .section { padding: 40px 0; }
             .section-header { flex-wrap: wrap; gap: 6px; }
             .section-rule { display: none; }
+            
+            footer { padding: 24px 20px; }
             .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
+            .footer-info { align-items: center; gap: 8px; }
             .footer-links { flex-wrap: wrap; justify-content: center; }
+            
             .auth-modal { max-width: 100%; height: 100%; border: none; border-top: 1px solid var(--border-strong); padding: 28px 24px 40px; overflow-y: auto; align-self: flex-end; transform: translateY(100%); }
             .modal-overlay { align-items: flex-end; }
             .modal-overlay.active .auth-modal { transform: translateY(0); }
@@ -704,8 +710,11 @@
     </div>
 
     <footer>
-        <div class="footer-inner reveal">
-            <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+        <div class="footer-inner">
+            <div class="footer-info">
+                <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+                <div class="footer-subtitle"><span id="footer-version-label">Ver. —</span> — Free Forever</div>
+            </div>
             <div class="footer-links">
                 <a href="index.html">Главная</a>
                 <a href="https://t.me/mxlauncher" target="_blank">Telegram</a>
@@ -967,6 +976,18 @@
             btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg> Отправить обращение`;
         }
 
+        async function fetchVersion() {
+            try {
+                const res = await fetch(`${API_URL}/check_update`);
+                const data = await res.json();
+                const ver = data.latest_version || data.version;
+                if (ver) {
+                    const footerEl = document.getElementById('footer-version-label');
+                    if (footerEl) footerEl.textContent = `Ver. ${ver}`;
+                }
+            } catch {}
+        }
+
         function initScrollReveal() {
             const els = document.querySelectorAll('.reveal');
             const observer = new IntersectionObserver((entries) => {
@@ -979,6 +1000,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             initScrollReveal();
+            fetchVersion(); 
 
             const savedUser = localStorage.getItem('mx_username');
             const savedToken = localStorage.getItem('mx_token');

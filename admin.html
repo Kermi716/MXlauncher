@@ -52,92 +52,28 @@
             z-index: 9999;
         }
 
-        .site-header {
-            position: relative;
-            width: 100%;
-            border-bottom: 1px solid var(--border);
-            overflow: hidden;
-        }
-
+        .site-header { position: relative; width: 100%; border-bottom: 1px solid var(--border); overflow: hidden; }
         .header-video-wrap { position: absolute; inset: 0; z-index: 0; }
         .header-video-wrap video { width: 100%; height: 100%; object-fit: cover; opacity: 0.18; filter: grayscale(100%) contrast(1.2); }
         .header-video-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,10,10,0) 40%, rgba(10,10,10,1) 100%); }
 
-        .header-inner {
-            position: relative;
-            z-index: 2;
-            padding: 80px 60px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
+        .header-inner { position: relative; z-index: 2; padding: 80px 60px 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
 
-        .header-eyebrow {
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .header-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gray-400); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
         .header-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--gray-600); }
 
-        h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(48px, 8vw, 80px);
-            letter-spacing: 4px;
-            color: var(--white);
-            line-height: 1;
-            margin-bottom: 0;
-            text-transform: uppercase;
-        }
+        h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 8vw, 80px); letter-spacing: 4px; color: var(--white); line-height: 1; margin-bottom: 0; text-transform: uppercase; }
 
         .nav-strip-wrap { border-bottom: 1px solid var(--border); }
-
-        .nav-strip {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 60px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
+        .nav-strip { display: flex; align-items: center; justify-content: space-between; padding: 0 60px; max-width: 1200px; margin: 0 auto; width: 100%; }
         .nav-left { display: flex; }
-
-        .nav-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 16px 20px 16px 0;
-            margin-right: 24px;
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            text-decoration: none;
-            transition: color 0.2s;
-            cursor: pointer;
-        }
+        .nav-link { display: inline-flex; align-items: center; gap: 8px; padding: 16px 20px 16px 0; margin-right: 24px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-400); text-decoration: none; transition: color 0.2s; cursor: pointer; }
         .nav-link:hover { color: var(--white); }
-
-        .nav-link.back-link {
-            color: var(--gray-600);
-            padding-right: 0;
-            margin-right: 32px;
-            border-right: 1px solid var(--border);
-            padding-right: 32px;
-        }
+        .nav-link.back-link { color: var(--gray-600); padding-right: 0; margin-right: 32px; border-right: 1px solid var(--border); padding-right: 32px; }
         .nav-link.back-link:hover { color: var(--gray-400); }
         .nav-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 60px; width: 100%; flex: 1; }
-
         .section { padding: 40px 0; border-bottom: 1px solid var(--border); }
         .section:last-child { border-bottom: none; }
         .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 36px; flex-wrap: wrap; gap: 16px; }
@@ -146,12 +82,7 @@
         .section-rule { flex: 1; height: 1px; background: var(--border); margin: 0 20px; min-width: 50px;}
 
         .controls { display: flex; gap: 12px; flex-wrap: wrap; }
-        .sort-select {
-            background: var(--black); color: var(--white); border: 1px solid var(--border);
-            padding: 8px 16px; font-family: 'DM Mono', monospace; font-size: 10px;
-            letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: 0.2s;
-            appearance: none; -webkit-appearance: none;
-        }
+        .sort-select { background: var(--black); color: var(--white); border: 1px solid var(--border); padding: 8px 16px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: 0.2s; appearance: none; -webkit-appearance: none; }
         .sort-select:hover { border-color: var(--white); }
 
         .ticket-item { border: 1px solid var(--border); margin-bottom: 16px; transition: background 0.2s; background: var(--black); }
@@ -176,52 +107,41 @@
         .ticket-a-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gray-400); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
         .ticket-a { font-size: 13px; color: var(--white); line-height: 1.5; }
 
-        .btn-auth {
-            background: var(--white); color: var(--black); border: 1px solid var(--white);
-            padding: 11px 20px; font-family: 'DM Mono', monospace; font-size: 10px;
-            font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
-            transition: all 0.2s; text-decoration: none; display: inline-block; text-align: center;
-        }
+        .btn-auth { background: var(--white); color: var(--black); border: 1px solid var(--white); padding: 11px 20px; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; text-align: center; }
         .btn-auth:hover { background: transparent; color: var(--white); }
         
-        .btn-outline {
-            background: transparent; color: var(--gray-400); border: 1px solid var(--border);
-            padding: 11px 20px; font-family: 'DM Mono', monospace; font-size: 10px;
-            letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
-            text-decoration: none; display: inline-block; text-align: center;
-        }
+        .btn-outline { background: transparent; color: var(--gray-400); border: 1px solid var(--border); padding: 11px 20px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; text-align: center; }
         .btn-outline:hover { border-color: var(--white); color: var(--white); }
 
         .action-section { display: none; margin-top: 24px; border-top: 1px solid var(--border); padding-top: 24px; }
         .action-section.active { display: block; }
         
-        .reply-input {
-            width: 100%; background: transparent; border: 1px solid var(--border);
-            padding: 16px; color: var(--white); font-family: 'DM Sans', sans-serif;
-            font-size: 13px; resize: vertical; min-height: 100px; margin-bottom: 16px; transition: 0.2s;
-        }
+        .reply-input { width: 100%; background: transparent; border: 1px solid var(--border); padding: 16px; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 13px; resize: vertical; min-height: 100px; margin-bottom: 16px; transition: 0.2s; }
         .reply-input:focus { border-color: var(--white); }
 
         .chat-link { color: var(--white); text-decoration: underline; transition: opacity 0.2s; word-break: break-all; }
         .chat-link:hover { opacity: 0.7; }
 
-        .empty-state {
-            padding: 60px 20px; text-align: center; font-family: 'DM Mono', monospace;
-            font-size: 10px; color: var(--gray-600); letter-spacing: 1px; text-transform: uppercase;
-            border: 1px dashed var(--border);
-        }
+        .empty-state { padding: 60px 20px; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1px; text-transform: uppercase; border: 1px dashed var(--border); }
 
-        .toast {
-            position: fixed; bottom: 30px; right: 30px; background: var(--white); color: var(--black); padding: 16px 24px;
-            z-index: 99999; transform: translateY(120%); opacity: 0; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
-            border-left: 3px solid var(--black); max-width: 320px; display: flex; align-items: center; gap: 12px;
-        }
+        .toast { position: fixed; bottom: 30px; right: 30px; background: var(--white); color: var(--black); padding: 16px 24px; z-index: 99999; transform: translateY(120%); opacity: 0; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s; border-left: 3px solid var(--black); max-width: 320px; display: flex; align-items: center; gap: 12px; }
         .toast.show { transform: translateY(0); opacity: 1; }
         .toast-title { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'DM Mono', monospace; }
 
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .anim-in { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+        .anim-in-1 { animation-delay: 0.1s; }
+        .anim-in-2 { animation-delay: 0.2s; }
+        .anim-in-3 { animation-delay: 0.3s; }
+
+        .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
         footer { border-top: 1px solid var(--border); padding: 32px 60px; margin-top: auto; }
         .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .footer-info { display: flex; flex-direction: column; gap: 8px; }
         .footer-copy { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; }
+        .footer-subtitle { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; }
 
         @media (max-width: 768px) {
             .header-inner { padding: 40px 20px 20px; }
@@ -230,7 +150,9 @@
             .nav-strip { padding: 0 20px; }
             .ticket-header { flex-direction: column; align-items: flex-start; }
             .controls { width: 100%; flex-direction: column; }
+            footer { padding: 24px 20px; }
             .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
+            .footer-info { align-items: center; gap: 8px; }
             .toast { right: 16px; left: 16px; max-width: none; bottom: 16px; }
         }
     </style>
@@ -242,13 +164,13 @@
                 <source src="video.mp4" type="video/mp4">
             </video>
         </div>
-        <div class="header-inner">
+        <div class="header-inner anim-in anim-in-1">
             <div class="header-eyebrow">Администрирование</div>
             <h1>Панель управления</h1>
         </div>
     </header>
 
-    <div class="nav-strip-wrap">
+    <div class="nav-strip-wrap anim-in anim-in-2">
         <div class="nav-strip">
             <nav class="nav-left">
                 <a class="nav-link back-link" href="profile.html">
@@ -261,7 +183,7 @@
     </div>
 
     <div class="container">
-        <section class="section" style="padding-top: 0;">
+        <section class="section anim-in anim-in-3" style="padding-top: 0;">
             <div class="section-header">
                 <span class="section-label">01</span>
                 <span class="section-title">Тикеты поддержки</span>
@@ -283,7 +205,7 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section reveal">
             <div class="section-header">
                 <span class="section-label">02</span>
                 <span class="section-title">Модерация Ресурспаков</span>
@@ -297,7 +219,10 @@
 
     <footer>
         <div class="footer-inner">
-            <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+            <div class="footer-info">
+                <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+                <div class="footer-subtitle"><span id="footer-version-label">Ver. —</span> — Free Forever</div>
+            </div>
         </div>
     </footer>
 
@@ -322,24 +247,49 @@
 
         function formatText(str) {
             if (!str) return '';
-            
-            let safeStr = str
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;");
-
+            let safeStr = str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             const urlRegex = /(https?:\/\/[^\s]+)/g;
             safeStr = safeStr.replace(urlRegex, function(url) {
                 return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="chat-link">${url}</a>`;
             });
-
             return safeStr.replace(/\n/g, '<br>');
+        }
+
+        async function fetchVersion() {
+            try {
+                const res = await fetch(`${API_URL}/check_update`);
+                const data = await res.json();
+                const ver = data.latest_version || data.version;
+                if (ver) {
+                    const footerEl = document.getElementById('footer-version-label');
+                    if (footerEl) footerEl.textContent = `Ver. ${ver}`;
+                }
+            } catch {}
+        }
+
+        function initScrollReveal() {
+            const els = document.querySelectorAll('.reveal');
+            if (!els.length) return;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            els.forEach(el => observer.observe(el));
         }
 
         async function initAdmin() {
             if (!savedUser || !savedToken) { window.location.href = "index.html"; return; }
+            
+            initScrollReveal();
+            
             await pollAdminTickets(true); 
             await pollAdminRP(); 
+            await fetchVersion(); 
+
             setInterval(() => pollAdminTickets(false), 10000); 
             setInterval(() => pollAdminRP(), 10000); 
         }
@@ -352,10 +302,7 @@
                 });
                 
                 if (res.status === 403 || !res.ok) {
-                    if (isFirstLoad) {
-                        alert("У вас нет прав администратора!");
-                        window.location.href = "profile.html";
-                    }
+                    if (isFirstLoad) { alert("У вас нет прав администратора!"); window.location.href = "profile.html"; }
                     return;
                 }
 
@@ -364,11 +311,8 @@
                 
                 if (newHash !== rawDataHash) {
                     rawDataHash = newHash;
-                    
                     globalTickets = [];
-                    for (const [id, tData] of Object.entries(data.tickets || {})) {
-                        globalTickets.push({ id, ...tData });
-                    }
+                    for (const [id, tData] of Object.entries(data.tickets || {})) { globalTickets.push({ id, ...tData }); }
                     renderTickets();
                 }
             } catch (e) { 
@@ -385,17 +329,12 @@
 
             const cont = document.getElementById('admin-tickets');
             cont.innerHTML = '';
-
             const statusFilter = document.getElementById('status-filter').value;
             const sortMethod = document.getElementById('sort-select').value;
-            
             let filteredTickets = globalTickets.filter(t => t.status === statusFilter);
 
             if (filteredTickets.length === 0) {
-                const emptyMsg = statusFilter === 'open' 
-                    ? "Все тикеты разобраны. Очередь пуста." 
-                    : "Список отвеченных тикетов пуст.";
-                    
+                const emptyMsg = statusFilter === 'open' ? "Все тикеты разобраны. Очередь пуста." : "Список отвеченных тикетов пуст.";
                 cont.innerHTML = `<div class="empty-state">${emptyMsg}</div>`;
                 return;
             }
@@ -403,23 +342,16 @@
             filteredTickets.sort((a, b) => {
                 const premiumA = a.is_premium ? 1 : 0;
                 const premiumB = b.is_premium ? 1 : 0;
-                
                 if (premiumA !== premiumB) return premiumB - premiumA; 
-
                 const dateA = new Date(a.date).getTime();
                 const dateB = new Date(b.date).getTime();
                 return sortMethod === 'new' ? dateB - dateA : dateA - dateB;
             });
 
             filteredTickets.forEach(tData => {
-                const dateStr = new Date(tData.date).toLocaleString('ru-RU', { 
-                    day: '2-digit', month: '2-digit', year: 'numeric', 
-                    hour: '2-digit', minute: '2-digit' 
-                });
-                
+                const dateStr = new Date(tData.date).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
                 const safeMessage = formatText(tData.message);
                 let html = '';
-
                 const premiumClass = tData.is_premium ? ' premium' : '';
                 const premiumBadge = tData.is_premium ? '<span class="premium-badge">PREMIUM</span>' : '';
 
@@ -428,28 +360,20 @@
                         <div class="ticket-item${premiumClass}" id="ticket-wrapper-${tData.id}">
                             <div class="ticket-header">
                                 <div class="ticket-status open">Ожидает ответа</div>
-                                <div class="ticket-user-info">
-                                    ${premiumBadge}
-                                    <span>Пользователь: ${tData.user}</span>
-                                    <span>|</span>
-                                    <span>${dateStr}</span>
-                                </div>
+                                <div class="ticket-user-info">${premiumBadge} <span>Пользователь: ${tData.user}</span> <span>|</span> <span>${dateStr}</span></div>
                             </div>
                             <div class="ticket-body">
                                 <div class="ticket-q-label">Суть обращения</div>
                                 <div class="ticket-q">${safeMessage}</div>
-                                
                                 <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                                     <button class="btn-outline" onclick="toggleForm('${tData.id}', 'reply')">Ответить</button>
                                     <button class="btn-outline" style="color: var(--red); border-color: var(--border);" onclick="toggleForm('${tData.id}', 'reject')">Отклонить</button>
                                     <button class="btn-outline" style="border-color: transparent;" onclick="deleteTicket('${tData.id}')">Удалить</button>
                                 </div>
-
                                 <div class="action-section" id="form-reply-${tData.id}">
                                     <textarea id="input-reply-${tData.id}" class="reply-input" placeholder="Введите ответ для игрока..."></textarea>
                                     <button class="btn-auth" style="width: 100%;" onclick="submitReply('${tData.id}')">Отправить ответ</button>
                                 </div>
-
                                 <div class="action-section" id="form-reject-${tData.id}">
                                     <textarea id="input-reject-${tData.id}" class="reply-input" style="border-color: var(--red);" placeholder="Укажите причину отклонения..."></textarea>
                                     <button class="btn-auth" style="width: 100%; background: var(--red); border-color: var(--red); color: var(--white);" onclick="submitReject('${tData.id}')">Отклонить тикет</button>
@@ -460,41 +384,28 @@
                 } else {
                     let rawReply = tData.reply || "";
                     let isRejected = rawReply.includes("Отклонено");
-                    
-                    if (isRejected) {
-                        rawReply = rawReply.replace(/^Отклонено администратором @[^\n\r]+[\n\r]*/i, '');
-                    } else {
-                        rawReply = rawReply.replace(/^Ответил администратор @[^\n\r]+:[\n\r]*/i, '');
-                    }
-                    
+                    if (isRejected) { rawReply = rawReply.replace(/^Отклонено администратором @[^\n\r]+[\n\r]*/i, ''); } 
+                    else { rawReply = rawReply.replace(/^Ответил администратор @[^\n\r]+:[\n\r]*/i, ''); }
                     const safeReply = formatText(rawReply);
                     
                     html = `
                         <div class="ticket-item${premiumClass}" id="ticket-wrapper-${tData.id}">
                             <div class="ticket-header">
                                 <div class="ticket-status ${isRejected ? 'rejected' : 'answered'}">${isRejected ? 'Отклонено' : 'Отвечено'}</div>
-                                <div class="ticket-user-info">
-                                    ${premiumBadge}
-                                    <span>Пользователь: ${tData.user}</span>
-                                    <span>|</span>
-                                    <span>${dateStr}</span>
-                                </div>
+                                <div class="ticket-user-info">${premiumBadge} <span>Пользователь: ${tData.user}</span> <span>|</span> <span>${dateStr}</span></div>
                             </div>
                             <div class="ticket-body">
                                 <div class="ticket-q-label">Суть обращения</div>
                                 <div class="ticket-q">${safeMessage}</div>
-                                
                                 <div class="ticket-a-block ${isRejected ? 'rejected' : ''}">
                                     <div class="ticket-a-label">${isRejected ? 'Причина отказа' : 'Ответ администрации'}</div>
                                     <div class="ticket-a" style="${isRejected ? 'color: var(--gray-400);' : ''}">${safeReply}</div>
                                 </div>
-                                
                                 <button class="btn-outline" style="border-color: transparent;" onclick="deleteTicket('${tData.id}')">Удалить навсегда</button>
                             </div>
                         </div>
                     `;
                 }
-                
                 cont.innerHTML += html;
             });
 
@@ -511,16 +422,12 @@
         function toggleForm(ticketId, type) {
             document.querySelectorAll('.action-section').forEach(el => el.classList.remove('active'));
             const targetSection = document.getElementById(`form-${type}-${ticketId}`);
-            if (targetSection) {
-                targetSection.classList.add('active');
-                document.getElementById(`input-${type}-${ticketId}`).focus();
-            }
+            if (targetSection) { targetSection.classList.add('active'); document.getElementById(`input-${type}-${ticketId}`).focus(); }
         }
 
         async function submitReply(ticketId) {
             const replyText = document.getElementById(`input-reply-${ticketId}`).value.trim();
             if (replyText.length < 2) { alert("Ответ слишком короткий!"); return; }
-            
             const finalReply = `Ответил администратор @${savedUser}:\n${replyText}`;
             await executeReplyAction(ticketId, finalReply, "Ответ отправлен");
         }
@@ -528,7 +435,6 @@
         async function submitReject(ticketId) {
             const reasonText = document.getElementById(`input-reject-${ticketId}`).value.trim();
             if (reasonText.length < 2) { alert("Укажите причину отклонения!"); return; }
-            
             const rejectMsg = `Отклонено администратором @${savedUser}\nПричина: ${reasonText}`;
             await executeReplyAction(ticketId, rejectMsg, "Тикет отклонен");
         }
@@ -537,15 +443,10 @@
             try {
                 const res = await fetch(`${API_URL}/reply_ticket`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        username: savedUser, token: savedToken, 
-                        ticket_id: ticketId, reply: replyText 
-                    })
+                    body: JSON.stringify({ username: savedUser, token: savedToken, ticket_id: ticketId, reply: replyText })
                 });
-                if (res.ok) {
-                    showToast(successMsg);
-                    pollAdminTickets(false); 
-                } else { alert("Ошибка при обработке запроса."); }
+                if (res.ok) { showToast(successMsg); pollAdminTickets(false); } 
+                else { alert("Ошибка при обработке запроса."); }
             } catch(e) { alert("Ошибка сети."); }
         }
 
@@ -556,10 +457,8 @@
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: savedUser, token: savedToken, ticket_id: ticketId })
                 });
-                if (res.ok) {
-                    showToast("Удалено с сервера");
-                    pollAdminTickets(false); 
-                } else { alert("Ошибка при удалении тикета."); }
+                if (res.ok) { showToast("Удалено с сервера"); pollAdminTickets(false); } 
+                else { alert("Ошибка при удалении тикета."); }
             } catch(e) { alert("Ошибка сети."); }
         }
 
@@ -575,18 +474,15 @@
                 } else if (res.status === 403) {
                     document.getElementById('admin-rp').innerHTML = '<div class="empty-state">У вас нет прав для модерации ресурспаков.</div>';
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) {}
         }
 
         function renderRP(pendingPacks) {
             const cont = document.getElementById('admin-rp');
             cont.innerHTML = '';
-            
             const entries = Object.entries(pendingPacks);
-            if (entries.length === 0) {
-                cont.innerHTML = `<div class="empty-state">Очередь ресурспаков пуста.</div>`;
-                return;
-            }
+            
+            if (entries.length === 0) { cont.innerHTML = `<div class="empty-state">Очередь ресурспаков пуста.</div>`; return; }
 
             entries.forEach(([id, pack]) => {
                 const dateStr = new Date(pack.date).toLocaleString('ru-RU');
@@ -594,11 +490,7 @@
                     <div class="ticket-item">
                         <div class="ticket-header">
                             <div class="ticket-status open">Ожидает модерации</div>
-                            <div class="ticket-user-info">
-                                <span>Автор: ${pack.author}</span>
-                                <span>|</span>
-                                <span>${dateStr}</span>
-                            </div>
+                            <div class="ticket-user-info"><span>Автор: ${pack.author}</span> <span>|</span> <span>${dateStr}</span></div>
                         </div>
                         <div class="ticket-body">
                             <div class="ticket-q-label">Информация о паке</div>
@@ -607,7 +499,6 @@
                                 <a href="${pack.url}" target="_blank" class="chat-link" style="margin-right: 16px;">[ Скачать .zip ]</a>
                                 <a href="${pack.image}" target="_blank" class="chat-link">[ Посмотреть скриншот ]</a>
                             </div>
-                            
                             <div style="display: flex; gap: 12px; margin-top: 24px;">
                                 <button class="btn-outline" style="color: var(--green); border-color: var(--border);" onclick="reviewRP('${id}', 'approve')">Одобрить</button>
                                 <button class="btn-outline" style="color: var(--red); border-color: transparent;" onclick="reviewRP('${id}', 'reject')">Отклонить</button>
@@ -625,10 +516,8 @@
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: savedUser, token: savedToken, rp_id: id, action: action })
                 });
-                if (res.ok) {
-                    showToast(action === 'approve' ? "Пак одобрен!" : "Пак отклонен");
-                    pollAdminRP();
-                } else { alert("Ошибка при обработке запроса."); }
+                if (res.ok) { showToast(action === 'approve' ? "Пак одобрен!" : "Пак отклонен"); pollAdminRP(); } 
+                else { alert("Ошибка при обработке запроса."); }
             } catch(e) { alert("Ошибка сети."); }
         }
 

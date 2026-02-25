@@ -21,7 +21,6 @@
             --gray-600: #444440;
             --gray-800: #1a1a18;
             --gray-900: #111110;
-            --accent: #f5f5f0;
             --border: rgba(245, 245, 240, 0.12);
             --border-strong: rgba(245, 245, 240, 0.28);
             --red: #ff5555;
@@ -54,124 +53,40 @@
             z-index: 9999;
         }
 
-        .site-header {
-            position: relative;
-            width: 100%;
-            border-bottom: 1px solid var(--border);
-            overflow: hidden;
-        }
-
+        .site-header { position: relative; width: 100%; border-bottom: 1px solid var(--border); overflow: hidden; }
         .header-video-wrap { position: absolute; inset: 0; z-index: 0; }
         .header-video-wrap video { width: 100%; height: 100%; object-fit: cover; opacity: 0.18; filter: grayscale(100%) contrast(1.2); }
         .header-video-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,10,10,0) 40%, rgba(10,10,10,1) 100%); }
 
-        .header-inner {
-            position: relative;
-            z-index: 2;
-            padding: 80px 60px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
+        .header-inner { position: relative; z-index: 2; padding: 80px 60px 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
 
-        .header-eyebrow {
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .header-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gray-400); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
         .header-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--gray-600); }
 
-        h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(48px, 8vw, 80px);
-            letter-spacing: 4px;
-            color: var(--white);
-            line-height: 1;
-            margin-bottom: 0;
-            text-transform: uppercase;
-        }
+        h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 8vw, 80px); letter-spacing: 4px; color: var(--white); line-height: 1; margin-bottom: 0; text-transform: uppercase; }
 
         .nav-strip-wrap { border-bottom: 1px solid var(--border); }
-
-        .nav-strip {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 60px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
+        .nav-strip { display: flex; align-items: center; justify-content: space-between; padding: 0 60px; max-width: 1200px; margin: 0 auto; width: 100%; }
         .nav-left { display: flex; }
-
-        .nav-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 16px 20px 16px 0;
-            margin-right: 24px;
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            text-decoration: none;
-            transition: color 0.2s;
-            cursor: pointer;
-        }
+        .nav-link { display: inline-flex; align-items: center; gap: 8px; padding: 16px 20px 16px 0; margin-right: 24px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-400); text-decoration: none; transition: color 0.2s; cursor: pointer; }
         .nav-link:hover { color: var(--white); }
-
-        .nav-link.back-link {
-            color: var(--gray-600);
-            padding-right: 0;
-            margin-right: 32px;
-            border-right: 1px solid var(--border);
-            padding-right: 32px;
-        }
+        .nav-link.back-link { color: var(--gray-600); padding-right: 0; margin-right: 32px; border-right: 1px solid var(--border); padding-right: 32px; }
         .nav-link.back-link:hover { color: var(--gray-400); }
         .nav-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; }
 
-        .nav-link.download-btn {
-            color: var(--gray-200);
-            border: 1px solid var(--border);
-            padding: 8px 16px;
-            margin-top: 8px;
-            margin-bottom: 8px;
-            border-radius: 2px;
-            transition: all 0.2s;
-        }
-        .nav-link.download-btn:hover {
-            color: var(--white);
-            border-color: var(--border-strong);
-            background: rgba(245,245,240,0.05);
-        }
+        .nav-link.download-btn { color: var(--gray-200); border: 1px solid var(--border); padding: 8px 16px; margin-top: 8px; margin-bottom: 8px; border-radius: 2px; transition: all 0.2s; }
+        .nav-link.download-btn:hover { color: var(--white); border-color: var(--border-strong); background: rgba(245,245,240,0.05); }
 
         .nav-right { display: flex; align-items: center; gap: 20px; position: relative; }
-
         .bell-wrapper { position: relative; display: flex; align-items: center; cursor: pointer; padding: 16px 0; }
         .bell-icon { width: 18px; height: 18px; fill: none; stroke: var(--gray-400); stroke-width: 1.5; transition: stroke 0.2s; }
         .bell-wrapper:hover .bell-icon { stroke: var(--white); }
-        .bell-badge {
-            position: absolute; top: 12px; right: -8px; background: var(--white);
-            color: var(--black); font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500;
-            border-radius: 2px; padding: 2px 4px; display: none; line-height: 1;
-        }
-        .notif-dropdown {
-            position: absolute; top: 100%; right: 0; width: 320px;
-            background: var(--gray-900); border: 1px solid var(--border-strong);
-            display: none; flex-direction: column; z-index: 1000;
-            transform: translateY(10px); opacity: 0; transition: all 0.2s;
-        }
+        .bell-badge { position: absolute; top: 12px; right: -8px; background: var(--white); color: var(--black); font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; border-radius: 2px; padding: 2px 4px; display: none; line-height: 1; }
+        
+        .notif-dropdown { position: absolute; top: 100%; right: 0; width: 320px; background: var(--gray-900); border: 1px solid var(--border-strong); display: none; flex-direction: column; z-index: 1000; transform: translateY(10px); opacity: 0; transition: all 0.2s; }
         .notif-dropdown.show { display: flex; transform: translateY(0); opacity: 1; }
         .notif-header { padding: 16px; border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-400); letter-spacing: 1.5px; text-transform: uppercase; }
-        .notif-list { max-height: 300px; overflow-y: auto; }
+        .notif-list { max-height: 320px; overflow-y: auto; }
         .notif-list::-webkit-scrollbar { width: 4px; }
         .notif-list::-webkit-scrollbar-thumb { background: var(--gray-600); }
         .notif-item { padding: 16px; border-bottom: 1px solid var(--border); transition: background 0.2s; }
@@ -184,7 +99,6 @@
         .notif-empty { padding: 32px 16px; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1px; text-transform: uppercase; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 60px; width: 100%; flex: 1; }
-
         .section { padding: 40px 0; border-bottom: 1px solid var(--border); }
         .section:last-child { border-bottom: none; }
         .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 36px; }
@@ -200,36 +114,19 @@
         .req-table td:first-child { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; width: 250px; border-right: 1px solid var(--border); }
         .req-table td:last-child { color: var(--gray-200); font-weight: 500; transition: color 0.2s; }
 
-        .btn-auth {
-            background: var(--white); color: var(--black); border: 1px solid var(--white);
-            padding: 13px 24px; font-family: 'DM Mono', monospace; font-size: 11px;
-            font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
-            transition: all 0.2s; text-decoration: none; display: inline-block; text-align: center;
-        }
+        .btn-auth { background: var(--white); color: var(--black); border: 1px solid var(--white); padding: 13px 24px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; text-align: center; }
         .btn-auth:hover { background: transparent; color: var(--white); }
         .btn-auth:disabled { opacity: 0.4; cursor: not-allowed; }
         
-        .btn-outline {
-            background: transparent; color: var(--gray-400); border: 1px solid var(--border);
-            padding: 13px 24px; font-family: 'DM Mono', monospace; font-size: 11px;
-            letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
-            text-decoration: none; display: inline-block; text-align: center;
-        }
+        .btn-outline { background: transparent; color: var(--gray-400); border: 1px solid var(--border); padding: 13px 24px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; text-align: center; }
         .btn-outline:hover { border-color: var(--white); color: var(--white); }
 
         .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 20px; }
-        .price-card {
-            border: 1px solid var(--border); padding: 32px 24px;
-            display: flex; flex-direction: column; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            background: var(--black); position: relative; overflow: hidden;
-        }
+        .price-card { border: 1px solid var(--border); padding: 32px 24px; display: flex; flex-direction: column; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); background: var(--black); position: relative; overflow: hidden; }
         .price-card:hover { border-color: var(--border-strong); transform: translateY(-4px); }
-        
         .price-title { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 3px; color: var(--gray-400); margin-bottom: 12px; }
-        
         .price-amount { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--white); line-height: 1; letter-spacing: 2px; display: flex; align-items: baseline; gap: 8px; margin-bottom: 24px; }
         .price-period { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1px; }
-        
         .price-features { list-style: none; margin-bottom: 32px; flex: 1; border-top: 1px solid var(--border); padding-top: 24px; }
         .price-features li { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--gray-200); margin-bottom: 16px; }
         .feature-icon { width: 12px; height: 12px; border: 1px solid var(--gray-600); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
@@ -241,57 +138,48 @@
         .ticket-status { font-family: 'DM Mono', monospace; font-size: 10px; padding: 4px 8px; border: 1px solid var(--border); letter-spacing: 1px; text-transform: uppercase; }
         .ticket-status.answered { color: var(--black); background: var(--white); border-color: var(--white); }
         .ticket-status.rejected { color: var(--black); background: var(--gray-400); border-color: var(--gray-400); }
-        
         .ticket-body { padding: 24px; }
         .ticket-q-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gray-600); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
         .ticket-q { font-size: 14px; color: var(--gray-200); line-height: 1.6; margin-bottom: 24px; }
-        
         .ticket-a-block { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 16px 20px; margin-bottom: 24px; }
         .ticket-a-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gray-400); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
         .ticket-a { font-size: 13px; color: var(--white); line-height: 1.5; }
 
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(10, 10, 10, 0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            z-index: 10000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.25s;
-        }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(10, 10, 10, 0.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        
-        .auth-modal {
-            background: var(--gray-900); border: 1px solid var(--border-strong); width: 100%; max-width: 400px;
-            padding: 32px 30px 28px; transform: translateY(10px) scale(0.985); transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1); position: relative;
-        }
+        .auth-modal { background: var(--gray-900); border: 1px solid var(--border-strong); width: 100%; max-width: 400px; padding: 32px 30px 28px; transform: translateY(10px) scale(0.985); transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1); position: relative; }
         .modal-overlay.active .auth-modal { transform: translateY(0) scale(1); }
-        .close-modal {
-            position: absolute; top: 14px; right: 14px; color: var(--gray-600); cursor: pointer; font-family: 'DM Mono', monospace;
-            font-size: 10px; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; padding: 4px 7px; border: 1px solid transparent;
-        }
+        .close-modal { position: absolute; top: 14px; right: 14px; color: var(--gray-600); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; padding: 4px 7px; border: 1px solid transparent; }
         .close-modal:hover { color: var(--white); border-color: var(--border); }
-        
         .auth-modal-title { font-size: 20px; font-weight: 500; letter-spacing: 0.2px; color: var(--white); margin-bottom: 4px; }
         .auth-modal-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 24px; }
 
         .coin-buttons { display: flex; gap: 12px; margin-bottom: 24px; }
-        .coin-btn {
-            flex: 1; text-align: center; border: 1px solid var(--border); padding: 16px 0; cursor: pointer;
-            font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; transition: all 0.2s; color: var(--gray-400);
-        }
+        .coin-btn { flex: 1; text-align: center; border: 1px solid var(--border); padding: 16px 0; cursor: pointer; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; transition: all 0.2s; color: var(--gray-400); }
         .coin-btn:hover { border-color: var(--border-strong); color: var(--white); }
         .coin-btn.active { border-color: var(--white); color: var(--black); background: var(--white); }
 
-        .toast {
-            position: fixed; bottom: 30px; right: 30px; background: var(--white); color: var(--black); padding: 16px 24px;
-            z-index: 99999; transform: translateY(120%); opacity: 0; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
-            border-left: 3px solid var(--black); max-width: 320px;
-        }
+        .toast { position: fixed; bottom: 30px; right: 30px; background: var(--white); color: var(--black); padding: 16px 24px; z-index: 99999; transform: translateY(120%); opacity: 0; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s; border-left: 3px solid var(--black); max-width: 320px; }
         .toast.show { transform: translateY(0); opacity: 1; }
         .toast-title { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 3px; }
         .toast-desc { font-size: 11px; color: var(--gray-600); font-family: 'DM Mono', monospace; }
         .toast.toast-error { background: var(--black); color: var(--white); border-left-color: var(--white); border: 1px solid var(--border-strong); }
         .toast.toast-error .toast-desc { color: var(--gray-400); }
 
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .anim-in { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+        .anim-in-1 { animation-delay: 0.1s; }
+        .anim-in-2 { animation-delay: 0.2s; }
+        .anim-in-3 { animation-delay: 0.3s; }
+
+        .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
         footer { border-top: 1px solid var(--border); padding: 32px 60px; margin-top: auto; }
         .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+        .footer-info { display: flex; flex-direction: column; gap: 8px; }
         .footer-copy { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; }
+        .footer-subtitle { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; }
 
         @media (max-width: 768px) {
             .header-inner { padding: 40px 20px 20px; }
@@ -302,7 +190,9 @@
             .pricing-grid { grid-template-columns: 1fr; }
             .req-table td { padding: 12px 16px; }
             .req-table td:first-child { width: 120px; font-size: 9px; }
+            footer { padding: 24px 20px; }
             .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
+            .footer-info { align-items: center; gap: 8px; }
             .btn-group { flex-direction: column; display: flex; gap: 12px; }
             .btn-group a, .btn-group button { width: 100%; }
             .toast { right: 16px; left: 16px; max-width: none; bottom: 16px; }
@@ -316,13 +206,13 @@
                 <source src="video.mp4" type="video/mp4">
             </video>
         </div>
-        <div class="header-inner">
+        <div class="header-inner anim-in anim-in-1">
             <div class="header-eyebrow">Личный кабинет</div>
             <h1>Профиль</h1>
         </div>
     </header>
 
-    <div class="nav-strip-wrap">
+    <div class="nav-strip-wrap anim-in anim-in-2">
         <div class="nav-strip">
             <nav class="nav-left">
                 <a class="nav-link back-link" href="index.html">
@@ -347,7 +237,7 @@
     </div>
 
     <div class="container">
-        <section class="section" style="padding-top: 0;">
+        <section class="section anim-in anim-in-3" style="padding-top: 0;">
             <div class="section-header">
                 <span class="section-label">01</span>
                 <span class="section-title">Информация об аккаунте</span>
@@ -367,7 +257,7 @@
             </div>
         </section>
 
-        <section class="section" id="premium-panel">
+        <section class="section reveal" id="premium-panel">
             <div class="section-header">
                 <span class="section-label">02</span>
                 <span class="section-title">MX Launcher Premium</span>
@@ -414,7 +304,7 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section reveal">
             <div class="section-header">
                 <span class="section-label">03</span>
                 <span class="section-title">Мои обращения</span>
@@ -428,7 +318,10 @@
 
     <footer>
         <div class="footer-inner">
-            <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+            <div class="footer-info">
+                <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+                <div class="footer-subtitle"><span id="footer-version-label">Ver. —</span> — Free Forever</div>
+            </div>
         </div>
     </footer>
 
@@ -510,7 +403,7 @@
                         </div>
                     `;
                 });
-            } catch (e) { console.error("Ошибка загрузки уведомлений", e); }
+            } catch (e) {}
         }
 
         async function toggleNotifications() {
@@ -540,9 +433,7 @@
             }
         });
 
-        document.getElementById('notif-dropdown').addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
+        document.getElementById('notif-dropdown').addEventListener('click', function(e) { e.stopPropagation(); });
 
         function logout() {
             localStorage.clear();
@@ -554,12 +445,43 @@
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
         }
 
+        async function fetchVersion() {
+            try {
+                const res = await fetch(`${API_URL}/check_update`);
+                const data = await res.json();
+                const ver = data.latest_version || data.version;
+                if (ver) {
+                    const footerEl = document.getElementById('footer-version-label');
+                    if (footerEl) footerEl.textContent = `Ver. ${ver}`;
+                }
+            } catch {}
+        }
+
+        function initScrollReveal() {
+            const els = document.querySelectorAll('.reveal');
+            if (!els.length) return;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            els.forEach(el => observer.observe(el));
+        }
+
         async function initProfile() {
             if (!savedUser || !savedToken) { window.location.href = "index.html"; return; }
+            
+            initScrollReveal(); 
+            
             document.getElementById('prof-name').innerText = savedUser;
             await checkRole();
             await loadNotifications(); 
             await pollProfileTickets(); 
+            await fetchVersion(); 
+            
             setInterval(() => loadNotifications(), 30000);
             setInterval(pollProfileTickets, 10000); 
         }
@@ -645,7 +567,6 @@
             btnPay.disabled = true;
             btnPay.className = 'btn-outline'; 
             btnPay.style.width = '100%';
-
             document.getElementById('paymentModal').classList.add('active');
         }
 
@@ -665,7 +586,6 @@
             selectedCoin = coin;
             document.getElementById('btn-usdt').classList.toggle('active', coin === 'USDT');
             document.getElementById('btn-ton').classList.toggle('active', coin === 'TON');
-            
             const btnPay = document.getElementById('btn-confirm-pay');
             btnPay.innerText = `Оплатить через ${coin}`;
             btnPay.disabled = false;
@@ -677,14 +597,12 @@
             const btnPay = document.getElementById('btn-confirm-pay');
             btnPay.innerText = "СОЗДАНИЕ ССЫЛКИ...";
             btnPay.disabled = true;
-
             try {
                 const res = await fetch(`${API_URL}/create_payment`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: savedUser, token: savedToken, plan: selectedPlan, coin: selectedCoin })
                 });
                 const data = await res.json();
-
                 if (data.pay_url) {
                     window.open(data.pay_url, '_blank');
                     btnPay.innerText = "ОЖИДАНИЕ ОПЛАТЫ...";
@@ -702,7 +620,6 @@
         function startCheckingPayment(invoiceId) {
             if(paymentInterval) clearInterval(paymentInterval);
             let checks = 0;
-            
             paymentInterval = setInterval(async () => {
                 checks++;
                 if(checks > 300) { 
@@ -711,24 +628,19 @@
                     setTimeout(closePaymentModal, 2000);
                     return;
                 }
-
                 try {
                     const res = await fetch(`${API_URL}/check_payment_status`, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ username: savedUser, invoice_id: invoiceId, plan: selectedPlan })
                     });
                     const data = await res.json();
-
                     if (data.status === "paid") {
                         clearInterval(paymentInterval);
                         document.getElementById('btn-confirm-pay').innerText = "УСПЕШНО!";
                         document.getElementById('btn-confirm-pay').style.background = "var(--white)";
                         document.getElementById('btn-confirm-pay').style.color = "var(--black)";
                         showNotification("Успешно", "Оплата прошла успешно!", true);
-                        setTimeout(() => {
-                            closePaymentModal();
-                            checkRole(); 
-                        }, 2000);
+                        setTimeout(() => { closePaymentModal(); checkRole(); }, 2000);
                     }
                 } catch(e) {}
             }, 2000); 
@@ -740,12 +652,9 @@
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: savedUser, token: savedToken })
                 });
-                
                 if (!resTickets.ok) return;
-                
                 const dataTickets = await resTickets.json();
                 const newHash = JSON.stringify(dataTickets.tickets || {});
-                
                 if (newHash === rawTicketsHash) return;
                 rawTicketsHash = newHash;
 
@@ -767,12 +676,8 @@
                     
                     let rawReply = tData.reply || "";
                     let isRejected = rawReply.includes("Отклонено");
-                    
-                    if (isRejected) {
-                        rawReply = rawReply.replace(/^Отклонено администратором @[^\n\r]+[\n\r]*/i, '');
-                    } else {
-                        rawReply = rawReply.replace(/^Ответил администратор @[^\n\r]+:[\n\r]*/i, '');
-                    }
+                    if (isRejected) { rawReply = rawReply.replace(/^Отклонено администратором @[^\n\r]+[\n\r]*/i, ''); } 
+                    else { rawReply = rawReply.replace(/^Ответил администратор @[^\n\r]+:[\n\r]*/i, ''); }
                     
                     const safeReply = formatText(rawReply);
                     
