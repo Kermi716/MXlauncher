@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,9 @@
     <link rel="manifest" href="site.webmanifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --black: #0a0a0a;
@@ -28,8 +31,18 @@
             --gold: #ffcc00;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-user-select: none; user-select: none; }
-        html { scroll-behavior: smooth; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             background-color: var(--black);
@@ -52,111 +65,581 @@
             z-index: 9999;
         }
 
-        .site-header { position: relative; width: 100%; border-bottom: 1px solid var(--border); overflow: hidden; }
-        .header-video-wrap { position: absolute; inset: 0; z-index: 0; }
-        .header-video-wrap video { width: 100%; height: 100%; object-fit: cover; opacity: 0.18; filter: grayscale(100%) contrast(1.2); }
-        .header-video-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,10,10,0) 40%, rgba(10,10,10,1) 100%); }
+        .site-header {
+            position: relative;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
 
-        .header-inner { position: relative; z-index: 2; padding: 80px 60px 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .header-video-wrap {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
 
-        .header-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gray-400); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
-        .header-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--gray-600); }
+        .header-video-wrap video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.18;
+            filter: grayscale(100%) contrast(1.2);
+        }
 
-        h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 8vw, 80px); letter-spacing: 4px; color: var(--white); line-height: 1; margin-bottom: 0; text-transform: uppercase; }
+        .header-video-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(10, 10, 10, 0) 40%, rgba(10, 10, 10, 1) 100%);
+        }
 
-        .nav-strip-wrap { border-bottom: 1px solid var(--border); }
-        .nav-strip { display: flex; align-items: center; justify-content: space-between; padding: 0 60px; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .nav-left { display: flex; }
-        .nav-link { display: inline-flex; align-items: center; gap: 8px; padding: 16px 20px 16px 0; margin-right: 24px; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-400); text-decoration: none; transition: color 0.2s; cursor: pointer; }
-        .nav-link:hover { color: var(--white); }
-        .nav-link.back-link { color: var(--gray-600); padding-right: 0; margin-right: 32px; border-right: 1px solid var(--border); padding-right: 32px; }
-        .nav-link.back-link:hover { color: var(--gray-400); }
-        .nav-link svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+        .header-inner {
+            position: relative;
+            z-index: 2;
+            padding: 80px 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 40px 60px; width: 100%; flex: 1; }
-        .section { padding: 40px 0; border-bottom: 1px solid var(--border); }
-        .section:last-child { border-bottom: none; }
-        .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 36px; flex-wrap: wrap; gap: 16px; }
-        .section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gray-600); margin-right: 20px; }
-        .section-title { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.5px; color: var(--gray-200); text-transform: uppercase; }
-        .section-rule { flex: 1; height: 1px; background: var(--border); margin: 0 20px; min-width: 50px;}
+        .header-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-        .controls { display: flex; gap: 12px; flex-wrap: wrap; }
-        .sort-select { background: var(--black); color: var(--white); border: 1px solid var(--border); padding: 8px 16px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: 0.2s; appearance: none; -webkit-appearance: none; }
-        .sort-select:hover { border-color: var(--white); }
+        .header-eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 28px;
+            height: 1px;
+            background: var(--gray-600);
+        }
 
-        .ticket-item { border: 1px solid var(--border); margin-bottom: 16px; transition: background 0.2s; background: var(--black); }
-        .ticket-item:hover { background: rgba(245,245,240,0.02); border-color: var(--border-strong); }
-        .ticket-item.premium { border-left: 3px solid var(--gold); }
-        
-        .ticket-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-        .ticket-status { font-family: 'DM Mono', monospace; font-size: 10px; padding: 4px 8px; border: 1px solid var(--border); letter-spacing: 1px; text-transform: uppercase; color: var(--gray-400); }
-        .ticket-status.open { color: var(--black); background: var(--white); border-color: var(--white); }
-        .ticket-status.answered { color: var(--white); background: transparent; border-color: var(--white); }
-        .ticket-status.rejected { color: var(--white); background: var(--red); border-color: var(--red); }
-        
-        .ticket-user-info { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-400); display: flex; gap: 16px; align-items: center; letter-spacing: 1px; text-transform: uppercase; }
-        .premium-badge { background: var(--gold); color: var(--black); padding: 2px 6px; font-weight: 600; }
-        
-        .ticket-body { padding: 24px; }
-        .ticket-q-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gray-600); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
-        .ticket-q { font-size: 14px; color: var(--gray-200); line-height: 1.6; margin-bottom: 24px; }
-        
-        .ticket-a-block { background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 16px 20px; margin-bottom: 24px; border-left: 2px solid var(--gray-600); }
-        .ticket-a-block.rejected { border-left-color: var(--red); background: rgba(153, 0, 0, 0.05); }
-        .ticket-a-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gray-400); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
-        .ticket-a { font-size: 13px; color: var(--white); line-height: 1.5; }
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(48px, 8vw, 80px);
+            letter-spacing: 4px;
+            color: var(--white);
+            line-height: 1;
+            margin-bottom: 0;
+            text-transform: uppercase;
+        }
 
-        .btn-auth { background: var(--white); color: var(--black); border: 1px solid var(--white); padding: 11px 20px; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; text-align: center; }
-        .btn-auth:hover { background: transparent; color: var(--white); }
-        
-        .btn-outline { background: transparent; color: var(--gray-400); border: 1px solid var(--border); padding: 11px 20px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; text-align: center; }
-        .btn-outline:hover { border-color: var(--white); color: var(--white); }
+        .nav-strip-wrap {
+            border-bottom: 1px solid var(--border);
+        }
 
-        .action-section { display: none; margin-top: 24px; border-top: 1px solid var(--border); padding-top: 24px; }
-        .action-section.active { display: block; }
-        
-        .reply-input { width: 100%; background: transparent; border: 1px solid var(--border); padding: 16px; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 13px; resize: vertical; min-height: 100px; margin-bottom: 16px; transition: 0.2s; }
-        .reply-input:focus { border-color: var(--white); }
+        .nav-strip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
 
-        .chat-link { color: var(--white); text-decoration: underline; transition: opacity 0.2s; word-break: break-all; }
-        .chat-link:hover { opacity: 0.7; }
+        .nav-left {
+            display: flex;
+        }
 
-        .empty-state { padding: 60px 20px; text-align: center; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1px; text-transform: uppercase; border: 1px dashed var(--border); }
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px 16px 0;
+            margin-right: 24px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
 
-        .toast { position: fixed; bottom: 30px; right: 30px; background: var(--white); color: var(--black); padding: 16px 24px; z-index: 99999; transform: translateY(120%); opacity: 0; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s; border-left: 3px solid var(--black); max-width: 320px; display: flex; align-items: center; gap: 12px; }
-        .toast.show { transform: translateY(0); opacity: 1; }
-        .toast-title { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+        .nav-link:hover {
+            color: var(--white);
+        }
 
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .anim-in { opacity: 0; animation: fadeUp 0.7s ease forwards; }
-        .anim-in-1 { animation-delay: 0.1s; }
-        .anim-in-2 { animation-delay: 0.2s; }
-        .anim-in-3 { animation-delay: 0.3s; }
+        .nav-link.back-link {
+            color: var(--gray-600);
+            padding-right: 0;
+            margin-right: 32px;
+            border-right: 1px solid var(--border);
+            padding-right: 32px;
+        }
 
-        .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1); }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .nav-link.back-link:hover {
+            color: var(--gray-400);
+        }
 
-        footer { border-top: 1px solid var(--border); padding: 32px 60px; margin-top: auto; }
-        .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-        .footer-info { display: flex; flex-direction: column; gap: 8px; }
-        .footer-copy { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; }
-        .footer-subtitle { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gray-600); letter-spacing: 1.5px; text-transform: uppercase; }
+        .nav-link svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 60px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .section {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 36px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            margin-right: 20px;
+        }
+
+        .section-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: var(--gray-200);
+            text-transform: uppercase;
+        }
+
+        .section-rule {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+            margin: 0 20px;
+            min-width: 50px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .sort-select {
+            background: var(--black);
+            color: var(--white);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .sort-select:hover {
+            border-color: var(--white);
+        }
+
+        .ticket-item {
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+            transition: background 0.2s;
+            background: var(--black);
+        }
+
+        .ticket-item:hover {
+            background: rgba(245, 245, 240, 0.02);
+            border-color: var(--border-strong);
+        }
+
+        .ticket-item.premium {
+            border-left: 3px solid var(--gold);
+        }
+
+        .ticket-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .ticket-status {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            padding: 4px 8px;
+            border: 1px solid var(--border);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+        }
+
+        .ticket-status.open {
+            color: var(--black);
+            background: var(--white);
+            border-color: var(--white);
+        }
+
+        .ticket-status.answered {
+            color: var(--white);
+            background: transparent;
+            border-color: var(--white);
+        }
+
+        .ticket-status.rejected {
+            color: var(--white);
+            background: var(--red);
+            border-color: var(--red);
+        }
+
+        .ticket-user-info {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-400);
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .premium-badge {
+            background: var(--gold);
+            color: var(--black);
+            padding: 2px 6px;
+            font-weight: 600;
+        }
+
+        .ticket-body {
+            padding: 24px;
+        }
+
+        .ticket-q-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            color: var(--gray-600);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .ticket-q {
+            font-size: 14px;
+            color: var(--gray-200);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .ticket-a-block {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            border-left: 2px solid var(--gray-600);
+        }
+
+        .ticket-a-block.rejected {
+            border-left-color: var(--red);
+            background: rgba(153, 0, 0, 0.05);
+        }
+
+        .ticket-a-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            color: var(--gray-400);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .ticket-a {
+            font-size: 13px;
+            color: var(--white);
+            line-height: 1.5;
+        }
+
+        .btn-auth {
+            background: var(--white);
+            color: var(--black);
+            border: 1px solid var(--white);
+            padding: 11px 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-auth:hover {
+            background: transparent;
+            color: var(--white);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--gray-400);
+            border: 1px solid var(--border);
+            padding: 11px 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--white);
+            color: var(--white);
+        }
+
+        .action-section {
+            display: none;
+            margin-top: 24px;
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+        }
+
+        .action-section.active {
+            display: block;
+        }
+
+        .reply-input {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 16px;
+            color: var(--white);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 16px;
+            transition: 0.2s;
+        }
+
+        .reply-input:focus {
+            border-color: var(--white);
+        }
+
+        .chat-link {
+            color: var(--white);
+            text-decoration: underline;
+            transition: opacity 0.2s;
+            word-break: break-all;
+        }
+
+        .chat-link:hover {
+            opacity: 0.7;
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px dashed var(--border);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--white);
+            color: var(--black);
+            padding: 16px 24px;
+            z-index: 99999;
+            transform: translateY(120%);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+            border-left: 3px solid var(--black);
+            max-width: 320px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-title {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-family: 'DM Mono', monospace;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .anim-in {
+            opacity: 0;
+            animation: fadeUp 0.7s ease forwards;
+        }
+
+        .anim-in-1 {
+            animation-delay: 0.1s;
+        }
+
+        .anim-in-2 {
+            animation-delay: 0.2s;
+        }
+
+        .anim-in-3 {
+            animation-delay: 0.3s;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 60px;
+            margin-top: auto;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-copy {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .footer-subtitle {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
 
         @media (max-width: 768px) {
-            .header-inner { padding: 40px 20px 20px; }
-            h1 { font-size: 40px; }
-            .container { padding: 30px 20px; }
-            .nav-strip { padding: 0 20px; }
-            .ticket-header { flex-direction: column; align-items: flex-start; }
-            .controls { width: 100%; flex-direction: column; }
-            footer { padding: 24px 20px; }
-            .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
-            .footer-info { align-items: center; gap: 8px; }
-            .toast { right: 16px; left: 16px; max-width: none; bottom: 16px; }
+            .header-inner {
+                padding: 40px 20px 20px;
+            }
+
+            h1 {
+                font-size: 40px;
+            }
+
+            .container {
+                padding: 30px 20px;
+            }
+
+            .nav-strip {
+                padding: 0 20px;
+            }
+
+            .ticket-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .controls {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            footer {
+                padding: 24px 20px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .footer-info {
+                align-items: center;
+                gap: 8px;
+            }
+
+            .toast {
+                right: 16px;
+                left: 16px;
+                max-width: none;
+                bottom: 16px;
+            }
         }
     </style>
 </head>
+
 <body>
     <header class="site-header">
         <div class="header-video-wrap">
@@ -174,7 +657,9 @@
         <div class="nav-strip">
             <nav class="nav-left">
                 <a class="nav-link back-link" href="profile.html">
-                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5M12 5l-7 7 7 7" />
+                    </svg>
                     В профиль
                 </a>
                 <a class="nav-link" href="index.html">На главную</a>
@@ -199,7 +684,7 @@
                     </select>
                 </div>
             </div>
-            
+
             <div id="admin-tickets">
                 <div class="empty-state">Проверка прав и загрузка данных...</div>
             </div>
@@ -215,6 +700,45 @@
                 <div class="empty-state">Проверка прав и загрузка данных...</div>
             </div>
         </section>
+
+        <section class="section reveal">
+            <div class="section-header">
+                <span class="section-label">03</span>
+                <span class="section-title">Управление игроками</span>
+                <div class="section-rule"></div>
+            </div>
+
+            <div class="ticket-item" style="padding: 24px;">
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div>
+                        <div class="ticket-q-label" style="margin-bottom: 8px;">Никнейм игрока</div>
+                        <input type="text" id="target-username" class="reply-input"
+                            style="min-height: auto; padding: 12px; margin-bottom: 0;"
+                            placeholder="Введите точный никнейм...">
+                    </div>
+
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <button class="btn-outline" style="color: var(--red); border-color: var(--border);"
+                            onclick="manageUser('ban')">Забанить</button>
+                        <button class="btn-outline" style="color: var(--green); border-color: var(--border);"
+                            onclick="manageUser('unban')">Разбанить</button>
+                    </div>
+
+                    <div
+                        style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; border-top: 1px solid var(--border); padding-top: 20px;">
+                        <select class="sort-select" id="premium-duration" style="padding: 11px 16px;">
+                            <option value="7">На 1 Неделю</option>
+                            <option value="30">На 1 Месяц</option>
+                            <option value="60">На 2 Месяца</option>
+                            <option value="forever">Навсегда</option>
+                            <option value="remove">Забрать Premium</option>
+                        </select>
+                        <button class="btn-auth" onclick="manageUser('premium')">Выдать / Забрать Premium</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <footer>
@@ -234,9 +758,9 @@
         const API_URL = "https://ultrafucker3.pythonanywhere.com";
         const savedUser = localStorage.getItem('mx_username');
         const savedToken = localStorage.getItem('mx_token');
-        
+
         let globalTickets = [];
-        let rawDataHash = ""; 
+        let rawDataHash = "";
 
         function showToast(text) {
             const toast = document.getElementById('toast');
@@ -249,7 +773,7 @@
             if (!str) return '';
             let safeStr = str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             const urlRegex = /(https?:\/\/[^\s]+)/g;
-            safeStr = safeStr.replace(urlRegex, function(url) {
+            safeStr = safeStr.replace(urlRegex, function (url) {
                 return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="chat-link">${url}</a>`;
             });
             return safeStr.replace(/\n/g, '<br>');
@@ -264,7 +788,7 @@
                     const footerEl = document.getElementById('footer-version-label');
                     if (footerEl) footerEl.textContent = `Ver. ${ver}`;
                 }
-            } catch {}
+            } catch { }
         }
 
         function initScrollReveal() {
@@ -274,7 +798,7 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                        observer.unobserve(entry.target); 
+                        observer.unobserve(entry.target);
                     }
                 });
             }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
@@ -283,15 +807,15 @@
 
         async function initAdmin() {
             if (!savedUser || !savedToken) { window.location.href = "index.html"; return; }
-            
-            initScrollReveal();
-            
-            await pollAdminTickets(true); 
-            await pollAdminRP(); 
-            await fetchVersion(); 
 
-            setInterval(() => pollAdminTickets(false), 10000); 
-            setInterval(() => pollAdminRP(), 10000); 
+            initScrollReveal();
+
+            await pollAdminTickets(true);
+            await pollAdminRP();
+            await fetchVersion();
+
+            setInterval(() => pollAdminTickets(false), 10000);
+            setInterval(() => pollAdminRP(), 10000);
         }
 
         async function pollAdminTickets(isFirstLoad = false) {
@@ -300,23 +824,24 @@
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: savedUser, token: savedToken })
                 });
-                
+
                 if (res.status === 403 || !res.ok) {
                     if (isFirstLoad) { alert("У вас нет прав администратора!"); window.location.href = "profile.html"; }
                     return;
                 }
 
                 const data = await res.json();
+
                 const newHash = JSON.stringify(data.tickets || {});
-                
+
                 if (newHash !== rawDataHash) {
                     rawDataHash = newHash;
                     globalTickets = [];
                     for (const [id, tData] of Object.entries(data.tickets || {})) { globalTickets.push({ id, ...tData }); }
                     renderTickets();
                 }
-            } catch (e) { 
-                if (isFirstLoad) document.getElementById('admin-tickets').innerHTML = '<div class="empty-state" style="color: var(--red);">Ошибка соединения с сервером.</div>'; 
+            } catch (e) {
+                if (isFirstLoad) document.getElementById('admin-tickets').innerHTML = '<div class="empty-state" style="color: var(--red);">Ошибка соединения с сервером.</div>';
             }
         }
 
@@ -342,7 +867,7 @@
             filteredTickets.sort((a, b) => {
                 const premiumA = a.is_premium ? 1 : 0;
                 const premiumB = b.is_premium ? 1 : 0;
-                if (premiumA !== premiumB) return premiumB - premiumA; 
+                if (premiumA !== premiumB) return premiumB - premiumA;
                 const dateA = new Date(a.date).getTime();
                 const dateB = new Date(b.date).getTime();
                 return sortMethod === 'new' ? dateB - dateA : dateA - dateB;
@@ -384,10 +909,10 @@
                 } else {
                     let rawReply = tData.reply || "";
                     let isRejected = rawReply.includes("Отклонено");
-                    if (isRejected) { rawReply = rawReply.replace(/^Отклонено администратором @[^\n\r]+[\n\r]*/i, ''); } 
+                    if (isRejected) { rawReply = rawReply.replace(/^Отклонено администратором @[^\n\r]+[\n\r]*/i, ''); }
                     else { rawReply = rawReply.replace(/^Ответил администратор @[^\n\r]+:[\n\r]*/i, ''); }
                     const safeReply = formatText(rawReply);
-                    
+
                     html = `
                         <div class="ticket-item${premiumClass}" id="ticket-wrapper-${tData.id}">
                             <div class="ticket-header">
@@ -445,9 +970,9 @@
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: savedUser, token: savedToken, ticket_id: ticketId, reply: replyText })
                 });
-                if (res.ok) { showToast(successMsg); pollAdminTickets(false); } 
+                if (res.ok) { showToast(successMsg); pollAdminTickets(false); }
                 else { alert("Ошибка при обработке запроса."); }
-            } catch(e) { alert("Ошибка сети."); }
+            } catch (e) { alert("Ошибка сети."); }
         }
 
         async function deleteTicket(ticketId) {
@@ -457,9 +982,9 @@
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: savedUser, token: savedToken, ticket_id: ticketId })
                 });
-                if (res.ok) { showToast("Удалено с сервера"); pollAdminTickets(false); } 
+                if (res.ok) { showToast("Удалено с сервера"); pollAdminTickets(false); }
                 else { alert("Ошибка при удалении тикета."); }
-            } catch(e) { alert("Ошибка сети."); }
+            } catch (e) { alert("Ошибка сети."); }
         }
 
         async function pollAdminRP() {
@@ -474,14 +999,14 @@
                 } else if (res.status === 403) {
                     document.getElementById('admin-rp').innerHTML = '<div class="empty-state">У вас нет прав для модерации ресурспаков.</div>';
                 }
-            } catch (e) {}
+            } catch (e) { }
         }
 
         function renderRP(pendingPacks) {
             const cont = document.getElementById('admin-rp');
             cont.innerHTML = '';
             const entries = Object.entries(pendingPacks);
-            
+
             if (entries.length === 0) { cont.innerHTML = `<div class="empty-state">Очередь ресурспаков пуста.</div>`; return; }
 
             entries.forEach(([id, pack]) => {
@@ -516,12 +1041,55 @@
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: savedUser, token: savedToken, rp_id: id, action: action })
                 });
-                if (res.ok) { showToast(action === 'approve' ? "Пак одобрен!" : "Пак отклонен"); pollAdminRP(); } 
+                if (res.ok) { showToast(action === 'approve' ? "Пак одобрен!" : "Пак отклонен"); pollAdminRP(); }
                 else { alert("Ошибка при обработке запроса."); }
-            } catch(e) { alert("Ошибка сети."); }
+            } catch (e) { alert("Ошибка сети."); }
+        }
+
+        async function manageUser(action) {
+            const targetUser = document.getElementById('target-username').value.trim();
+            if (!targetUser) {
+                alert("Сначала введите никнейм игрока!");
+                return;
+            }
+
+            let duration = null;
+            if (action === 'premium') {
+                duration = document.getElementById('premium-duration').value;
+            }
+
+            if (!confirm(`Вы уверены, что хотите применить это действие к игроку ${targetUser}?`)) return;
+
+            try {
+                const res = await fetch(`${API_URL}/admin_manage_user`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: savedUser,
+                        token: savedToken,
+                        target_user: targetUser,
+                        action: action,
+                        duration: duration
+                    })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    showToast(data.message || "Успешно выполнено!");
+                    if (action === 'ban' || action === 'unban') {
+                        document.getElementById('target-username').value = '';
+                    }
+                } else {
+                    alert(data.error || "Ошибка при выполнении действия.");
+                }
+            } catch (e) {
+                alert("Ошибка соединения с сервером.");
+            }
         }
 
         window.onload = initAdmin;
     </script>
 </body>
+
 </html>
