@@ -1125,6 +1125,13 @@
     <script>
         const API_URL = "https://ultrafucker3.pythonanywhere.com";
 
+        async function getSha256Hash(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
         const origFetch = window.fetch;
         window.fetch = async function (url, options = {}) {
             if (typeof url === 'string' && url.includes(API_URL)) {
@@ -1150,9 +1157,18 @@
 
                     if (session_id && session_secret) {
                         const timestamp = (Date.now() / 1000).toString();
+                        const nonce = crypto.randomUUID();
                         const urlObj = new URL(url);
                         const path = urlObj.pathname;
-                        const message = `${path}:${timestamp}`;
+                        const method = (options.method || 'GET').toUpperCase();
+
+                        let bodyString = "";
+                        if (options.body) {
+                            bodyString = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
+                        }
+                        const bodyHash = await getSha256Hash(bodyString);
+
+                        const message = `${method}:${path}:${timestamp}:${nonce}:${bodyHash}`;
 
                         const encoder = new TextEncoder();
                         const keyData = encoder.encode(session_secret);
@@ -1170,7 +1186,8 @@
                             ...options.headers,
                             'X-Session-Id': session_id,
                             'X-Signature': signatureHex,
-                            'X-Timestamp': timestamp
+                            'X-Timestamp': timestamp,
+                            'X-Nonce': nonce
                         };
                     }
                 }
