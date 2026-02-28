@@ -756,6 +756,66 @@
 
     <script>
         const API_URL = "https://ultrafucker3.pythonanywhere.com";
+
+        const origFetch = window.fetch;
+        window.fetch = async function (url, options = {}) {
+            if (typeof url === 'string' && url.includes(API_URL)) {
+                const exempt = ['/handshake', '/check_update', '/online', '/get_downloads', '/get_ad'];
+                const isExempt = exempt.some(endpoint => url.includes(endpoint));
+
+                if (!isExempt) {
+                    let session_id = sessionStorage.getItem('mx_session_id');
+                    let session_secret = sessionStorage.getItem('mx_session_secret');
+
+                    if (!session_id || !session_secret) {
+                        try {
+                            const hs_res = await origFetch(`${API_URL}/handshake`);
+                            if (hs_res.ok) {
+                                const hs_data = await hs_res.json();
+                                session_id = hs_data.session_id;
+                                session_secret = hs_data.session_secret;
+                                sessionStorage.setItem('mx_session_id', session_id);
+                                sessionStorage.setItem('mx_session_secret', session_secret);
+                            }
+                        } catch (e) { console.error("Handshake failed:", e); }
+                    }
+
+                    if (session_id && session_secret) {
+                        const timestamp = (Date.now() / 1000).toString();
+                        const urlObj = new URL(url);
+                        const path = urlObj.pathname;
+                        const message = `${path}:${timestamp}`;
+
+                        const encoder = new TextEncoder();
+                        const keyData = encoder.encode(session_secret);
+                        const msgData = encoder.encode(message);
+
+                        const cryptoKey = await crypto.subtle.importKey(
+                            "raw", keyData, { name: "HMAC", hash: "SHA-256" },
+                            false, ["sign"]
+                        );
+                        const signatureBuffer = await crypto.subtle.sign("HMAC", cryptoKey, msgData);
+                        const signatureArray = Array.from(new Uint8Array(signatureBuffer));
+                        const signatureHex = signatureArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+                        options.headers = {
+                            ...options.headers,
+                            'X-Session-Id': session_id,
+                            'X-Signature': signatureHex,
+                            'X-Timestamp': timestamp
+                        };
+                    }
+                }
+            }
+            return origFetch(url, options);
+        };
+
+        origFetch(`${API_URL}/handshake`).then(r => r.json()).then(d => {
+            if (d.session_id) {
+                sessionStorage.setItem('mx_session_id', d.session_id);
+                sessionStorage.setItem('mx_session_secret', d.session_secret);
+            }
+        }).catch(() => { });
         const savedUser = localStorage.getItem('mx_username');
         const savedToken = localStorage.getItem('mx_token');
 
