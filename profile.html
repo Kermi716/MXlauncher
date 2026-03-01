@@ -191,22 +191,6 @@
             stroke-width: 1.5;
         }
 
-        .nav-link.download-btn {
-            color: var(--gray-200);
-            border: 1px solid var(--border);
-            padding: 8px 16px;
-            margin-top: 8px;
-            margin-bottom: 8px;
-            border-radius: 2px;
-            transition: all 0.2s;
-        }
-
-        .nav-link.download-btn:hover {
-            color: var(--white);
-            border-color: var(--border-strong);
-            background: rgba(245, 245, 240, 0.05);
-        }
-
         .nav-right {
             display: flex;
             align-items: center;
@@ -688,6 +672,7 @@
             transition: color 0.2s;
             padding: 4px 7px;
             border: 1px solid transparent;
+            border-radius: 2px;
         }
 
         .close-modal:hover {
@@ -1349,7 +1334,7 @@
 
                 if (resRole.ok) {
                     const dataRole = await resRole.json();
-                    let baseRoleText = dataRole.current_role.toUpperCase();
+                    let baseRoleText = dataRole.current_role ? dataRole.current_role.toUpperCase() : "USER";
                     let displayRoleText = baseRoleText;
                     let roleElement = document.getElementById('prof-role');
                     let trialBtn = document.getElementById('btn-trial');
