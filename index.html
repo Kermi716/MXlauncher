@@ -66,6 +66,28 @@
             z-index: 9999;
         }
 
+        .red-alert-bar {
+            background-color: var(--red); 
+            color: var(--white);
+            text-align: center;
+            padding: 12px 20px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            z-index: 100;
+        }
+
+        .red-alert-bar a {
+            color: var(--white);
+            text-decoration: underline; 
+            font-weight: bold;
+        }
+
+        .red-alert-bar a:hover {
+            opacity: 0.8; 
+        }
+
         .top-alert-bar {
             background: var(--white);
             color: var(--black);
@@ -1292,6 +1314,7 @@
 
             .toast { right: 16px; left: 16px; max-width: none; bottom: 16px; }
 
+            /* FAQ mobile */
             .faq-trigger { padding: 18px 16px; }
             .faq-cat { display: none; }
             .faq-body-inner { padding: 0 16px; }
@@ -1309,6 +1332,9 @@
 </head>
 
 <body>
+    <div class="red-alert-bar">
+        В данный момент не получится зарегистрироваться в лаунчере, так как сервисы Google ошибочно заблокировали нам почту. Следите за новостями в нашем <a href="https://t.me/mxlauncher" target="_blank">Telegram</a> канале, там мы вас оповестим о разблокировке сервиса.
+    </div>
     <header class="site-header">
         <div class="header-video-wrap">
             <video autoplay muted loop playsinline>
@@ -1459,9 +1485,9 @@
                     <div class="sec-left"><span class="sec-num">02</span><span class="sec-name">Отчёт VirusTotal — Лаунчер</span></div>
                     <div class="sec-right"><span class="sec-tag">3 / 72</span><span class="sec-arrow">↗</span></div>
                 </a>
-                <a href="https://www.virustotal.com/gui/file/2a469bb120aea9e12738c19b3aca8f518fefdf66c5832e25e99da9b7c50128ac?nocache=1" target="_blank" class="sec-item">
+                <a href="https://www.virustotal.com/gui/file/3053b4b2e5d38061ddddcad2925bb94dc472215729ba81977c738f6613548380?nocache=1" target="_blank" class="sec-item">
                     <div class="sec-left"><span class="sec-num">03</span><span class="sec-name">Отчёт VirusTotal — MXSetup</span></div>
-                    <div class="sec-right"><span class="sec-tag">4 / 72</span><span class="sec-arrow">↗</span></div>
+                    <div class="sec-right"><span class="sec-tag">3 / 72</span><span class="sec-arrow">↗</span></div>
                 </a>
             </div>
         </section>
@@ -1793,7 +1819,7 @@
             setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
-        let authMode = 'login';
+        let authMode = 'login'; 
         let isCodeSent = false;
         let linkUsername = "";
 
@@ -2016,7 +2042,6 @@
             if(authMode === 'login') btn.innerText = "ВОЙТИ";
             else if(!isCodeSent) btn.innerText = "ОТПРАВИТЬ КОД";
         }
-        // --- КОНЕЦ НОВОЙ СИСТЕМЫ АВТОРИЗАЦИИ ---
 
         async function fetchDownloadCount() {
             try {
@@ -2168,6 +2193,5 @@
         });
     </script>
 </body>
-
 
 </html>
