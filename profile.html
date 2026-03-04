@@ -109,7 +109,7 @@
             letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--gray-400);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -979,6 +979,10 @@
                         <td>Статус аккаунта</td>
                         <td id="prof-role">Загрузка...</td>
                     </tr>
+                    <tr>
+                        <td>Telegram ID</td>
+                        <td id="prof-tg">Загрузка...</td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -1338,6 +1342,15 @@
                     let displayRoleText = baseRoleText;
                     let roleElement = document.getElementById('prof-role');
                     let trialBtn = document.getElementById('btn-trial');
+                    
+                    let tgElement = document.getElementById('prof-tg');
+                    if (dataRole.status === "no_tg") {
+                        tgElement.innerText = "Не привязан";
+                        tgElement.style.color = "var(--red)";
+                    } else {
+                        tgElement.innerText = "Привязан";
+                        tgElement.style.color = "var(--green)";
+                    }
 
                     if (baseRoleText === 'ADMIN') roleElement.style.color = 'var(--red)';
                     else if (baseRoleText === 'HELPER') roleElement.style.color = 'var(--green)';

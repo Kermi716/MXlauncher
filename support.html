@@ -654,80 +654,8 @@
             color: var(--gray-400);
         }
 
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .modal-form-label {
-            display: block;
-            font-family: 'DM Mono', monospace;
-            font-size: 9px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--gray-600);
-            margin-bottom: 7px;
-        }
-
-        .modal-form-group {
+        .form-group {
             margin-bottom: 15px;
-        }
-
-        .modal-form-control {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            padding: 11px 13px;
-            color: var(--white);
-            font-family: 'DM Mono', monospace;
-            font-size: 13px;
-            transition: border-color 0.2s, background 0.2s;
-            -webkit-user-select: text;
-            user-select: text;
-            border-radius: 0;
-        }
-
-        .modal-form-control:focus {
-            border-color: rgba(245, 245, 240, 0.35);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .captcha-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-            align-items: stretch;
-        }
-
-        .captcha-img {
-            flex: 1;
-            height: 42px;
-            border: 1px solid var(--border);
-            background: var(--white);
-            object-fit: contain;
-        }
-
-        .captcha-refresh {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--gray-400);
-            width: 42px;
-            height: 42px;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-
-        .captcha-refresh:hover {
-            border-color: var(--border-strong);
-            color: var(--white);
         }
 
         .btn-auth {
@@ -1060,6 +988,7 @@
             .footer-links {
                 flex-wrap: wrap;
                 justify-content: center;
+                gap: 16px;
             }
 
             .auth-modal {
@@ -1159,10 +1088,8 @@
                 <ul class="notice-list">
                     <li>Формулируйте проблему чётко. Опишите, после каких действий возникла ошибка.</li>
                     <li>Укажите версию Windows и характеристики ПК, если проблема технического характера.</li>
-                    <li>Если есть скриншот или видео - загрузите на Imgur, YouTube или Яндекс.Диск и вставьте ссылку в
-                        текст обращения.</li>
-                    <li>Не спамьте тикетами и не отправляйте бессодержательные сообщения. За флуд аккаунт может быть
-                        заблокирован.</li>
+                    <li>Если есть скриншот или видео - загрузите на Imgur, YouTube или Яндекс.Диск и вставьте ссылку в текст обращения.</li>
+                    <li>Не спамьте тикетами и не отправляйте бессодержательные сообщения. За флуд аккаунт может быть заблокирован.</li>
                 </ul>
             </div>
         </section>
@@ -1279,12 +1206,7 @@
             <form id="auth-form" onsubmit="handleAuthSubmit(event)">
                 <div class="form-group" id="auth-username-group">
                     <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Никнейм</label>
-                    <input type="text" id="auth-username" class="form-control" placeholder="Логин или E-mail" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 13px; margin-bottom: 15px;">
-                </div>
-
-                <div class="form-group" id="auth-email-group" style="display: none;">
-                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">E-mail</label>
-                    <input type="email" id="auth-email" class="form-control" placeholder="example@mail.ru" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 13px; margin-bottom: 15px;">
+                    <input type="text" id="auth-username" class="form-control" placeholder="Логин" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 13px; margin-bottom: 15px;">
                 </div>
 
                 <div class="form-group" id="auth-pass-group">
@@ -1303,11 +1225,6 @@
                     </div>
                     <input type="text" id="auth-captcha-text" class="form-control" autocomplete="off" placeholder="Код" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-size: 13px;">
                     <input type="hidden" id="auth-captcha-id">
-                </div>
-
-                <div class="form-group" id="auth-code-group" style="display: none;">
-                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Код подтверждения</label>
-                    <input type="text" id="auth-code" class="form-control" placeholder="6 цифр из письма" maxlength="6" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-size: 13px; text-align: center; letter-spacing: 5px; margin-bottom: 15px;">
                 </div>
 
                 <div id="auth-status" style="color: var(--red); text-align: center; margin-bottom: 10px; font-size: 12px; min-height: 15px;"></div>
@@ -1350,7 +1267,7 @@
                                 sessionStorage.setItem('mx_session_id', session_id);
                                 sessionStorage.setItem('mx_session_secret', session_secret);
                             }
-                        } catch (e) { console.error("Handshake failed:", e); }
+                        } catch (e) { }
                     }
 
                     if (session_id && session_secret) {
@@ -1413,10 +1330,8 @@
             setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
-        // --- НОВАЯ СИСТЕМА АВТОРИЗАЦИИ ---
-        let authMode = 'login'; // 'login', 'register', 'reset', 'link'
-        let isCodeSent = false;
-        let linkUsername = "";
+        let authMode = 'login'; 
+        let tgLinkOpened = false;
 
         function openAuthModal(e) {
             if(e) e.preventDefault();
@@ -1461,11 +1376,10 @@
 
         function switchAuthMode(mode) {
             authMode = mode;
-            isCodeSent = false;
+            tgLinkOpened = false;
             
             document.getElementById('auth-status').innerText = "";
             document.getElementById('auth-status').style.color = "var(--red)";
-            document.getElementById('auth-code').value = "";
             
             const title = document.getElementById('auth-modal-title-text');
             const sub = document.getElementById('auth-modal-sub-text');
@@ -1474,108 +1388,88 @@
             document.getElementById('tab-login').classList.remove('active');
             document.getElementById('tab-register').classList.remove('active');
 
-            document.getElementById('auth-username-group').style.display = 'none';
-            document.getElementById('auth-email-group').style.display = 'none';
-            document.getElementById('auth-pass-group').style.display = 'none';
-            document.getElementById('auth-code-group').style.display = 'none';
+            document.getElementById('auth-username-group').style.display = 'block';
+            document.getElementById('auth-pass-group').style.display = 'block';
             document.getElementById('auth-captcha-group').style.display = 'block';
             document.getElementById('auth-forgot-btn').style.display = 'none';
             document.getElementById('auth-switch-btn').style.display = 'block';
-
             document.getElementById('auth-username').disabled = false;
+            document.getElementById('auth-username').value = '';
 
             if (mode === 'login') {
                 document.getElementById('tab-login').classList.add('active');
                 title.innerText = "Добро пожаловать";
                 sub.innerText = "Войдите в свой аккаунт";
-                document.getElementById('auth-username-group').style.display = 'block';
-                document.getElementById('auth-pass-group').style.display = 'block';
                 document.getElementById('auth-forgot-btn').style.display = 'block';
-                document.getElementById('auth-username').placeholder = "Логин или E-mail";
+                document.getElementById('auth-username').placeholder = "Логин";
                 document.getElementById('auth-switch-btn').innerText = "Нет аккаунта? Регистрация";
                 document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('register');
                 btn.innerText = "ВОЙТИ";
-                loadCaptcha();
             } 
             else if (mode === 'register') {
                 document.getElementById('tab-register').classList.add('active');
                 title.innerText = "Создать аккаунт";
-                sub.innerText = "Регистрация займет минуту";
-                document.getElementById('auth-username-group').style.display = 'block';
-                document.getElementById('auth-email-group').style.display = 'block';
-                document.getElementById('auth-pass-group').style.display = 'block';
+                sub.innerText = "Регистрация через Telegram";
                 document.getElementById('auth-username').placeholder = "Придумайте логин";
                 document.getElementById('auth-switch-btn').innerText = "Уже есть аккаунт? Войти";
                 document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
-                btn.innerText = "ОТПРАВИТЬ КОД";
-                loadCaptcha();
+                btn.innerText = "ОТПРАВИТЬ В ТЕЛЕГРАМ";
             } 
             else if (mode === 'reset') {
                 title.innerText = "Сброс пароля";
                 sub.innerText = "Восстановление доступа";
-                document.getElementById('auth-email-group').style.display = 'block';
-                document.getElementById('auth-pass-group').style.display = 'block';
+                document.getElementById('auth-username').placeholder = "Ваш логин";
+                document.getElementById('auth-password').placeholder = "Новый пароль";
                 document.getElementById('auth-switch-btn').innerText = "Вспомнили? Войти";
                 document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
-                btn.innerText = "ОТПРАВИТЬ КОД";
-                loadCaptcha();
+                btn.innerText = "ОТПРАВИТЬ В ТЕЛЕГРАМ";
             } 
             else if (mode === 'link') {
-                title.innerText = "Привязка почты";
+                title.innerText = "Привязка Telegram";
                 sub.innerText = "Требование безопасности";
-                document.getElementById('auth-username-group').style.display = 'block';
-                document.getElementById('auth-email-group').style.display = 'block';
-                document.getElementById('auth-username').value = linkUsername;
-                document.getElementById('auth-username').disabled = true;
+                document.getElementById('auth-username').placeholder = "Ваш логин";
                 document.getElementById('auth-switch-btn').innerText = "Войти в другой аккаунт";
                 document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
-                btn.innerText = "ОТПРАВИТЬ КОД";
-                loadCaptcha();
+                btn.innerText = "ПОЛУЧИТЬ ССЫЛКУ";
             }
+            loadCaptcha();
         }
 
         async function handleAuthSubmit(e) {
             e.preventDefault();
             const user = document.getElementById('auth-username').value.trim();
-            const email = document.getElementById('auth-email').value.trim();
             const pass = document.getElementById('auth-password').value.trim();
             const capText = document.getElementById('auth-captcha-text').value.trim();
             const capId = document.getElementById('auth-captcha-id').value;
-            const code = document.getElementById('auth-code').value.trim();
             
             const btn = document.getElementById('auth-submit-btn');
             const status = document.getElementById('auth-status');
             status.style.color = 'var(--red)';
 
-            if (authMode === 'login' && (!user || !pass || !capText)) { status.innerText = "Заполните все поля!"; return; }
-            if (authMode === 'reset' && (!email || !pass)) { status.innerText = "Укажите почту и новый пароль!"; return; }
-            if ((authMode === 'register' || authMode === 'link') && (!user || !email)) { status.innerText = "Заполните логин и почту!"; return; }
+            if (!user || !pass) { status.innerText = "Заполните логин и пароль!"; return; }
 
-            if (authMode !== 'login' && !isCodeSent) {
+            if (authMode !== 'login' && !tgLinkOpened) {
                 if (!capText) { status.innerText = "Введите капчу!"; return; }
-                btn.disabled = true; btn.innerText = "ОТПРАВКА...";
+                btn.disabled = true; btn.innerText = "ПОЛУЧЕНИЕ ССЫЛКИ...";
                 
                 try {
-                    const res = await fetch(`${API_URL}/send_code`, {
+                    const res = await fetch(`${API_URL}/get_tg_link`, {
                         method: 'POST', headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ email: email, action: authMode, captcha_id: capId, captcha_text: capText })
+                        body: JSON.stringify({ username: user, action: authMode, captcha_id: capId, captcha_text: capText })
                     });
                     const data = await res.json();
                     if (res.ok) {
-                        isCodeSent = true;
+                        tgLinkOpened = true;
+                        window.open(data.link, '_blank');
                         status.style.color = 'var(--green)';
-                        status.innerText = "Код отправлен на почту!";
+                        status.innerText = "Перейдите в Telegram, нажмите СТАРТ, а затем кнопку ниже.";
                         
                         document.getElementById('auth-captcha-group').style.display = 'none';
-                        document.getElementById('auth-code-group').style.display = 'block';
                         if(authMode === 'register') btn.innerText = "ЗАВЕРШИТЬ РЕГИСТРАЦИЮ";
                         if(authMode === 'reset') btn.innerText = "СМЕНИТЬ ПАРОЛЬ";
-                        if(authMode === 'link') {
-                            btn.innerText = "ПРИВЯЗАТЬ";
-                            document.getElementById('auth-pass-group').style.display = 'block';
-                        }
+                        if(authMode === 'link') btn.innerText = "ЗАВЕРШИТЬ ПРИВЯЗКУ";
                     } else {
-                        status.innerText = data.error || "Ошибка отправки кода";
+                        status.innerText = data.error || "Ошибка получения ссылки";
                         loadCaptcha();
                     }
                 } catch(e) { status.innerText = "Ошибка сервера"; }
@@ -1586,20 +1480,20 @@
             btn.disabled = true; btn.innerText = "ОБРАБОТКА...";
             
             let endpoint = "";
-            let payload = {};
+            let payload = { username: user, password: pass };
             
             if (authMode === 'login') {
+                if (!capText) { status.innerText = "Введите капчу!"; btn.disabled = false; btn.innerText = "ВОЙТИ"; return; }
                 endpoint = "/login";
-                payload = { username: user, password: pass, captcha_id: capId, captcha_text: capText };
+                payload.captcha_id = capId;
+                payload.captcha_text = capText;
             } else if (authMode === 'register') {
                 endpoint = "/register";
-                payload = { username: user, email: email, password: pass, code: code };
             } else if (authMode === 'reset') {
                 endpoint = "/reset_password";
-                payload = { email: email, new_password: pass, code: code };
+                payload = { username: user, new_password: pass };
             } else if (authMode === 'link') {
-                endpoint = "/link_email";
-                payload = { username: user, email: email, password: pass, code: code };
+                endpoint = "/link_tg";
             }
 
             try {
@@ -1618,26 +1512,30 @@
                         showNotification("Добро пожаловать", data.username, true);
                         setTimeout(() => window.location.reload(), 1000);
                     } else {
-                        status.innerText = data.message || "Успешно!";
-                        setTimeout(() => switchAuthMode('login'), 2000);
+                        let msg = "Успешно!";
+                        if (authMode === 'register') msg = "Регистрация успешна! Входим...";
+                        if (authMode === 'reset') msg = "Пароль изменен! Входим...";
+                        if (authMode === 'link') msg = "Telegram привязан! Входим...";
+                        status.innerText = msg;
+                        setTimeout(() => switchAuthMode('login'), 1500);
                     }
                 } else {
-                    if (authMode === 'login' && data.error === 'no_email' && data.require_link) {
-                        linkUsername = data.username || user;
+                    if (authMode === 'login' && data.error === 'no_tg' && data.require_link) {
+                        document.getElementById('auth-username').value = data.username || user;
+                        document.getElementById('auth-username').disabled = true;
                         switchAuthMode('link');
-                        document.getElementById('auth-status').innerText = "Требуется привязка E-mail!";
+                        document.getElementById('auth-status').innerText = "Требуется привязка Telegram! Введите пароль и получите ссылку.";
                     } else {
                         status.innerText = data.error || "Ошибка";
-                        if (authMode === 'login' || !isCodeSent) loadCaptcha();
+                        if (authMode === 'login') loadCaptcha();
                     }
                 }
             } catch(e) { status.innerText = "Ошибка сервера"; }
             
             btn.disabled = false;
             if(authMode === 'login') btn.innerText = "ВОЙТИ";
-            else if(!isCodeSent) btn.innerText = "ОТПРАВИТЬ КОД";
+            else if(!tgLinkOpened) btn.innerText = "ОТПРАВИТЬ В ТЕЛЕГРАМ";
         }
-        // --- КОНЕЦ НОВОЙ СИСТЕМЫ АВТОРИЗАЦИИ ---
 
         function toggleSubmitButton() {
             const checkbox = document.getElementById('rules-checkbox');
