@@ -101,6 +101,311 @@
             border-bottom: 1px solid var(--border);
         }
 
+        .giveaway-banner {
+            position: relative;
+            background: var(--black);
+            border-bottom: 1px solid var(--border-strong);
+            overflow: hidden;
+            z-index: 50;
+            animation: giveaway-fadein 0.7s ease forwards;
+        }
+
+        @keyframes giveaway-fadein {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .giveaway-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 50% 200% at 5% 50%, rgba(245,245,240,0.03) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 200% at 95% 50%, rgba(245,245,240,0.025) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .giveaway-banner::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(245,245,240,0.2) 20%, rgba(245,245,240,0.55) 50%, rgba(245,245,240,0.2) 80%, transparent 100%);
+            animation: shimmer-line 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmer-line {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .giveaway-banner-scan {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 30%, rgba(245,245,240,0.018) 50%, transparent 70%);
+            animation: banner-scan 6s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes banner-scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .giveaway-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            min-height: 72px;
+            position: relative;
+        }
+
+        .giveaway-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .giveaway-badge {
+            font-family: 'DM Mono', monospace;
+            font-size: 8px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--white);
+            padding: 5px 10px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .giveaway-badge::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.65) 50%, transparent 65%);
+            animation: badge-shine 3.5s ease-in-out infinite;
+        }
+
+        @keyframes badge-shine {
+            0%, 100% { transform: translateX(-150%); }
+            40%, 60% { transform: translateX(150%); }
+        }
+
+        .giveaway-dots {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .giveaway-dots span {
+            display: inline-block;
+            border-radius: 50%;
+            animation: dot-wave 2.4s ease-in-out infinite;
+        }
+
+        .giveaway-dots span:nth-child(1) { width: 3px; height: 3px; background: var(--gray-600); animation-delay: 0s; }
+        .giveaway-dots span:nth-child(2) { width: 5px; height: 5px; background: var(--gray-400); animation-delay: 0.2s; }
+        .giveaway-dots span:nth-child(3) { width: 3px; height: 3px; background: var(--gray-600); animation-delay: 0.4s; }
+        .giveaway-dots span:nth-child(4) { width: 4px; height: 4px; background: var(--gray-200); animation-delay: 0.6s; }
+        .giveaway-dots span:nth-child(5) { width: 3px; height: 3px; background: var(--gray-600); animation-delay: 0.8s; }
+
+        @keyframes dot-wave {
+            0%, 100% { opacity: 0.25; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        .giveaway-text-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 0;
+        }
+
+        .giveaway-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--white);
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+        }
+
+        .giveaway-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .giveaway-divider {
+            width: 1px;
+            height: 36px;
+            background: var(--border);
+            flex-shrink: 0;
+        }
+
+        .giveaway-prize {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            flex-shrink: 0;
+        }
+
+        .giveaway-prize-num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            color: var(--white);
+            line-height: 1;
+            letter-spacing: 2px;
+        }
+
+        .giveaway-prize-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 8px;
+            color: var(--gray-600);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .giveaway-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 12px 22px;
+            background: var(--white);
+            color: var(--black);
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .giveaway-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.55) 50%, transparent 65%);
+            transform: translateX(-150%);
+        }
+
+        .giveaway-btn:hover::before {
+            animation: btn-sweep 0.5s ease forwards;
+        }
+
+        @keyframes btn-sweep {
+            to { transform: translateX(150%); }
+        }
+
+        .giveaway-btn:hover {
+            background: var(--gray-100);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(245, 245, 240, 0.18);
+        }
+
+        .giveaway-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .giveaway-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
+        .giveaway-close-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--gray-600);
+            cursor: pointer;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+            padding: 5px 8px;
+            transition: color 0.2s, border-color 0.2s;
+            border-radius: 2px;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .giveaway-close-btn:hover {
+            color: var(--gray-400);
+            border-color: var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .giveaway-inner {
+                padding: 14px 16px;
+                flex-wrap: wrap;
+                min-height: auto;
+                gap: 12px;
+            }
+
+            .giveaway-left {
+                gap: 10px;
+            }
+
+            .giveaway-title {
+                font-size: 13px;
+                white-space: normal;
+            }
+
+            .giveaway-sub {
+                display: none;
+            }
+
+            .giveaway-divider {
+                display: none;
+            }
+
+            .giveaway-prize {
+                flex-direction: row;
+                align-items: baseline;
+                gap: 6px;
+            }
+
+            .giveaway-prize-num {
+                font-size: 24px;
+            }
+
+            .giveaway-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .giveaway-dots {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .giveaway-badge {
+                display: none;
+            }
+        }
         .site-header {
             position: relative;
             width: 100%;
@@ -1314,7 +1619,6 @@
 
             .toast { right: 16px; left: 16px; max-width: none; bottom: 16px; }
 
-            /* FAQ mobile */
             .faq-trigger { padding: 18px 16px; }
             .faq-cat { display: none; }
             .faq-body-inner { padding: 0 16px; }
@@ -1332,6 +1636,33 @@
 </head>
 
 <body>
+
+    <div class="giveaway-banner" id="giveawayBanner">
+        <div class="giveaway-banner-scan"></div>
+        <div class="giveaway-inner">
+            <div class="giveaway-left">
+                <div class="giveaway-badge">Розыгрыш</div>
+                <div class="giveaway-dots">
+                    <span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="giveaway-text-wrap">
+                    <div class="giveaway-title">Бесплатный розыгрыш <strong>10 подписок Premium</strong></div>
+                    <div class="giveaway-sub">В честь 1000 скачиваний лаунчера</div>
+                </div>
+            </div>
+            <div class="giveaway-divider"></div>
+            <div class="giveaway-prize">
+                <div class="giveaway-prize-num">10</div>
+                <div class="giveaway-prize-label">Premium</div>
+            </div>
+            <a class="giveaway-btn" href="https://t.me/mxlauncher/176" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24"><path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z"/></svg>
+                Участвовать
+            </a>
+
+        </div>
+    </div>
+
     <header class="site-header">
         <div class="header-video-wrap">
             <video autoplay muted loop playsinline>
@@ -1706,7 +2037,7 @@
                 Скачать для Windows
             </a>
             <a class="mobile-nav-link" href="support.html">Поддержка</a>
-            <a class="mobile-nav-link" href="#" id="mobile-auth-link" onclick="closeMobileNav(); openAuthModal(event)">Войти</a>
+            <a class="mobile-nav-link" id="mobile-auth-link" onclick="closeMobileNav(); openAuthModal(event)">Войти</a>
             <a class="mobile-nav-link" href="https://t.me/mxlauncher" target="_blank">
                 <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:16px;height:16px">
                     <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
