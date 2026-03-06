@@ -1266,37 +1266,37 @@
                                 session_secret = hs_data.session_secret;
                                 sessionStorage.setItem('mx_session_id', session_id);
                                 sessionStorage.setItem('mx_session_secret', session_secret);
+                                
+                                if (hs_data.server_time) {
+                                    const localTime = Date.now() / 1000;
+                                    sessionStorage.setItem('mx_time_offset', hs_data.server_time - localTime);
+                                }
                             }
-                        } catch (e) { }
+                        } catch (e) {}
                     }
 
                     if (session_id && session_secret) {
-                        const timestamp = (Date.now() / 1000).toString();
-                        const nonce = crypto.randomUUID();
+                        const timeOffset = parseFloat(sessionStorage.getItem('mx_time_offset')) || 0;
+                        const timestamp = (Date.now() / 1000 + timeOffset).toString(); 
+                        
+                        const nonce = crypto.randomUUID(); 
                         const urlObj = new URL(url);
                         const path = urlObj.pathname;
                         const method = (options.method || 'GET').toUpperCase();
-
                         let bodyString = "";
-                        if (options.body) {
-                            bodyString = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
-                        }
+                        if (options.body) bodyString = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
+                        
                         const bodyHash = await getSha256Hash(bodyString);
-
                         const message = `${method}:${path}:${timestamp}:${nonce}:${bodyHash}`;
-
+                        
                         const encoder = new TextEncoder();
                         const keyData = encoder.encode(session_secret);
                         const msgData = encoder.encode(message);
-
-                        const cryptoKey = await crypto.subtle.importKey(
-                            "raw", keyData, { name: "HMAC", hash: "SHA-256" },
-                            false, ["sign"]
-                        );
+                        const cryptoKey = await crypto.subtle.importKey("raw", keyData, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
                         const signatureBuffer = await crypto.subtle.sign("HMAC", cryptoKey, msgData);
                         const signatureArray = Array.from(new Uint8Array(signatureBuffer));
                         const signatureHex = signatureArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
+                        
                         options.headers = {
                             ...options.headers,
                             'X-Session-Id': session_id,
@@ -1314,8 +1314,12 @@
             if (d.session_id) {
                 sessionStorage.setItem('mx_session_id', d.session_id);
                 sessionStorage.setItem('mx_session_secret', d.session_secret);
+                if (d.server_time) {
+                    const localTime = Date.now() / 1000;
+                    sessionStorage.setItem('mx_time_offset', d.server_time - localTime);
+                }
             }
-        }).catch(() => { });
+        }).catch(() => {});
 
         function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); document.body.style.overflow = 'hidden'; }
         function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); document.body.style.overflow = ''; }
