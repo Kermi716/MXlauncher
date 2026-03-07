@@ -12,168 +12,1264 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Unbounded:wght@700;800;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="support.css">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --white: #f5f5f0;
+            --gray-100: #e8e8e3;
+            --gray-200: #c8c8c2;
+            --gray-400: #888882;
+            --gray-600: #444440;
+            --gray-800: #1a1a18;
+            --gray-900: #111110;
+            --border: rgba(245, 245, 240, 0.12);
+            --border-strong: rgba(245, 245, 240, 0.28);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--black);
+            font-family: 'DM Sans', sans-serif;
+            color: var(--white);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .site-header {
+            position: relative;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .header-video-wrap {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .header-video-wrap video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.18;
+            filter: grayscale(100%) contrast(1.2);
+        }
+
+        .header-video-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(10, 10, 10, 0) 40%, rgba(10, 10, 10, 1) 100%);
+        }
+
+        .header-inner {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: end;
+            padding: 60px 60px 40px;
+            min-height: 260px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            gap: 40px;
+        }
+
+        .header-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 28px;
+            height: 1px;
+            background: var(--gray-600);
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(52px, 8vw, 100px);
+            letter-spacing: 4px;
+            color: var(--white);
+            line-height: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .header-sub {
+            font-size: 14px;
+            color: var(--gray-400);
+            font-weight: 300;
+            max-width: 380px;
+            line-height: 1.5;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            padding-bottom: 4px;
+        }
+
+        .header-meta-item {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: var(--gray-600);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-strip-wrap {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-strip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .nav-left {
+            display: flex;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px 16px 0;
+            margin-right: 24px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: var(--white);
+        }
+
+        .nav-link svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+        }
+
+        .nav-link.back-link {
+            color: var(--gray-600);
+            padding-right: 0;
+            margin-right: 32px;
+            border-right: 1px solid var(--border);
+            padding-right: 32px;
+        }
+
+        .nav-link.back-link:hover {
+            color: var(--gray-400);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .tg-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            transition: all 0.2s;
+        }
+
+        .tg-link:hover {
+            color: var(--white);
+            border-color: var(--border-strong);
+        }
+
+        .tg-link svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 60px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .section {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            margin-right: 20px;
+        }
+
+        .section-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: var(--gray-200);
+            text-transform: uppercase;
+        }
+
+        .section-rule {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+            margin: 0 20px;
+        }
+
+        .notice-box {
+            border: 1px solid var(--border);
+            border-left: 2px solid var(--gray-600);
+            padding: 20px 24px;
+            margin-bottom: 28px;
+        }
+
+        .notice-title {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-bottom: 14px;
+        }
+
+        .notice-list {
+            list-style: none;
+        }
+
+        .notice-list li {
+            font-size: 13px;
+            color: var(--gray-400);
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .notice-list li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--gray-600);
+            font-size: 11px;
+        }
+
+        .sender-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 28px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+        }
+
+        .sender-tag strong {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: var(--white);
+            font-weight: 400;
+        }
+
+        .unauth-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .unauth-text {
+            font-size: 14px;
+            color: var(--gray-400);
+            font-weight: 300;
+            max-width: 420px;
+            line-height: 1.6;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--white);
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            background: var(--gray-100);
+        }
+
+        .btn-action:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 12px 14px;
+            color: var(--white);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            transition: border-color 0.2s, background 0.2s;
+            -webkit-user-select: text;
+            user-select: text;
+            border-radius: 0;
+            resize: none;
+        }
+
+        .form-control:focus {
+            border-color: rgba(245, 245, 240, 0.35);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        textarea.form-control {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .check-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            cursor: pointer;
+        }
+
+        .check-box {
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+
+        .check-row input {
+            display: none;
+        }
+
+        .check-row input:checked+.check-box {
+            border-color: var(--white);
+            background: var(--white);
+        }
+
+        .check-row input:checked+.check-box::after {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 5px;
+            border-left: 1.5px solid var(--black);
+            border-bottom: 1.5px solid var(--black);
+            transform: rotate(-45deg) translateY(-1px);
+        }
+
+        .check-label {
+            font-size: 12px;
+            color: var(--gray-400);
+            font-weight: 300;
+            line-height: 1.4;
+        }
+
+        .btn-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 32px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--white);
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: var(--gray-100);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--white);
+            color: var(--black);
+            padding: 16px 24px;
+            z-index: 99999;
+            transform: translateY(120%);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+            border-left: 3px solid var(--black);
+            max-width: 320px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-title {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
+
+        .toast-desc {
+            font-size: 11px;
+            color: var(--gray-600);
+            font-family: 'DM Mono', monospace;
+        }
+
+        .toast.toast-error {
+            background: var(--black);
+            color: var(--white);
+            border-left-color: var(--white);
+        }
+
+        .toast.toast-error .toast-desc {
+            color: var(--gray-400);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .auth-modal {
+            background: var(--gray-900);
+            border: 1px solid var(--border-strong);
+            width: 100%;
+            max-width: 356px;
+            padding: 32px 30px 28px;
+            transform: translateY(10px) scale(0.985);
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .modal-overlay.active .auth-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .auth-modal-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .auth-modal-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            color: var(--gray-600);
+            cursor: pointer;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+            padding: 4px 7px;
+            border: 1px solid transparent;
+            border-radius: 2px;
+        }
+
+        .close-modal:hover {
+            color: var(--white);
+            border-color: var(--border);
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 22px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .auth-tab {
+            padding: 8px 0;
+            margin-right: 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            margin-bottom: -1px;
+            transition: all 0.2s;
+        }
+
+        .auth-tab.active {
+            color: var(--white);
+            border-bottom-color: var(--white);
+        }
+
+        .auth-tab:hover:not(.active) {
+            color: var(--gray-400);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .modal-form-label {
+            display: block;
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            margin-bottom: 7px;
+        }
+
+        .modal-form-group {
+            margin-bottom: 15px;
+        }
+
+        .modal-form-control {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 11px 13px;
+            color: var(--white);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            transition: border-color 0.2s, background 0.2s;
+            -webkit-user-select: text;
+            user-select: text;
+            border-radius: 0;
+        }
+
+        .modal-form-control:focus {
+            border-color: rgba(245, 245, 240, 0.35);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .captcha-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            align-items: stretch;
+        }
+
+        .captcha-img {
+            flex: 1;
+            height: 42px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            object-fit: contain;
+        }
+
+        .captcha-refresh {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--gray-400);
+            width: 42px;
+            height: 42px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .captcha-refresh:hover {
+            border-color: var(--border-strong);
+            color: var(--white);
+        }
+
+        .btn-auth {
+            width: 100%;
+            background: var(--white);
+            color: var(--black);
+            border: none;
+            padding: 13px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+            margin-top: 6px;
+        }
+
+        .btn-auth:hover {
+            background: var(--gray-100);
+        }
+
+        .btn-auth:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 60px;
+            margin-top: auto;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-copy {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .footer-subtitle {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        #auth-view {
+            opacity: 0;
+        }
+
+        #auth-view.visible {
+            animation: fadeUp 0.5s ease forwards;
+            opacity: 1;
+        }
+
+        #auth-view.visible .sender-tag {
+            animation: fadeUp 0.45s ease 0.05s both;
+        }
+
+        #auth-view.visible .form-group {
+            animation: fadeUp 0.45s ease 0.12s both;
+        }
+
+        #auth-view.visible .check-row {
+            animation: fadeUp 0.45s ease 0.2s both;
+        }
+
+        #auth-view.visible .btn-submit {
+            animation: fadeUp 0.45s ease 0.26s both;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-d1 {
+            transition-delay: 0.08s;
+        }
+
+        .reveal-d2 {
+            transition-delay: 0.16s;
+        }
+
+        .reveal-d3 {
+            transition-delay: 0.24s;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .anim-in {
+            opacity: 0;
+            animation: fadeUp 0.7s ease forwards;
+        }
+
+        .anim-in-1 {
+            animation-delay: 0.1s;
+        }
+
+        .anim-in-2 {
+            animation-delay: 0.2s;
+        }
+
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.97);
+            z-index: 8000;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .mobile-nav-overlay.open {
+            display: flex;
+        }
+
+        .mobile-nav-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .mobile-nav-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 3px;
+            color: var(--white);
+        }
+
+        .mobile-nav-close {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            cursor: pointer;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            transition: all 0.2s;
+            background: transparent;
+        }
+
+        .mobile-nav-close:hover {
+            color: var(--white);
+            border-color: var(--border-strong);
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            flex: 1;
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .mobile-nav-link:hover,
+        .mobile-nav-link.highlight {
+            color: var(--white);
+        }
+
+        .mobile-nav-footer {
+            margin-top: 32px;
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            color: var(--gray-600);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .hamburger {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--gray-400);
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            border-radius: 2px;
+            transition: all 0.2s;
+            padding: 0;
+        }
+
+        .hamburger:hover {
+            border-color: var(--border-strong);
+            color: var(--white);
+        }
+
+        .hamburger span {
+            display: block;
+            width: 16px;
+            height: 1px;
+            background: currentColor;
+            transition: all 0.2s;
+        }
+
+        @media (max-width: 768px) {
+            .header-inner {
+                grid-template-columns: 1fr;
+                padding: 40px 20px 28px;
+                min-height: 200px;
+            }
+
+            .header-right {
+                display: none;
+            }
+
+            .container {
+                padding: 0 20px;
+            }
+
+            .nav-strip {
+                padding: 0 20px;
+            }
+
+            .nav-left {
+                display: none;
+            }
+
+            .nav-right .tg-link {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .section {
+                padding: 40px 0;
+            }
+
+            .section-header {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            .section-rule {
+                display: none;
+            }
+
+            footer {
+                padding: 24px 20px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .footer-info {
+                align-items: center;
+                gap: 8px;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .auth-modal {
+                max-width: 100%;
+                height: 100%;
+                border: none;
+                border-top: 1px solid var(--border-strong);
+                padding: 28px 24px 40px;
+                overflow-y: auto;
+                align-self: flex-end;
+                transform: translateY(100%);
+            }
+
+            .modal-overlay {
+                align-items: flex-end;
+            }
+
+            .modal-overlay.active .auth-modal {
+                transform: translateY(0);
+            }
+
+            .toast {
+                right: 16px;
+                left: 16px;
+                max-width: none;
+                bottom: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 52px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="nav-wrapper" id="navbar">
-        <header class="nav-strip">
-            <a href="index.html" class="nav-logo">
-                <img src="icon.png" alt="MX Logo"
-                    style="width: 32px; height: 32px; object-fit: contain; border-radius: 4px;"
-                    onerror="this.src='logo.ico'">
-                MX LAUNCHER
-            </a>
-            <nav class="nav-links">
-                <a class="nav-link" href="index.html" style="display:flex; align-items:center; gap:6px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 12H5M12 5l-7 7 7 7" />
-                    </svg> На главную
-                </a>
-                <a class="nav-link" href="https://t.me/mxlauncher" target="_blank"
-                    style="display:flex; align-items:center; gap:6px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                        <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
-                    </svg> Telegram
-                </a>
-                <a class="nav-link" href="#" id="auth-btn-footer" onclick="openAuthModal(event)"
-                    style="display:flex; align-items:center; gap:6px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg> Войти
-                </a>
-            </nav>
-            <button class="hamburger" onclick="openMobileNav()">
-                <span></span><span></span><span></span>
-            </button>
-        </header>
-    </div>
-
-    <main class="hero">
-        <div class="hero-video-wrap">
+    <header class="site-header">
+        <div class="header-video-wrap">
             <video autoplay muted loop playsinline>
                 <source src="video.mp4" type="video/mp4">
             </video>
         </div>
-        <div class="hero-content hero-enter">
-            <div class="hero-eyebrow">Служба Поддержки</div>
-            <h1 class="hero-title">ПОДДЕРЖКА</h1>
-            <p class="hero-desc">Опишите вашу проблему, и мы постараемся помочь в кратчайшие сроки.</p>
-            <div class="hero-meta">
-                <span>Тикет-система</span>
-                <span>Ответ до 24 ч</span>
-                <span class="mono">09:00 - 22:00 МСК</span>
+        <div class="header-inner">
+            <div class="header-left anim-in anim-in-1">
+                <div class="header-eyebrow">MX Launcher — Служба поддержки</div>
+                <h1>ПОДДЕРЖКА</h1>
+                <p class="header-sub">Опишите вашу проблему, и мы постараемся помочь в кратчайшие сроки.</p>
+            </div>
+            <div class="header-right anim-in anim-in-2">
+                <div class="header-meta-item">Тикет-система</div>
+                <div class="header-meta-item">Ответ до 24 ч</div>
+                <div class="header-meta-item">Робочие время от 09:00 - 22:00 по МСК</div>
             </div>
         </div>
-    </main>
+    </header>
 
-    <section class="container">
-        <div class="bento-grid">
-            <div class="bento-item col-span-4 reveal">
-                <h3 style="font-size: 20px; margin-bottom: 24px;">Правила обращения</h3>
-                <div class="notice-box">
-                    <div class="notice-title">Прочитайте перед подачей</div>
-                    <ul class="notice-list">
-                        <li>Формулируйте проблему чётко. Опишите, после каких действий возникла ошибка.</li>
-                        <li>Укажите версию Windows и характеристики ПК, если проблема технического характера.</li>
-                        <li>Если есть скриншот или видео - загрузите на Imgur, YouTube или Яндекс.Диск и вставьте ссылку
-                            в текст обращения.</li>
-                        <li>Не спамьте тикетами и не отправляйте бессодержательные сообщения. За флуд аккаунт может быть
-                            заблокирован.</li>
-                    </ul>
-                </div>
+    <div class="nav-strip-wrap anim-in anim-in-2">
+        <div class="nav-strip">
+            <nav class="nav-left">
+                <a class="nav-link back-link" href="index.html">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5M12 5l-7 7 7 7" />
+                    </svg>
+                    На главную
+                </a>
+                <a class="nav-link" href="#" id="auth-btn-nav" onclick="openAuthModal(event)">Войти</a>
+            </nav>
+            <div class="nav-right">
+                <a class="tg-link" href="https://t.me/mxlauncher" target="_blank">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
+                    </svg>
+                    Telegram
+                </a>
+                <button class="hamburger" onclick="openMobileNav()" aria-label="Меню">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <section class="section reveal">
+            <div class="section-header">
+                <span class="section-label">01</span>
+                <span class="section-title">Правила обращения</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Перед отправкой</span>
             </div>
 
-            <div class="bento-item col-span-8 reveal">
-                <h3 style="font-size: 24px; margin-bottom: 24px;">Создать обращение</h3>
+            <div class="notice-box reveal reveal-d1">
+                <div class="notice-title">Прочитайте перед подачей тикета</div>
+                <ul class="notice-list">
+                    <li>Формулируйте проблему чётко. Опишите, после каких действий возникла ошибка.</li>
+                    <li>Укажите версию Windows и характеристики ПК, если проблема технического характера.</li>
+                    <li>Если есть скриншот или видео - загрузите на Imgur, YouTube или Яндекс.Диск и вставьте ссылку в
+                        текст обращения.</li>
+                    <li>Не спамьте тикетами и не отправляйте бессодержательные сообщения. За флуд аккаунт может быть
+                        заблокирован.</li>
+                </ul>
+            </div>
+        </section>
 
-                <div id="unauth-view" class="unauth-box">
-                    <p class="unauth-text">Для создания обращения необходимо войти в аккаунт MX Launcher.</p>
-                    <button class="btn-action" onclick="openAuthModal(event)">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" />
-                        </svg>
-                        Войти в аккаунт
-                    </button>
+        <section class="section">
+            <div class="section-header reveal">
+                <span class="section-label">02</span>
+                <span class="section-title">Создать обращение</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Тикет-система</span>
+            </div>
+
+            <div id="unauth-view" class="unauth-box reveal reveal-d1">
+                <p class="unauth-text">Для создания обращения необходимо войти в аккаунт MX Launcher.</p>
+                <button class="btn-action" onclick="openAuthModal(event)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" />
+                    </svg>
+                    Войти в аккаунт
+                </button>
+            </div>
+
+            <div id="auth-view" style="display:none;">
+
+                <div class="sender-tag">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
+                    </svg>
+                    Отправитель:&nbsp;<strong id="display-username"></strong>
                 </div>
 
-                <div id="auth-view" style="display:none;">
-                    <div class="sender-tag">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
-                        </svg>
-                        Отправитель:&nbsp;<strong id="display-username"></strong>
+                <form id="supportForm" onsubmit="submitQuestion(event)">
+                    <div class="form-group">
+                        <label class="form-label">Опишите вашу проблему</label>
+                        <textarea id="support-text" class="form-control" required
+                            placeholder="Здравствуйте! У меня возникла проблема при запуске... Ссылка на скриншот: https://imgur.com/..."></textarea>
                     </div>
 
-                    <form id="supportForm" onsubmit="submitQuestion(event)">
-                        <div class="form-group">
-                            <label class="form-label"
-                                style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Опишите
-                                вашу проблему</label>
-                            <textarea id="support-text" class="form-control" required rows="5"
-                                placeholder="Здравствуйте! У меня возникла проблема при запуске... Ссылка на скриншот: https://imgur.com/..."></textarea>
-                        </div>
+                    <label class="check-row">
+                        <input type="checkbox" id="rules-checkbox" onchange="toggleSubmitButton()">
+                        <div class="check-box"></div>
+                        <span class="check-label">Я прочитал(а) правила подачи и обязуюсь их соблюдать.</span>
+                    </label>
 
-                        <label class="check-row">
-                            <input type="checkbox" id="rules-checkbox" onchange="toggleSubmitButton()">
-                            <div class="check-box"></div>
-                            <span class="check-label">Я прочитал(а) правила подачи и обязуюсь их соблюдать.</span>
-                        </label>
-
-                        <button type="submit" id="submit-btn" class="btn-submit" disabled>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" />
-                            </svg>
-                            Отправить обращение
-                        </button>
-                    </form>
-                </div>
+                    <button type="submit" id="submit-btn" class="btn-submit" disabled>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" />
+                        </svg>
+                        Отправить обращение
+                    </button>
+                </form>
             </div>
-        </div>
-    </section>
+        </section>
+
+    </div>
 
     <footer>
         <div class="footer-inner">
-            <div class="mono" style="font-size: 11px; color: var(--gray-400);">
-                MX Launcher © 2026. <span id="footer-version-label">Ver. —</span>
+            <div class="footer-info">
+                <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+                <div class="footer-subtitle"><span id="footer-version-label">Ver. —</span> — Free Forever</div>
             </div>
-            <div style="display: flex; gap: 24px; font-size: 13px;">
-                <a href="index.html" style="color: var(--gray-400); transition: color 0.3s;" title="Главная"
-                    onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--gray-400)'">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                    </svg>
-                </a>
-                <a href="https://t.me/mxlauncher" target="_blank"
-                    style="color: var(--gray-400); transition: color 0.3s;" title="Telegram"
-                    onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--gray-400)'">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                        <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
-                    </svg>
-                </a>
+            <div class="footer-links">
+                <a href="index.html">Главная</a>
+                <a href="https://t.me/mxlauncher" target="_blank">Telegram</a>
             </div>
         </div>
     </footer>
 
     <div id="notificationToast" class="toast">
-        <div id="toastTitle" style="font-weight: 600; font-size: 14px;">Уведомление</div>
-        <div id="toastDesc" style="font-size: 12px; color: var(--gray-200);">—</div>
+        <div class="toast-title" id="toastTitle">Уведомление</div>
+        <div class="toast-desc" id="toastDesc">—</div>
+    </div>
+
+    <div class="mobile-nav-overlay" id="mobileNav">
+        <div class="mobile-nav-header">
+            <div class="mobile-nav-title">MX LAUNCHER</div>
+            <button class="mobile-nav-close" onclick="closeMobileNav()">✕ Закрыть</button>
+        </div>
+        <div class="mobile-nav-links">
+            <a class="mobile-nav-link" href="index.html">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                </svg>
+                На главную
+            </a>
+            <a class="mobile-nav-link highlight" href="#" id="mobile-auth-link-nav"
+                onclick="closeMobileNav(); openAuthModal(event)">Войти в аккаунт</a>
+            <a class="mobile-nav-link" href="https://t.me/mxlauncher" target="_blank">
+                <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:16px;height:16px">
+                    <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
+                </svg>
+                Telegram
+            </a>
+        </div>
+        <div class="mobile-nav-footer">MX Launcher © 2026 — Служба поддержки</div>
     </div>
 
     <div class="modal-overlay" id="authModal">
         <div class="auth-modal">
-            <div class="close-modal" onclick="closeAuthModal()">✕</div>
+            <div class="close-modal" onclick="closeAuthModal()">ESC</div>
             <div class="auth-modal-title" id="auth-modal-title-text">Добро пожаловать</div>
-            <div class="mono" id="auth-modal-sub-text"
-                style="font-size: 12px; color: var(--gray-400); margin-bottom: 24px;">Войдите в аккаунт</div>
+            <div class="auth-modal-sub" id="auth-modal-sub-text">Войдите в свой аккаунт</div>
 
             <div class="auth-tabs">
                 <div class="auth-tab active" id="tab-login" onclick="switchAuthMode('login')">Войти</div>
@@ -182,57 +1278,462 @@
 
             <form id="auth-form" onsubmit="handleAuthSubmit(event)">
                 <div class="form-group" id="auth-username-group">
-                    <input type="text" id="auth-username" class="form-control" placeholder="Логин">
+                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Никнейм</label>
+                    <input type="text" id="auth-username" class="form-control" placeholder="Логин или E-mail" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 13px; margin-bottom: 15px;">
+                </div>
+
+                <div class="form-group" id="auth-email-group" style="display: none;">
+                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">E-mail</label>
+                    <input type="email" id="auth-email" class="form-control" placeholder="example@mail.ru" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 13px; margin-bottom: 15px;">
                 </div>
 
                 <div class="form-group" id="auth-pass-group">
-                    <div style="position: relative;">
-                        <input type="password" id="auth-password" class="form-control" placeholder="Пароль"
-                            minlength="5" style="padding-right: 40px;">
-                        <button type="button" onclick="togglePasswordVisibility()"
-                            style="position: absolute; right: 12px; top: 12px; color: var(--gray-400);">👁</button>
+                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Пароль</label>
+                    <div style="display: flex; background: rgba(0,0,0,0.2); border: 1px solid var(--border); margin-bottom: 15px;">
+                        <input type="password" id="auth-password" class="form-control" placeholder="Пароль" minlength="5" style="border: none; background: transparent; flex: 1; padding: 11px 13px; color: var(--white); font-size: 13px;">
+                        <button type="button" onclick="togglePasswordVisibility()" style="background: transparent; border: none; color: var(--gray-400); padding: 0 15px; cursor: pointer;">👁</button>
                     </div>
                 </div>
 
                 <div class="form-group" id="auth-captcha-group">
-                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                        <img id="auth-captcha-image" src="" alt="Загрузка..."
-                            style="flex: 1; height: 48px; border-radius: var(--radius-sm); border: 1px solid var(--border); object-fit: contain; background: var(--white);">
-                        <button type="button" onclick="loadCaptcha()"
-                            style="width: 48px; height: 48px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--gray-800);">↻</button>
+                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Код с картинки</label>
+                    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                        <img id="auth-captcha-image" src="" alt="Загрузка..." style="flex: 1; height: 42px; border: 1px solid var(--border); background: var(--white); object-fit: contain; border-radius: 2px;">
+                        <button type="button" onclick="loadCaptcha()" style="background: transparent; border: 1px solid var(--border); color: var(--gray-400); width: 42px; height: 42px; cursor: pointer; font-size: 16px; border-radius: 2px;">↻</button>
                     </div>
-                    <input type="text" id="auth-captcha-text" class="form-control" autocomplete="off"
-                        placeholder="Код с картинки">
+                    <input type="text" id="auth-captcha-text" class="form-control" autocomplete="off" placeholder="Код" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-size: 13px;">
                     <input type="hidden" id="auth-captcha-id">
                 </div>
 
-                <div id="auth-status" style="font-size: 13px; margin: 12px 0; text-align: center;"></div>
+                <div class="form-group" id="auth-code-group" style="display: none;">
+                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Код подтверждения</label>
+                    <input type="text" id="auth-code" class="form-control" placeholder="6 цифр из письма" maxlength="6" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-size: 13px; text-align: center; letter-spacing: 5px; margin-bottom: 15px;">
+                </div>
 
-                <button type="submit" id="auth-submit-btn" class="btn-auth">ВОЙТИ</button>
+                <div id="auth-status" style="color: var(--red); text-align: center; margin-bottom: 10px; font-size: 12px; min-height: 15px;"></div>
 
-                <button type="button" id="auth-forgot-btn"
-                    style="width: 100%; margin-top: 16px; font-size: 12px; color: var(--gray-400);"
-                    onclick="switchAuthMode('reset')">Забыли пароль?</button>
-                <button type="button" id="auth-switch-btn"
-                    style="width: 100%; margin-top: 8px; font-size: 12px; color: var(--gray-400);"
-                    onclick="switchAuthMode('register')">Нет аккаунта? Регистрация</button>
+                <button type="submit" id="auth-submit-btn" class="btn-auth" style="width: 100%; background: var(--white); color: var(--black); border: none; padding: 13px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer;">ВОЙТИ</button>
+
+                <button type="button" id="auth-forgot-btn" style="width: 100%; margin-top: 15px; background: transparent; border: none; color: var(--gray-400); cursor: pointer; font-size: 11px; font-family: 'DM Mono', monospace;" onclick="switchAuthMode('reset')">Забыли пароль?</button>
+                <button type="button" id="auth-switch-btn" style="width: 100%; margin-top: 10px; background: transparent; border: none; color: var(--gray-400); cursor: pointer; font-size: 11px; font-family: 'DM Mono', monospace;" onclick="switchAuthMode('register')">Нет аккаунта? Регистрация</button>
             </form>
         </div>
     </div>
 
-    <div class="mobile-nav-overlay" id="mobileNav">
-        <div class="mobile-nav-header">
-            <span style="font-family: 'Bebas Neue'; font-size: 28px; color: var(--white);">MX LAUNCHER</span>
-            <button class="close-modal" style="position: relative; top: 0; right: 0;"
-                onclick="closeMobileNav()">✕</button>
-        </div>
-        <a href="index.html" class="mobile-nav-link">На главную</a>
-        <a href="#" class="mobile-nav-link" id="mobile-auth-link"
-            onclick="closeMobileNav(); openAuthModal(event)">Войти</a>
-        <a href="https://t.me/mxlauncher" class="mobile-nav-link" target="_blank">Telegram</a>
-    </div>
+    <script>
+        const API_URL = "https://api.mxlauncher.fun";
 
-    <script src="support.js"></script>
+        async function getSha256Hash(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        const origFetch = window.fetch;
+        window.fetch = async function (url, options = {}) {
+            if (typeof url === 'string' && url.includes(API_URL)) {
+                const exempt = ['/handshake', '/check_update', '/online', '/get_downloads', '/get_ad'];
+                const isExempt = exempt.some(endpoint => url.includes(endpoint));
+
+                if (!isExempt) {
+                    let session_id = sessionStorage.getItem('mx_session_id');
+                    let session_secret = sessionStorage.getItem('mx_session_secret');
+
+                    if (!session_id || !session_secret) {
+                        try {
+                            const hs_res = await origFetch(`${API_URL}/handshake`);
+                            if (hs_res.ok) {
+                                const hs_data = await hs_res.json();
+                                session_id = hs_data.session_id;
+                                session_secret = hs_data.session_secret;
+                                sessionStorage.setItem('mx_session_id', session_id);
+                                sessionStorage.setItem('mx_session_secret', session_secret);
+                            }
+                        } catch (e) { console.error("Handshake failed:", e); }
+                    }
+
+                    if (session_id && session_secret) {
+                        const timestamp = (Date.now() / 1000).toString();
+                        const nonce = crypto.randomUUID();
+                        const urlObj = new URL(url);
+                        const path = urlObj.pathname;
+                        const method = (options.method || 'GET').toUpperCase();
+
+                        let bodyString = "";
+                        if (options.body) {
+                            bodyString = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
+                        }
+                        const bodyHash = await getSha256Hash(bodyString);
+
+                        const message = `${method}:${path}:${timestamp}:${nonce}:${bodyHash}`;
+
+                        const encoder = new TextEncoder();
+                        const keyData = encoder.encode(session_secret);
+                        const msgData = encoder.encode(message);
+
+                        const cryptoKey = await crypto.subtle.importKey(
+                            "raw", keyData, { name: "HMAC", hash: "SHA-256" },
+                            false, ["sign"]
+                        );
+                        const signatureBuffer = await crypto.subtle.sign("HMAC", cryptoKey, msgData);
+                        const signatureArray = Array.from(new Uint8Array(signatureBuffer));
+                        const signatureHex = signatureArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+                        options.headers = {
+                            ...options.headers,
+                            'X-Session-Id': session_id,
+                            'X-Signature': signatureHex,
+                            'X-Timestamp': timestamp,
+                            'X-Nonce': nonce
+                        };
+                    }
+                }
+            }
+            return origFetch(url, options);
+        };
+
+        origFetch(`${API_URL}/handshake`).then(r => r.json()).then(d => {
+            if (d.session_id) {
+                sessionStorage.setItem('mx_session_id', d.session_id);
+                sessionStorage.setItem('mx_session_secret', d.session_secret);
+            }
+        }).catch(() => { });
+
+        function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); document.body.style.overflow = 'hidden'; }
+        function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); document.body.style.overflow = ''; }
+
+        function showNotification(title, text, isSuccess = false) {
+            const toast = document.getElementById('notificationToast');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastDesc').innerText = text;
+            toast.className = 'toast';
+            if (!isSuccess) toast.classList.add('toast-error');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        // --- НОВАЯ СИСТЕМА АВТОРИЗАЦИИ ---
+        let authMode = 'login'; // 'login', 'register', 'reset', 'link'
+        let isCodeSent = false;
+        let linkUsername = "";
+
+        function openAuthModal(e) {
+            if(e) e.preventDefault();
+            document.getElementById('authModal').classList.add('active');
+            switchAuthMode('login');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        document.getElementById('authModal').addEventListener('click', function (e) {
+            if (e.target === this) closeAuthModal();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeAuthModal();
+        });
+
+        function togglePasswordVisibility() {
+            const inp = document.getElementById('auth-password');
+            inp.type = inp.type === 'password' ? 'text' : 'password';
+        }
+
+        async function loadCaptcha() {
+            const img = document.getElementById('auth-captcha-image');
+            const idInput = document.getElementById('auth-captcha-id');
+            const textInput = document.getElementById('auth-captcha-text');
+            if (!img) return;
+            
+            img.style.opacity = '0.4';
+            textInput.value = '';
+            try {
+                const res = await fetch(`${API_URL}/get_captcha`);
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    img.src = data.image_base64;
+                    idInput.value = data.captcha_id;
+                    img.style.opacity = '1';
+                }
+            } catch (e) { img.style.opacity = '1'; }
+        }
+
+        function switchAuthMode(mode) {
+            authMode = mode;
+            isCodeSent = false;
+            
+            document.getElementById('auth-status').innerText = "";
+            document.getElementById('auth-status').style.color = "var(--red)";
+            document.getElementById('auth-code').value = "";
+            
+            const title = document.getElementById('auth-modal-title-text');
+            const sub = document.getElementById('auth-modal-sub-text');
+            const btn = document.getElementById('auth-submit-btn');
+
+            document.getElementById('tab-login').classList.remove('active');
+            document.getElementById('tab-register').classList.remove('active');
+
+            document.getElementById('auth-username-group').style.display = 'none';
+            document.getElementById('auth-email-group').style.display = 'none';
+            document.getElementById('auth-pass-group').style.display = 'none';
+            document.getElementById('auth-code-group').style.display = 'none';
+            document.getElementById('auth-captcha-group').style.display = 'block';
+            document.getElementById('auth-forgot-btn').style.display = 'none';
+            document.getElementById('auth-switch-btn').style.display = 'block';
+
+            document.getElementById('auth-username').disabled = false;
+
+            if (mode === 'login') {
+                document.getElementById('tab-login').classList.add('active');
+                title.innerText = "Добро пожаловать";
+                sub.innerText = "Войдите в свой аккаунт";
+                document.getElementById('auth-username-group').style.display = 'block';
+                document.getElementById('auth-pass-group').style.display = 'block';
+                document.getElementById('auth-forgot-btn').style.display = 'block';
+                document.getElementById('auth-username').placeholder = "Логин или E-mail";
+                document.getElementById('auth-switch-btn').innerText = "Нет аккаунта? Регистрация";
+                document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('register');
+                btn.innerText = "ВОЙТИ";
+                loadCaptcha();
+            } 
+            else if (mode === 'register') {
+                document.getElementById('tab-register').classList.add('active');
+                title.innerText = "Создать аккаунт";
+                sub.innerText = "Регистрация займет минуту";
+                document.getElementById('auth-username-group').style.display = 'block';
+                document.getElementById('auth-email-group').style.display = 'block';
+                document.getElementById('auth-pass-group').style.display = 'block';
+                document.getElementById('auth-username').placeholder = "Придумайте логин";
+                document.getElementById('auth-switch-btn').innerText = "Уже есть аккаунт? Войти";
+                document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
+                btn.innerText = "ОТПРАВИТЬ КОД";
+                loadCaptcha();
+            } 
+            else if (mode === 'reset') {
+                title.innerText = "Сброс пароля";
+                sub.innerText = "Восстановление доступа";
+                document.getElementById('auth-email-group').style.display = 'block';
+                document.getElementById('auth-pass-group').style.display = 'block';
+                document.getElementById('auth-switch-btn').innerText = "Вспомнили? Войти";
+                document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
+                btn.innerText = "ОТПРАВИТЬ КОД";
+                loadCaptcha();
+            } 
+            else if (mode === 'link') {
+                title.innerText = "Привязка почты";
+                sub.innerText = "Требование безопасности";
+                document.getElementById('auth-username-group').style.display = 'block';
+                document.getElementById('auth-email-group').style.display = 'block';
+                document.getElementById('auth-username').value = linkUsername;
+                document.getElementById('auth-username').disabled = true;
+                document.getElementById('auth-switch-btn').innerText = "Войти в другой аккаунт";
+                document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
+                btn.innerText = "ОТПРАВИТЬ КОД";
+                loadCaptcha();
+            }
+        }
+
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            const user = document.getElementById('auth-username').value.trim();
+            const email = document.getElementById('auth-email').value.trim();
+            const pass = document.getElementById('auth-password').value.trim();
+            const capText = document.getElementById('auth-captcha-text').value.trim();
+            const capId = document.getElementById('auth-captcha-id').value;
+            const code = document.getElementById('auth-code').value.trim();
+            
+            const btn = document.getElementById('auth-submit-btn');
+            const status = document.getElementById('auth-status');
+            status.style.color = 'var(--red)';
+
+            if (authMode === 'login' && (!user || !pass || !capText)) { status.innerText = "Заполните все поля!"; return; }
+            if (authMode === 'reset' && (!email || !pass)) { status.innerText = "Укажите почту и новый пароль!"; return; }
+            if ((authMode === 'register' || authMode === 'link') && (!user || !email)) { status.innerText = "Заполните логин и почту!"; return; }
+
+            if (authMode !== 'login' && !isCodeSent) {
+                if (!capText) { status.innerText = "Введите капчу!"; return; }
+                btn.disabled = true; btn.innerText = "ОТПРАВКА...";
+                
+                try {
+                    const res = await fetch(`${API_URL}/send_code`, {
+                        method: 'POST', headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ email: email, action: authMode, captcha_id: capId, captcha_text: capText })
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        isCodeSent = true;
+                        status.style.color = 'var(--green)';
+                        status.innerText = "Код отправлен на почту!";
+                        
+                        document.getElementById('auth-captcha-group').style.display = 'none';
+                        document.getElementById('auth-code-group').style.display = 'block';
+                        if(authMode === 'register') btn.innerText = "ЗАВЕРШИТЬ РЕГИСТРАЦИЮ";
+                        if(authMode === 'reset') btn.innerText = "СМЕНИТЬ ПАРОЛЬ";
+                        if(authMode === 'link') {
+                            btn.innerText = "ПРИВЯЗАТЬ";
+                            document.getElementById('auth-pass-group').style.display = 'block';
+                        }
+                    } else {
+                        status.innerText = data.error || "Ошибка отправки кода";
+                        loadCaptcha();
+                    }
+                } catch(e) { status.innerText = "Ошибка сервера"; }
+                btn.disabled = false;
+                return;
+            }
+
+            btn.disabled = true; btn.innerText = "ОБРАБОТКА...";
+            
+            let endpoint = "";
+            let payload = {};
+            
+            if (authMode === 'login') {
+                endpoint = "/login";
+                payload = { username: user, password: pass, captcha_id: capId, captcha_text: capText };
+            } else if (authMode === 'register') {
+                endpoint = "/register";
+                payload = { username: user, email: email, password: pass, code: code };
+            } else if (authMode === 'reset') {
+                endpoint = "/reset_password";
+                payload = { email: email, new_password: pass, code: code };
+            } else if (authMode === 'link') {
+                endpoint = "/link_email";
+                payload = { username: user, email: email, password: pass, code: code };
+            }
+
+            try {
+                const res = await fetch(`${API_URL}${endpoint}`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    status.style.color = 'var(--green)';
+                    if (authMode === 'login') {
+                        localStorage.setItem('mx_token', data.token);
+                        localStorage.setItem('mx_username', data.username);
+                        closeAuthModal();
+                        showNotification("Добро пожаловать", data.username, true);
+                        setTimeout(() => window.location.reload(), 1000);
+                    } else {
+                        status.innerText = data.message || "Успешно!";
+                        setTimeout(() => switchAuthMode('login'), 2000);
+                    }
+                } else {
+                    if (authMode === 'login' && data.error === 'no_email' && data.require_link) {
+                        linkUsername = data.username || user;
+                        switchAuthMode('link');
+                        document.getElementById('auth-status').innerText = "Требуется привязка E-mail!";
+                    } else {
+                        status.innerText = data.error || "Ошибка";
+                        if (authMode === 'login' || !isCodeSent) loadCaptcha();
+                    }
+                }
+            } catch(e) { status.innerText = "Ошибка сервера"; }
+            
+            btn.disabled = false;
+            if(authMode === 'login') btn.innerText = "ВОЙТИ";
+            else if(!isCodeSent) btn.innerText = "ОТПРАВИТЬ КОД";
+        }
+        // --- КОНЕЦ НОВОЙ СИСТЕМЫ АВТОРИЗАЦИИ ---
+
+        function toggleSubmitButton() {
+            const checkbox = document.getElementById('rules-checkbox');
+            const btn = document.getElementById('submit-btn');
+            if (btn) btn.disabled = !checkbox.checked;
+        }
+
+        async function submitQuestion(e) {
+            e.preventDefault();
+            const savedUser = localStorage.getItem('mx_username');
+            const savedToken = localStorage.getItem('mx_token');
+            const messageText = document.getElementById('support-text').value.trim();
+
+            if (!savedUser || !savedToken) { showNotification("Ошибка", "Войдите в аккаунт"); openAuthModal(e); return; }
+            if (messageText.length < 10) { showNotification("Слишком коротко", "Опишите проблему подробнее (мин. 10 символов)"); return; }
+
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Отправка...`;
+
+            try {
+                const response = await fetch(`${API_URL}/create_ticket`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken, message: messageText })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    showNotification("Обращение отправлено", "Ответим в ближайшее время", true);
+                    document.getElementById('support-text').value = '';
+                    document.getElementById('rules-checkbox').checked = false;
+                    toggleSubmitButton();
+                } else {
+                    showNotification("Ошибка", data.error || "Не удалось отправить");
+                    btn.disabled = false;
+                }
+            } catch {
+                showNotification("Нет связи", "Сервер недоступен");
+                btn.disabled = false;
+            }
+
+            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg> Отправить обращение`;
+        }
+
+        async function fetchVersion() {
+            try {
+                const res = await fetch(`${API_URL}/check_update`);
+                const data = await res.json();
+                const ver = data.latest_version || data.version;
+                if (ver) {
+                    const footerEl = document.getElementById('footer-version-label');
+                    if (footerEl) footerEl.textContent = `Ver. ${ver}`;
+                }
+            } catch { }
+        }
+
+        function initScrollReveal() {
+            const els = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            els.forEach(el => observer.observe(el));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initScrollReveal();
+            fetchVersion();
+
+            const savedUser = localStorage.getItem('mx_username');
+            const savedToken = localStorage.getItem('mx_token');
+
+            const navBtn = document.getElementById('auth-btn-nav');
+            const mobileBtn = document.getElementById('mobile-auth-link-nav');
+            const unauthView = document.getElementById('unauth-view');
+            const authView = document.getElementById('auth-view');
+            const displayUsername = document.getElementById('display-username');
+
+            if (savedUser && savedToken) {
+                if (navBtn) { navBtn.textContent = 'Личный кабинет'; navBtn.onclick = null; navBtn.href = 'profile.html'; }
+                if (mobileBtn) { mobileBtn.textContent = 'Личный кабинет'; mobileBtn.onclick = null; mobileBtn.href = 'profile.html'; }
+                unauthView.style.display = 'none';
+                authView.style.display = 'block';
+                displayUsername.textContent = savedUser;
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        authView.classList.add('visible');
+                    });
+                });
+            } else {
+                unauthView.style.display = 'flex';
+                authView.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 
 </html>

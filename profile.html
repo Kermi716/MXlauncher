@@ -12,27 +12,938 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Unbounded:wght@700;800;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="profile.css">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --white: #f5f5f0;
+            --gray-100: #e8e8e3;
+            --gray-200: #c8c8c2;
+            --gray-400: #888882;
+            --gray-600: #444440;
+            --gray-800: #1a1a18;
+            --gray-900: #111110;
+            --border: rgba(245, 245, 240, 0.12);
+            --border-strong: rgba(245, 245, 240, 0.28);
+            --red: #ff5555;
+            --green: #2ecc71;
+            --blue: #2aabee;
+            --gold: #ffcc00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--black);
+            font-family: 'DM Sans', sans-serif;
+            color: var(--white);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            cursor: default;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .site-header {
+            position: relative;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .header-video-wrap {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .header-video-wrap video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.18;
+            filter: grayscale(100%) contrast(1.2);
+        }
+
+        .header-video-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(10, 10, 10, 0) 40%, rgba(10, 10, 10, 1) 100%);
+        }
+
+        .header-inner {
+            position: relative;
+            z-index: 2;
+            padding: 80px 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 28px;
+            height: 1px;
+            background: var(--gray-600);
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(48px, 8vw, 80px);
+            letter-spacing: 4px;
+            color: var(--white);
+            line-height: 1;
+            margin-bottom: 0;
+            text-transform: uppercase;
+        }
+
+        .nav-strip-wrap {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-strip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .nav-left {
+            display: flex;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px 16px 0;
+            margin-right: 24px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: var(--white);
+        }
+
+        .nav-link.back-link {
+            color: var(--gray-600);
+            padding-right: 0;
+            margin-right: 32px;
+            border-right: 1px solid var(--border);
+            padding-right: 32px;
+        }
+
+        .nav-link.back-link:hover {
+            color: var(--gray-400);
+        }
+
+        .nav-link svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .bell-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 16px 0;
+        }
+
+        .bell-icon {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: var(--gray-400);
+            stroke-width: 1.5;
+            transition: stroke 0.2s;
+        }
+
+        .bell-wrapper:hover .bell-icon {
+            stroke: var(--white);
+        }
+
+        .bell-badge {
+            position: absolute;
+            top: 12px;
+            right: -8px;
+            background: var(--white);
+            color: var(--black);
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            font-weight: 500;
+            border-radius: 2px;
+            padding: 2px 4px;
+            display: none;
+            line-height: 1;
+        }
+
+        .notif-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 320px;
+            background: var(--gray-900);
+            border: 1px solid var(--border-strong);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: all 0.2s;
+        }
+
+        .notif-dropdown.show {
+            display: flex;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .notif-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-400);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .notif-list {
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        .notif-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .notif-list::-webkit-scrollbar-thumb {
+            background: var(--gray-600);
+        }
+
+        .notif-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .notif-item:last-child {
+            border-bottom: none;
+        }
+
+        .notif-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .notif-item.success {
+            border-left: 2px solid var(--white);
+        }
+
+        .notif-item.error {
+            border-left: 2px solid #8a0303;
+        }
+
+        .notif-text {
+            font-size: 13px;
+            color: var(--gray-200);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .notif-date {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            color: var(--gray-600);
+            letter-spacing: 1px;
+        }
+
+        .notif-empty {
+            padding: 32px 16px;
+            text-align: center;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 60px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .section {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 36px;
+        }
+
+        .section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            margin-right: 20px;
+        }
+
+        .section-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: var(--gray-200);
+            text-transform: uppercase;
+        }
+
+        .section-rule {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+            margin: 0 20px;
+        }
+
+        .req-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid var(--border);
+        }
+
+        .req-table tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        .req-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .req-table tr:hover {
+            background: rgba(245, 245, 240, 0.025);
+        }
+
+        .req-table td {
+            padding: 16px 24px;
+            font-size: 13px;
+        }
+
+        .req-table td:first-child {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            width: 250px;
+            border-right: 1px solid var(--border);
+        }
+
+        .req-table td:last-child {
+            color: var(--gray-200);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .btn-auth {
+            background: var(--white);
+            color: var(--black);
+            border: 1px solid var(--white);
+            padding: 13px 24px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-auth:hover {
+            background: transparent;
+            color: var(--white);
+        }
+
+        .btn-auth:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--gray-400);
+            border: 1px solid var(--border);
+            padding: 13px 24px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--white);
+            color: var(--white);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .price-card {
+            border: 1px solid var(--border);
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card:hover {
+            border-color: var(--border-strong);
+            transform: translateY(-4px);
+        }
+
+        .price-title {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: var(--gray-400);
+            margin-bottom: 12px;
+        }
+
+        .price-amount {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 48px;
+            color: var(--white);
+            line-height: 1;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .price-period {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1px;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 32px;
+            flex: 1;
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+        }
+
+        .price-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--gray-200);
+            margin-bottom: 16px;
+        }
+
+        .feature-icon {
+            width: 12px;
+            height: 12px;
+            border: 1px solid var(--gray-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .price-card:hover .feature-icon {
+            border-color: var(--white);
+            background: var(--white);
+        }
+
+        .ticket-item {
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+            transition: background 0.2s;
+        }
+
+        .ticket-item:hover {
+            background: rgba(245, 245, 240, 0.02);
+        }
+
+        .ticket-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ticket-status {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            padding: 4px 8px;
+            border: 1px solid var(--border);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .ticket-status.answered {
+            color: var(--black);
+            background: var(--white);
+            border-color: var(--white);
+        }
+
+        .ticket-status.rejected {
+            color: var(--black);
+            background: var(--gray-400);
+            border-color: var(--gray-400);
+        }
+
+        .ticket-body {
+            padding: 24px;
+        }
+
+        .ticket-q-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            color: var(--gray-600);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .ticket-q {
+            font-size: 14px;
+            color: var(--gray-200);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .ticket-a-block {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+
+        .ticket-a-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            color: var(--gray-400);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .ticket-a {
+            font-size: 13px;
+            color: var(--white);
+            line-height: 1.5;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .auth-modal {
+            background: var(--gray-900);
+            border: 1px solid var(--border-strong);
+            width: 100%;
+            max-width: 400px;
+            padding: 32px 30px 28px;
+            transform: translateY(10px) scale(0.985);
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .modal-overlay.active .auth-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            color: var(--gray-600);
+            cursor: pointer;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+            padding: 4px 7px;
+            border: 1px solid transparent;
+            border-radius: 2px;
+        }
+
+        .close-modal:hover {
+            color: var(--white);
+            border-color: var(--border);
+        }
+
+        .auth-modal-title {
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .auth-modal-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .coin-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .coin-btn {
+            flex: 1;
+            text-align: center;
+            border: 1px solid var(--border);
+            padding: 16px 0;
+            cursor: pointer;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+            color: var(--gray-400);
+        }
+
+        .coin-btn:hover {
+            border-color: var(--border-strong);
+            color: var(--white);
+        }
+
+        .coin-btn.active {
+            border-color: var(--white);
+            color: var(--black);
+            background: var(--white);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--white);
+            color: var(--black);
+            padding: 16px 24px;
+            z-index: 99999;
+            transform: translateY(120%);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+            border-left: 3px solid var(--black);
+            max-width: 320px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-title {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
+
+        .toast-desc {
+            font-size: 11px;
+            color: var(--gray-600);
+            font-family: 'DM Mono', monospace;
+        }
+
+        .toast.toast-error {
+            background: var(--black);
+            color: var(--white);
+            border-left-color: var(--white);
+            border: 1px solid var(--border-strong);
+        }
+
+        .toast.toast-error .toast-desc {
+            color: var(--gray-400);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .anim-in {
+            opacity: 0;
+            animation: fadeUp 0.7s ease forwards;
+        }
+
+        .anim-in-1 {
+            animation-delay: 0.1s;
+        }
+
+        .anim-in-2 {
+            animation-delay: 0.2s;
+        }
+
+        .anim-in-3 {
+            animation-delay: 0.3s;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 60px;
+            margin-top: auto;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-copy {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .footer-subtitle {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .header-inner {
+                padding: 40px 20px 20px;
+            }
+
+            h1 {
+                font-size: 40px;
+            }
+
+            .container {
+                padding: 30px 20px;
+            }
+
+            .nav-strip {
+                padding: 0 20px;
+            }
+
+            .nav-link {
+                margin-right: 12px;
+                font-size: 9px;
+                padding: 16px 12px 16px 0;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .req-table td {
+                padding: 12px 16px;
+            }
+
+            .req-table td:first-child {
+                width: 120px;
+                font-size: 9px;
+            }
+
+            footer {
+                padding: 24px 20px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .footer-info {
+                align-items: center;
+                gap: 8px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                display: flex;
+                gap: 12px;
+            }
+
+            .btn-group a,
+            .btn-group button {
+                width: 100%;
+            }
+
+            .toast {
+                right: 16px;
+                left: 16px;
+                max-width: none;
+                bottom: 16px;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <header class="site-header">
+        <div class="header-video-wrap">
+            <video autoplay muted loop playsinline>
+                <source src="video.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="header-inner anim-in anim-in-1">
+            <div class="header-eyebrow">Личный кабинет</div>
+            <h1>Профиль</h1>
+        </div>
+    </header>
 
-    <div class="nav-wrapper" id="navbar">
-        <header class="nav-strip">
-            <a href="index.html" class="nav-logo">
-                <img src="icon.png" alt="MX Logo"
-                    style="width: 32px; height: 32px; object-fit: contain; border-radius: 4px;"
-                    onerror="this.src='logo.ico'">
-                MX LAUNCHER
-            </a>
-            <nav class="nav-links">
-                <a class="nav-link" href="index.html">На главную</a>
+    <div class="nav-strip-wrap anim-in anim-in-2">
+        <div class="nav-strip">
+            <nav class="nav-left">
+                <a class="nav-link back-link" href="index.html">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5M12 5l-7 7 7 7" />
+                    </svg>
+                    На главную
+                </a>
                 <a class="nav-link" href="support.html">Поддержка</a>
             </nav>
-            <div class="nav-right" style="display:flex; align-items:center; gap: 20px; z-index: 105;">
+            <div class="nav-right">
                 <div class="bell-wrapper" id="bell-wrapper">
                     <svg class="bell-icon" viewBox="0 0 24 24">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -46,208 +957,616 @@
                         </div>
                     </div>
                 </div>
-                <button class="hamburger" onclick="openMobileNav()" style="position:static;">
-                    <span></span><span></span><span></span>
-                </button>
             </div>
-        </header>
+        </div>
     </div>
 
-    <main class="hero">
-        <div class="hero-video-wrap">
-            <video autoplay muted loop playsinline>
-                <source src="video.mp4" type="video/mp4">
-            </video>
-        </div>
-        <div class="hero-content hero-enter">
-            <div class="hero-eyebrow">Личный кабинет</div>
-            <h1 class="hero-title">ПРОФИЛЬ</h1>
-            <p class="hero-desc">Управляйте аккаунтом, приобретайте Premium и следите за своими обращениями.</p>
-        </div>
-    </main>
-
-    <section class="container">
-        <div class="bento-grid">
-
-            <div class="bento-item col-span-4 reveal" style="display: flex; flex-direction: column;">
-                <div class="section-header" style="margin-bottom: 24px;">
-                    <span class="section-label">01</span>
-                    <span class="section-title">Информация об аккаунте</span>
-                </div>
-
-                <table class="req-table" style="flex: 1;">
-                    <tbody>
-                        <tr>
-                            <td>Никнейм</td>
-                            <td id="prof-name">Загрузка...</td>
-                        </tr>
-                        <tr>
-                            <td>Статус аккаунта</td>
-                            <td id="prof-role">Загрузка...</td>
-                        </tr>
-                        <tr>
-                            <td>Telegram ID</td>
-                            <td id="prof-tg">Загрузка...</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="btn-group" style="margin-top: 24px; display: flex; gap: 16px;">
-                    <button class="btn-outline" style="flex:1;" onclick="logout()">Выйти</button>
-                    <a href="admin.html" class="btn-outline" id="adminBtn"
-                        style="display: none; flex: 1;">Админ-Панель</a>
-                </div>
+    <div class="container">
+        <section class="section anim-in anim-in-3" style="padding-top: 0;">
+            <div class="section-header">
+                <span class="section-label">01</span>
+                <span class="section-title">Информация об аккаунте</span>
+                <div class="section-rule"></div>
             </div>
 
-            <div class="bento-item col-span-8 reveal" style="display: flex; flex-direction: column;">
-                <div class="section-header" style="margin-bottom: 24px;">
-                    <span class="section-label">03</span>
-                    <span class="section-title">Мои обращения</span>
-                </div>
-                <div id="tickets-container" style="flex: 1;">
-                    <div class="notif-empty"
-                        style="border: 1px dashed var(--border); padding: 40px; border-radius: 8px;">Загрузка тикетов...
-                    </div>
-                </div>
+            <table class="req-table">
+                <tbody>
+                    <tr>
+                        <td>Никнейм</td>
+                        <td id="prof-name">Загрузка...</td>
+                    </tr>
+                    <tr>
+                        <td>Статус аккаунта</td>
+                        <td id="prof-role">Загрузка...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="btn-group" style="margin-top: 24px; display: flex; gap: 16px;">
+                <a href="admin.html" class="btn-outline" id="adminBtn" style="display: none;">Перейти в Админ-Панель</a>
+                <button class="btn-outline" onclick="logout()">Выйти из аккаунта</button>
+            </div>
+        </section>
+
+        <section class="section reveal" id="premium-panel">
+            <div class="section-header">
+                <span class="section-label">02</span>
+                <span class="section-title">MX Launcher Premium</span>
+                <div class="section-rule"></div>
+                <button class="nav-link download-btn" id="btn-trial" onclick="activateTrial()"
+                    style="display: none; border-color: var(--white); color: var(--white);">Получить тест на
+                    10ч</button>
             </div>
 
-            <div class="bento-item col-span-12 reveal" id="premium-panel">
-                <div class="section-header"
-                    style="margin-bottom: 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
-                    <div>
-                        <span class="section-label">02</span>
-                        <span class="section-title">MX Launcher Premium</span>
-                    </div>
-                    <button class="btn-outline download-btn" id="btn-trial" onclick="activateTrial()"
-                        style="display: none; border-color: var(--white); color: var(--white); padding: 8px 16px; font-size: 10px;">Получить
-                        тест на 10ч</button>
+            <div class="pricing-grid">
+                <div class="price-card start">
+                    <div class="price-title">START</div>
+                    <div class="price-amount">199₽ <span class="price-period">/ мес</span></div>
+                    <ul class="price-features">
+                        <li>
+                            <div class="feature-icon"></div> Добавление читов
+                        </li>
+                        <li>
+                            <div class="feature-icon"></div> Добавление ресурспаков
+                        </li>
+                        <li>
+                            <div class="feature-icon"></div> Нет рекламы
+                        </li>
+                        <li>
+                            <div class="feature-icon"></div> Приоритет поддержки
+                        </li>
+                    </ul>
+                    <button class="btn-outline" style="width: 100%;"
+                        onclick="openPaymentModal('START')">ВЫБРАТЬ</button>
                 </div>
 
-                <div class="pricing-grid">
-                    <div class="price-card start">
-                        <div class="price-title">START</div>
-                        <div class="price-amount">199₽ <span class="price-period">/ мес</span></div>
-                        <ul class="price-features">
-                            <li>
-                                <div class="feature-icon"></div> Добавление читов
-                            </li>
-                            <li>
-                                <div class="feature-icon"></div> Добавление ресурспаков
-                            </li>
-                            <li>
-                                <div class="feature-icon"></div> Нет рекламы
-                            </li>
-                            <li>
-                                <div class="feature-icon"></div> Приоритет поддержки
-                            </li>
-                        </ul>
-                        <button class="btn-outline" style="width: 100%;"
-                            onclick="openPaymentModal('START')">ВЫБРАТЬ</button>
-                    </div>
+                <div class="price-card medium">
+                    <div class="price-title">MEDIUM</div>
+                    <div class="price-amount">499₽ <span class="price-period">/ 6 мес</span></div>
+                    <ul class="price-features">
+                        <li>
+                            <div class="feature-icon"></div> Добавление читов
+                        </li>
+                        <li>
+                            <div class="feature-icon"></div> Добавление ресурспаков
+                        </li>
+                        <li>
+                            <div class="feature-icon"></div> Нет рекламы
+                        </li>
+                        <li>
+                            <div class="feature-icon"></div> Приоритет поддержки
+                        </li>
+                    </ul>
+                    <button class="btn-outline" style="width: 100%;"
+                        onclick="openPaymentModal('MEDIUM')">ВЫБРАТЬ</button>
+                </div>
 
-                    <div class="price-card medium">
-                        <div class="price-title">MEDIUM</div>
-                        <div class="price-amount">499₽ <span class="price-period">/ 6 мес</span></div>
-                        <ul class="price-features">
-                            <li>
-                                <div class="feature-icon"></div> Добавление читов
-                            </li>
-                            <li>
-                                <div class="feature-icon"></div> Добавление ресурспаков
-                            </li>
-                            <li>
-                                <div class="feature-icon"></div> Нет рекламы
-                            </li>
-                            <li>
-                                <div class="feature-icon"></div> Приоритет поддержки
-                            </li>
-                        </ul>
-                        <button class="btn-outline" style="width: 100%;"
-                            onclick="openPaymentModal('MEDIUM')">ВЫБРАТЬ</button>
-                    </div>
-
-                    <div class="price-card ultimate">
-                        <div class="price-title">ULTIMATE</div>
-                        <div class="price-amount">999₽ <span class="price-period">/ навсегда</span></div>
-                        <ul class="price-features">
-                            <li>
-                                <div class="feature-icon"></div> Добавление читов
-                            </li>
-                            <li>
-                                <div class="feature-icon"></div> Добавление ресурспаков
-                            </li>
-                            <li>
-                                <div class="feature-icon"></div> Нет рекламы
-                            </li>
-                            <li>
-                                <div class="feature-icon"></div> Приоритет поддержки
-                            </li>
-                        </ul>
-                        <button class="btn-outline" style="width: 100%;"
-                            onclick="openPaymentModal('ULTIMATE')">ВЫБРАТЬ</button>
-                    </div>
+                <div class="price-card ultimate">
+                    <div class="price-title">ULTIMATE</div>
+                    <div class="price-amount">999₽ <span class="price-period">/ навсегда</span></div>
+                    <ul class="price-features">
+                        <li>
+                            <div class="feature-icon"></div> Добавление читов
+                        </li>
+                        <li>
+                            <div class="feature-icon"></div> Добавление ресурспаков
+                        </li>
+                        <li>
+                            <div class="feature-icon"></div> Нет рекламы
+                        </li>
+                        <li>
+                            <div class="feature-icon"></div> Приоритет поддержки
+                        </li>
+                    </ul>
+                    <button class="btn-outline" style="width: 100%;"
+                        onclick="openPaymentModal('ULTIMATE')">ВЫБРАТЬ</button>
                 </div>
             </div>
+        </section>
 
-        </div>
-    </section>
+        <section class="section reveal">
+            <div class="section-header">
+                <span class="section-label">03</span>
+                <span class="section-title">Мои обращения</span>
+                <div class="section-rule"></div>
+            </div>
+            <div id="tickets-container">
+                <div class="notif-empty" style="border: 1px solid var(--border); padding: 40px;">Загрузка тикетов...
+                </div>
+            </div>
+        </section>
+    </div>
 
     <footer>
         <div class="footer-inner">
-            <div class="mono" style="font-size: 11px; color: var(--gray-400);">
-                MX Launcher © 2026. <span id="footer-version-label">Ver. —</span>
-            </div>
-            <div style="display: flex; gap: 24px; font-size: 13px;">
-                <a href="index.html" style="color: var(--gray-400); transition: color 0.3s;" title="Главная"
-                    onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--gray-400)'">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                    </svg>
-                </a>
+            <div class="footer-info">
+                <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+                <div class="footer-subtitle"><span id="footer-version-label">Ver. —</span> — Free Forever</div>
             </div>
         </div>
     </footer>
-
-    <!-- Payment Modal -->
-    <div class="modal-overlay" id="payment-modal">
-        <div class="auth-modal" style="padding-top: 40px; text-align: center;">
-            <button class="close-modal" onclick="closePaymentModal()">✕</button>
-            <div class="auth-modal-title">Оплата Premium</div>
-            <div class="auth-modal-sub" id="payment-tier-label">Выбранный тариф: —</div>
-
-            <div style="margin-bottom: 24px; text-align: left;">
-                <div
-                    style="font-family:'DM Mono', monospace; font-size:9px; color:var(--gray-400); margin-bottom:8px; text-transform:uppercase;">
-                    Выберите метод оплаты</div>
-                <div class="coin-buttons">
-                    <div class="coin-btn active" id="btn-rub" onclick="selectCurrency('RUB')">Банк. Карта (RUB)</div>
-                    <div class="coin-btn" id="btn-crypto" onclick="selectCurrency('CRYPTO')">Криптовалюта</div>
-                </div>
-            </div>
-
-            <button class="btn-auth" style="width: 100%;" id="btn-pay" onclick="processPayment()">Перейти к
-                оплате</button>
-            <div style="margin-top: 16px; font-family:'DM Mono', monospace; font-size:9px; color:var(--gray-600);">Мы
-                используем безопасное шифрование</div>
-        </div>
-    </div>
-
-    <div class="mobile-nav-overlay" id="mobileNav">
-        <div class="mobile-nav-header">
-            <span style="font-family: 'Bebas Neue'; font-size: 28px; color: var(--white);">MX LAUNCHER</span>
-            <button class="close-modal" style="position: relative; top: 0; right: 0;"
-                onclick="closeMobileNav()">✕</button>
-        </div>
-        <a href="index.html" class="mobile-nav-link">На главную</a>
-        <a href="support.html" class="mobile-nav-link">Поддержка</a>
-    </div>
 
     <div id="notificationToast" class="toast">
         <div class="toast-title" id="toastTitle">Уведомление</div>
         <div class="toast-desc" id="toastDesc">—</div>
     </div>
 
-    <script src="profile.js"></script>
+    <div class="modal-overlay" id="paymentModal">
+        <div class="auth-modal">
+            <div class="close-modal" onclick="closePaymentModal()">ESC</div>
+            <div class="auth-modal-title" id="pay-title">Оплата</div>
+            <div class="auth-modal-sub">Выберите криптовалюту (CryptoBot)</div>
+
+            <div class="coin-buttons">
+                <div class="coin-btn" id="btn-usdt" onclick="selectCoin('USDT')">USDT</div>
+                <div class="coin-btn" id="btn-ton" onclick="selectCoin('TON')">TON</div>
+            </div>
+
+            <button class="btn-auth" id="btn-confirm-pay" style="width: 100%;" disabled
+                onclick="startPayment()">Выберите валюту</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://api.mxlauncher.fun";
+
+        async function getSha256Hash(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        const origFetch = window.fetch;
+        window.fetch = async function (url, options = {}) {
+            if (typeof url === 'string' && url.includes(API_URL)) {
+                const exempt = ['/handshake', '/check_update', '/online', '/get_downloads', '/get_ad'];
+                const isExempt = exempt.some(endpoint => url.includes(endpoint));
+
+                if (!isExempt) {
+                    let session_id = sessionStorage.getItem('mx_session_id');
+                    let session_secret = sessionStorage.getItem('mx_session_secret');
+
+                    if (!session_id || !session_secret) {
+                        try {
+                            const hs_res = await origFetch(`${API_URL}/handshake`);
+                            if (hs_res.ok) {
+                                const hs_data = await hs_res.json();
+                                session_id = hs_data.session_id;
+                                session_secret = hs_data.session_secret;
+                                sessionStorage.setItem('mx_session_id', session_id);
+                                sessionStorage.setItem('mx_session_secret', session_secret);
+                            }
+                        } catch (e) { console.error("Handshake failed:", e); }
+                    }
+
+                    if (session_id && session_secret) {
+                        const timestamp = (Date.now() / 1000).toString();
+                        const nonce = crypto.randomUUID();
+                        const urlObj = new URL(url);
+                        const path = urlObj.pathname;
+                        const method = (options.method || 'GET').toUpperCase();
+
+                        let bodyString = "";
+                        if (options.body) {
+                            bodyString = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
+                        }
+                        const bodyHash = await getSha256Hash(bodyString);
+
+                        const message = `${method}:${path}:${timestamp}:${nonce}:${bodyHash}`;
+
+                        const encoder = new TextEncoder();
+                        const keyData = encoder.encode(session_secret);
+                        const msgData = encoder.encode(message);
+
+                        const cryptoKey = await crypto.subtle.importKey(
+                            "raw", keyData, { name: "HMAC", hash: "SHA-256" },
+                            false, ["sign"]
+                        );
+                        const signatureBuffer = await crypto.subtle.sign("HMAC", cryptoKey, msgData);
+                        const signatureArray = Array.from(new Uint8Array(signatureBuffer));
+                        const signatureHex = signatureArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+                        options.headers = {
+                            ...options.headers,
+                            'X-Session-Id': session_id,
+                            'X-Signature': signatureHex,
+                            'X-Timestamp': timestamp,
+                            'X-Nonce': nonce
+                        };
+                    }
+                }
+            }
+            return origFetch(url, options);
+        };
+
+        origFetch(`${API_URL}/handshake`).then(r => r.json()).then(d => {
+            if (d.session_id) {
+                sessionStorage.setItem('mx_session_id', d.session_id);
+                sessionStorage.setItem('mx_session_secret', d.session_secret);
+            }
+        }).catch(() => { });
+        const savedUser = localStorage.getItem('mx_username');
+        const savedToken = localStorage.getItem('mx_token');
+
+        let rawTicketsHash = "";
+        let selectedPlan = "";
+        let selectedCoin = "";
+        let paymentInterval = null;
+
+        function showNotification(title, text, isSuccess = false) {
+            const toast = document.getElementById('notificationToast');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastDesc').innerHTML = text;
+            toast.className = 'toast';
+            if (!isSuccess) toast.classList.add('toast-error');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        async function loadNotifications() {
+            try {
+                const res = await fetch(`${API_URL}/get_notifications`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken })
+                });
+
+                if (!res.ok) return;
+                const data = await res.json();
+
+                const badge = document.getElementById('bell-badge');
+                if (data.unread > 0) {
+                    badge.innerText = data.unread > 9 ? '9+' : data.unread;
+                    badge.style.display = 'block';
+                } else {
+                    badge.style.display = 'none';
+                }
+
+                const list = document.getElementById('notif-list');
+                list.innerHTML = '';
+
+                if (!data.notifications || data.notifications.length === 0) {
+                    list.innerHTML = '<div class="notif-empty">Нет новых уведомлений</div>';
+                    return;
+                }
+
+                data.notifications.forEach(n => {
+                    const dateObj = new Date(n.date);
+                    const dateStr = dateObj.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+                    const typeClass = n.type || 'info';
+
+                    list.innerHTML += `
+                        <div class="notif-item ${typeClass}">
+                            <div class="notif-text">${formatText(n.text)}</div>
+                            <div class="notif-date">${dateStr}</div>
+                        </div>
+                    `;
+                });
+            } catch (e) { }
+        }
+
+        async function toggleNotifications() {
+            const drop = document.getElementById('notif-dropdown');
+            drop.classList.toggle('show');
+
+            if (drop.classList.contains('show')) {
+                await loadNotifications();
+                fetch(`${API_URL}/read_notifications`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken })
+                }).then(() => {
+                    document.getElementById('bell-badge').style.display = 'none';
+                });
+            }
+        }
+
+        document.getElementById('bell-wrapper').addEventListener('click', function (e) {
+            e.stopPropagation();
+            toggleNotifications();
+        });
+
+        document.addEventListener('click', function (e) {
+            const drop = document.getElementById('notif-dropdown');
+            if (drop.classList.contains('show')) {
+                drop.classList.remove('show');
+            }
+        });
+
+        document.getElementById('notif-dropdown').addEventListener('click', function (e) { e.stopPropagation(); });
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+
+        function formatText(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
+        }
+
+        async function fetchVersion() {
+            try {
+                const res = await fetch(`${API_URL}/check_update`);
+                const data = await res.json();
+                const ver = data.latest_version || data.version;
+                if (ver) {
+                    const footerEl = document.getElementById('footer-version-label');
+                    if (footerEl) footerEl.textContent = `Ver. ${ver}`;
+                }
+            } catch { }
+        }
+
+        function initScrollReveal() {
+            const els = document.querySelectorAll('.reveal');
+            if (!els.length) return;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            els.forEach(el => observer.observe(el));
+        }
+
+        async function initProfile() {
+            if (!savedUser || !savedToken) { window.location.href = "index.html"; return; }
+
+            initScrollReveal();
+
+            document.getElementById('prof-name').innerText = savedUser;
+            await checkRole();
+            await loadNotifications();
+            await pollProfileTickets();
+            await fetchVersion();
+
+            setInterval(() => loadNotifications(), 30000);
+            setInterval(pollProfileTickets, 10000);
+        }
+
+        async function checkRole() {
+            try {
+                const resRole = await fetch(`${API_URL}/heartbeat`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken })
+                });
+
+                if (resRole.ok) {
+                    const dataRole = await resRole.json();
+                    let baseRoleText = dataRole.current_role ? dataRole.current_role.toUpperCase() : "USER";
+                    let displayRoleText = baseRoleText;
+                    let roleElement = document.getElementById('prof-role');
+                    let trialBtn = document.getElementById('btn-trial');
+
+                    if (baseRoleText === 'ADMIN') roleElement.style.color = 'var(--red)';
+                    else if (baseRoleText === 'HELPER') roleElement.style.color = 'var(--green)';
+                    else if (baseRoleText === 'PREMIUM') roleElement.style.color = 'var(--gold)';
+                    else if (baseRoleText === 'BETA') roleElement.style.color = 'var(--blue)';
+                    else roleElement.style.color = 'var(--gray-400)';
+
+                    if (baseRoleText === 'ADMIN' || baseRoleText === 'HELPER') {
+                        document.getElementById('adminBtn').style.display = 'inline-block';
+                        trialBtn.style.display = 'none';
+                    } else if (baseRoleText === 'PREMIUM' || baseRoleText === 'BETA') {
+                        trialBtn.style.display = 'none';
+                    } else {
+                        trialBtn.style.display = 'inline-block';
+                        if (dataRole.trial_used) {
+                            trialBtn.innerText = "Тест использован";
+                            trialBtn.disabled = true;
+                            trialBtn.style.opacity = '0.5';
+                            trialBtn.style.cursor = 'not-allowed';
+                        }
+                    }
+
+                    if (dataRole.premium_until) { displayRoleText += ` (до ${new Date(dataRole.premium_until).toLocaleDateString()})`; }
+                    roleElement.innerText = displayRoleText;
+                } else {
+                    logout();
+                }
+            } catch (e) { }
+        }
+
+        async function activateTrial() {
+            const btn = document.getElementById('btn-trial');
+            btn.disabled = true;
+            btn.innerText = "ОБРАБОТКА...";
+
+            try {
+                const res = await fetch(`${API_URL}/activate_trial`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showNotification("Успешно", "Premium активирован на 10 часов!", true);
+                    checkRole();
+                } else {
+                    showNotification("Ошибка", data.error || "Ошибка активации");
+                    btn.innerText = "Получить тест на 10ч";
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                showNotification("Ошибка", "Ошибка соединения");
+                btn.innerText = "Получить тест на 10ч";
+                btn.disabled = false;
+            }
+        }
+
+        function openPaymentModal(plan) {
+            selectedPlan = plan;
+            selectedCoin = "";
+            document.getElementById('pay-title').innerText = `Покупка ${plan}`;
+            document.getElementById('btn-usdt').classList.remove('active');
+            document.getElementById('btn-ton').classList.remove('active');
+
+            const btnPay = document.getElementById('btn-confirm-pay');
+            btnPay.innerText = "Выберите валюту";
+            btnPay.disabled = true;
+            btnPay.className = 'btn-outline';
+            btnPay.style.width = '100%';
+            document.getElementById('paymentModal').classList.add('active');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+            if (paymentInterval) clearInterval(paymentInterval);
+        }
+
+        document.getElementById('paymentModal').addEventListener('click', function (e) {
+            if (e.target === this) closePaymentModal();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closePaymentModal();
+        });
+
+        function selectCoin(coin) {
+            selectedCoin = coin;
+            document.getElementById('btn-usdt').classList.toggle('active', coin === 'USDT');
+            document.getElementById('btn-ton').classList.toggle('active', coin === 'TON');
+            const btnPay = document.getElementById('btn-confirm-pay');
+            btnPay.innerText = `Оплатить через ${coin}`;
+            btnPay.disabled = false;
+            btnPay.className = 'btn-auth';
+            btnPay.style.width = '100%';
+        }
+
+        async function startPayment() {
+            const btnPay = document.getElementById('btn-confirm-pay');
+            btnPay.innerText = "СОЗДАНИЕ ССЫЛКИ...";
+            btnPay.disabled = true;
+            try {
+                const res = await fetch(`${API_URL}/create_payment`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken, plan: selectedPlan, coin: selectedCoin })
+                });
+                const data = await res.json();
+                if (data.pay_url) {
+                    window.open(data.pay_url, '_blank');
+                    btnPay.innerText = "ОЖИДАНИЕ ОПЛАТЫ...";
+                    startCheckingPayment(data.invoice_id);
+                } else {
+                    showNotification("Ошибка", data.error || "Ошибка создания платежа");
+                    closePaymentModal();
+                }
+            } catch (e) {
+                showNotification("Ошибка", "Ошибка соединения с сервером");
+                closePaymentModal();
+            }
+        }
+
+        function startCheckingPayment(invoiceId) {
+            if (paymentInterval) clearInterval(paymentInterval);
+            let checks = 0;
+            paymentInterval = setInterval(async () => {
+                checks++;
+                if (checks > 300) {
+                    clearInterval(paymentInterval);
+                    document.getElementById('btn-confirm-pay').innerText = "ТАЙМАУТ ОЖИДАНИЯ";
+                    setTimeout(closePaymentModal, 2000);
+                    return;
+                }
+                try {
+                    const res = await fetch(`${API_URL}/check_payment_status`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: savedUser, invoice_id: invoiceId, plan: selectedPlan })
+                    });
+                    const data = await res.json();
+                    if (data.status === "paid") {
+                        clearInterval(paymentInterval);
+                        document.getElementById('btn-confirm-pay').innerText = "УСПЕШНО!";
+                        document.getElementById('btn-confirm-pay').style.background = "var(--white)";
+                        document.getElementById('btn-confirm-pay').style.color = "var(--black)";
+                        showNotification("Успешно", "Оплата прошла успешно!", true);
+                        setTimeout(() => { closePaymentModal(); checkRole(); }, 2000);
+                    }
+                } catch (e) { }
+            }, 2000);
+        }
+
+        async function pollProfileTickets() {
+            try {
+                const resTickets = await fetch(`${API_URL}/get_my_tickets`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken })
+                });
+                if (!resTickets.ok) return;
+                const dataTickets = await resTickets.json();
+                const newHash = JSON.stringify(dataTickets.tickets || {});
+                if (newHash === rawTicketsHash) return;
+                rawTicketsHash = newHash;
+
+                const cont = document.getElementById('tickets-container');
+                cont.innerHTML = '';
+
+                if (Object.keys(dataTickets.tickets || {}).length === 0) {
+                    cont.innerHTML = '<div class="notif-empty" style="border: 1px solid var(--border); padding: 40px;">У вас нет активных обращений.</div>';
+                    return;
+                }
+
+                const sortedTickets = Object.entries(dataTickets.tickets).sort((a, b) => {
+                    return new Date(b[1].date).getTime() - new Date(a[1].date).getTime();
+                });
+
+                for (const [tId, tData] of sortedTickets) {
+                    const isAnswered = tData.status === 'answered';
+                    const safeMessage = formatText(tData.message);
+
+                    let rawReply = tData.reply || "";
+                    let isRejected = rawReply.includes("Отклонено");
+                    if (isRejected) { rawReply = rawReply.replace(/^Отклонено администратором @[^\n\r]+[\n\r]*/i, ''); }
+                    else { rawReply = rawReply.replace(/^Ответил администратор @[^\n\r]+:[\n\r]*/i, ''); }
+
+                    const safeReply = formatText(rawReply);
+
+                    let replyBlock = '';
+                    if (isAnswered) {
+                        replyBlock = `
+                            <div class="ticket-a-block">
+                                <div class="ticket-a-label">${isRejected ? 'Статус: Отклонено' : 'Ответ поддержки'}</div>
+                                <div class="ticket-a" ${isRejected ? 'style="color: var(--gray-400);"' : ''}>${safeReply}</div>
+                            </div>
+                        `;
+                    }
+
+                    const html = `
+                        <div class="ticket-item" id="ticket-${tId}">
+                            <div class="ticket-header">
+                                <div class="ticket-status ${isAnswered ? (isRejected ? 'rejected' : 'answered') : ''}">
+                                    ${isAnswered ? (isRejected ? 'Отклонено' : 'Отвечен поддержкой') : 'Ожидает ответа'}
+                                </div>
+                                ${isAnswered ? `<button class="btn-outline" style="padding: 6px 12px; font-size: 9px;" onclick="markRead('${tId}')">ОЗНАКОМЛЕН (УДАЛИТЬ)</button>` : ''}
+                            </div>
+                            <div class="ticket-body">
+                                <div class="ticket-q-label">Ваш вопрос</div>
+                                <div class="ticket-q">${safeMessage}</div>
+                                ${replyBlock}
+                            </div>
+                        </div>
+                    `;
+                    cont.innerHTML += html;
+                }
+            } catch (e) {
+                document.getElementById('tickets-container').innerHTML = '<div class="notif-empty" style="border: 1px solid var(--border); padding: 40px;">Ошибка связи с сервером.</div>';
+            }
+        }
+
+        async function markRead(ticketId) {
+            try {
+                const res = await fetch(`${API_URL}/delete_ticket`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken, ticket_id: ticketId })
+                });
+                if (res.ok) {
+                    showNotification("Успешно", "Тикет удален", true);
+                    pollProfileTickets();
+                }
+            } catch (e) { }
+        }
+
+        window.onload = initProfile;
+    </script>
 </body>
 
 </html>

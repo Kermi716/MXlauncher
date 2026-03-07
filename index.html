@@ -8,297 +8,1629 @@
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Unbounded:wght@700;800;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --white: #f5f5f0;
+            --gray-100: #e8e8e3;
+            --gray-200: #c8c8c2;
+            --gray-400: #888882;
+            --gray-600: #444440;
+            --gray-800: #1a1a18;
+            --gray-900: #111110;
+            --accent: #f5f5f0;
+            --border: rgba(245, 245, 240, 0.12);
+            --border-strong: rgba(245, 245, 240, 0.28);
+            --red: #ff5555;
+            --green: #2ecc71;
+        }
 
-    <link rel="stylesheet" href="style.css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--black);
+            font-family: 'DM Sans', sans-serif;
+            color: var(--white);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            cursor: default;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .top-alert-bar {
+            background: var(--white);
+            color: var(--black);
+            text-align: center;
+            padding: 9px 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .site-header {
+            position: relative;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .header-video-wrap {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .header-video-wrap video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.18;
+            filter: grayscale(100%) contrast(1.2);
+        }
+
+        .header-video-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(10, 10, 10, 0) 40%, rgba(10, 10, 10, 1) 100%);
+        }
+
+        .header-inner {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: end;
+            padding: 80px 60px 50px;
+            min-height: 360px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            gap: 40px;
+        }
+
+        .header-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 28px;
+            height: 1px;
+            background: var(--gray-600);
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(72px, 12vw, 140px);
+            letter-spacing: 4px;
+            color: var(--white);
+            line-height: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .header-sub {
+            font-size: 15px;
+            color: var(--gray-400);
+            font-weight: 300;
+            letter-spacing: 0.3px;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+            padding-bottom: 4px;
+        }
+
+        .header-meta-item {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: var(--gray-600);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-strip {
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .nav-strip-inner {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-left {
+            display: flex;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px 16px 0;
+            margin-right: 24px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: var(--white);
+        }
+
+        .nav-link.download-btn {
+            color: var(--gray-200);
+            border: 1px solid var(--border);
+            padding: 8px 16px 8px 12px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            border-radius: 2px;
+            transition: all 0.2s;
+        }
+
+        .nav-link.download-btn:hover {
+            color: var(--white);
+            border-color: var(--border-strong);
+            background: rgba(245, 245, 240, 0.05);
+        }
+
+        .nav-link svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .tg-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            transition: all 0.2s;
+        }
+
+        .tg-link:hover {
+            color: var(--white);
+            border-color: var(--border-strong);
+        }
+
+        .tg-link svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 60px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .section {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 36px;
+        }
+
+        .section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            margin-right: 20px;
+        }
+
+        .section-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: var(--gray-200);
+            text-transform: uppercase;
+        }
+
+        .section-rule {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+            margin: 0 20px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            border: 1px solid var(--border);
+        }
+
+        .stat-block {
+            padding: 36px 40px;
+            border-right: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .stat-block:last-child {
+            border-right: none;
+        }
+
+        .stat-block:hover {
+            background: rgba(245, 245, 240, 0.02);
+        }
+
+        .stat-num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 64px;
+            letter-spacing: 2px;
+            color: var(--white);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+        }
+
+        .stat-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .s-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gray-600);
+        }
+
+        .s-dot.online {
+            background: var(--white);
+            box-shadow: 0 0 0 0 rgba(245, 245, 240, 0.4);
+            animation: pulse-w 2.5s infinite;
+        }
+
+        @keyframes pulse-w {
+            0% { box-shadow: 0 0 0 0 rgba(245, 245, 240, 0.4); }
+            60% { box-shadow: 0 0 0 6px rgba(245, 245, 240, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 245, 240, 0); }
+        }
+
+        .status-text {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+        }
+
+        .swiper {
+            width: 100%;
+            padding-bottom: 40px !important;
+        }
+
+        .swiper-slide {
+            width: 480px;
+            height: 280px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            filter: grayscale(20%);
+            transition: all 0.4s ease;
+        }
+
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease, filter 0.4s;
+            filter: brightness(0.85);
+        }
+
+        .swiper-slide-active {
+            border-color: var(--border-strong);
+            filter: grayscale(0%);
+        }
+
+        .swiper-slide-active img {
+            transform: scale(1.03);
+            filter: brightness(1);
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: var(--gray-400) !important;
+            transition: color 0.2s;
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            color: var(--white) !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: var(--gray-600) !important;
+            opacity: 1 !important;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: var(--white) !important;
+            width: 20px !important;
+            border-radius: 2px !important;
+        }
+
+        .screenshots-note {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1px;
+            margin-top: 16px;
+        }
+
+        .rating-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .rating-desc {
+            font-size: 13px;
+            color: var(--gray-400);
+            font-weight: 300;
+        }
+
+        .rating-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-rate {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 1px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--gray-400);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-rate svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+            transition: transform 0.2s;
+        }
+
+        .btn-rate.like:hover {
+            color: var(--white);
+            border-color: var(--border-strong);
+            background: rgba(245, 245, 240, 0.04);
+        }
+
+        .btn-rate.like:hover svg { transform: translateY(-2px); }
+
+        .btn-rate.dislike:hover {
+            color: var(--gray-200);
+            border-color: rgba(245, 245, 240, 0.2);
+            background: rgba(245, 245, 240, 0.02);
+        }
+
+        .btn-rate.dislike:hover svg { transform: translateY(2px); }
+
+        .rating-track {
+            height: 2px;
+            background: var(--gray-800);
+            display: flex;
+            overflow: hidden;
+        }
+
+        .rating-like-fill {
+            height: 100%;
+            background: var(--white);
+            transition: width 0.6s ease;
+        }
+
+        .rating-dislike-fill {
+            height: 100%;
+            background: var(--gray-600);
+            transition: width 0.6s ease;
+        }
+
+        .sec-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            border: 1px solid var(--border);
+        }
+
+        .sec-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--gray-200);
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .sec-item:last-child { border-bottom: none; }
+
+        .sec-item:hover {
+            background: rgba(245, 245, 240, 0.04);
+            color: var(--white);
+        }
+
+        .sec-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .sec-num {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1px;
+            min-width: 24px;
+        }
+
+        .sec-name { font-size: 14px; font-weight: 400; }
+
+        .sec-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .sec-tag {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+        }
+
+        .sec-arrow {
+            font-size: 16px;
+            color: var(--gray-600);
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .sec-item:hover .sec-arrow {
+            transform: translate(3px, -3px);
+            color: var(--white);
+        }
+
+        .req-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid var(--border);
+        }
+
+        .req-table tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        .req-table tr:last-child { border-bottom: none; }
+
+        .req-table tr:hover { background: rgba(245, 245, 240, 0.025); }
+
+        .req-table td { padding: 16px 24px; font-size: 13px; }
+
+        .req-table td:first-child {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            width: 200px;
+            border-right: 1px solid var(--border);
+        }
+
+        .req-table td:last-child { color: var(--gray-200); font-weight: 300; }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--white);
+            color: var(--black);
+            padding: 16px 24px;
+            z-index: 99999;
+            transform: translateY(120%);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+            border-left: 3px solid var(--black);
+            max-width: 320px;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        .toast-title { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 3px; }
+
+        .toast-desc { font-size: 11px; color: var(--gray-600); font-family: 'DM Mono', monospace; }
+
+        .toast.toast-error {
+            background: var(--black);
+            color: var(--white);
+            border-left-color: var(--white);
+        }
+
+        .toast.toast-error .toast-desc { color: var(--gray-400); }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .auth-modal {
+            background: var(--gray-900);
+            border: 1px solid var(--border-strong);
+            width: 100%;
+            max-width: 356px;
+            padding: 32px 30px 28px;
+            transform: translateY(10px) scale(0.985);
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .modal-overlay.active .auth-modal { transform: translateY(0) scale(1); }
+
+        .auth-modal-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            color: var(--white);
+            margin-bottom: 4px;
+        }
+
+        .auth-modal-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            color: var(--gray-600);
+            cursor: pointer;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+            padding: 4px 7px;
+            border: 1px solid transparent;
+            border-radius: 2px;
+        }
+
+        .close-modal:hover { color: var(--white); border-color: var(--border); }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 22px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .auth-tab {
+            padding: 8px 0;
+            margin-right: 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            margin-bottom: -1px;
+            transition: all 0.2s;
+        }
+
+        .auth-tab.active { color: var(--white); border-bottom-color: var(--white); }
+        .auth-tab:hover:not(.active) { color: var(--gray-400); }
+
+        .form-group { margin-bottom: 15px; }
+
+        .btn-auth {
+            width: 100%;
+            background: var(--white);
+            color: var(--black);
+            border: none;
+            padding: 13px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+            margin-top: 6px;
+        }
+
+        .btn-auth:hover { background: var(--gray-100); }
+        .btn-auth:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 60px;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-info { display: flex; flex-direction: column; gap: 8px; }
+
+        .footer-copy {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .footer-subtitle {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .footer-links { display: flex; gap: 24px; }
+
+        .footer-links a {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--white); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .anim-in { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+        .anim-in-1 { animation-delay: 0.1s; }
+        .anim-in-2 { animation-delay: 0.2s; }
+        .anim-in-3 { animation-delay: 0.3s; }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-d1 { transition-delay: 0.05s; }
+        .reveal-d2 { transition-delay: 0.12s; }
+        .reveal-d3 { transition-delay: 0.19s; }
+        .reveal-d4 { transition-delay: 0.26s; }
+        .reveal-d5 { transition-delay: 0.33s; }
+
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.95);
+            z-index: 8000;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .mobile-nav-overlay.open { display: flex; }
+
+        .mobile-nav-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .mobile-nav-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 3px;
+            color: var(--white);
+        }
+
+        .mobile-nav-close {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            cursor: pointer;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            transition: all 0.2s;
+            background: transparent;
+        }
+
+        .mobile-nav-close:hover { color: var(--white); border-color: var(--border-strong); }
+
+        .mobile-nav-links { display: flex; flex-direction: column; gap: 0; flex: 1; }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .mobile-nav-link:hover,
+        .mobile-nav-link.highlight { color: var(--white); }
+
+        .mobile-nav-link svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+        .mobile-nav-footer {
+            margin-top: 32px;
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            color: var(--gray-600);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .hamburger {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--gray-400);
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            border-radius: 2px;
+            transition: all 0.2s;
+            padding: 0;
+        }
+
+        .hamburger:hover { border-color: var(--border-strong); color: var(--white); }
+        .hamburger span { display: block; width: 16px; height: 1px; background: currentColor; transition: all 0.2s; }
+
+        .faq-list {
+            border: 1px solid var(--border);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-trigger {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.2s;
+            gap: 16px;
+        }
+
+        .faq-trigger:hover {
+            background: rgba(245, 245, 240, 0.03);
+        }
+
+        .faq-trigger[aria-expanded="true"] {
+            background: rgba(245, 245, 240, 0.04);
+        }
+
+        .faq-trigger-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-width: 0;
+        }
+
+        .faq-trigger-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+
+        .faq-num {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            color: var(--gray-600);
+            letter-spacing: 1px;
+            min-width: 20px;
+        }
+
+        .faq-q {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--gray-200);
+            transition: color 0.2s;
+        }
+
+        .faq-trigger:hover .faq-q,
+        .faq-trigger[aria-expanded="true"] .faq-q {
+            color: var(--white);
+        }
+
+        .faq-cat {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-600);
+        }
+
+        .faq-chevron svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--gray-600);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.2s;
+            display: block;
+        }
+
+        .faq-trigger[aria-expanded="true"] .faq-chevron svg {
+            transform: rotate(180deg);
+            stroke: var(--gray-400);
+        }
+
+        .faq-body {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .faq-body.open {
+            grid-template-rows: 1fr;
+        }
+
+        .faq-body-inner {
+            overflow: hidden;
+            padding: 0 24px 0 56px;
+        }
+
+        .faq-body.open .faq-body-inner {
+            padding-bottom: 28px;
+        }
+
+        .faq-body-inner p {
+            font-size: 13px;
+            color: var(--gray-400);
+            font-weight: 300;
+            line-height: 1.65;
+            margin-bottom: 18px;
+        }
+
+        .faq-body-inner strong {
+            color: var(--gray-200);
+            font-weight: 500;
+        }
+
+        .faq-body-inner code {
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            color: var(--gray-200);
+            background: rgba(245, 245, 240, 0.06);
+            padding: 1px 6px;
+            border: 1px solid var(--border);
+        }
+
+        .faq-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .faq-step {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--gray-400);
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        .step-n {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 1px;
+            color: var(--gray-600);
+            border: 1px solid var(--border);
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .faq-tip {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: var(--gray-600);
+            letter-spacing: 0.3px;
+            border-left: 2px solid var(--border-strong);
+            padding: 10px 14px;
+            line-height: 1.6;
+            margin-top: 4px;
+        }
+
+        .tip-label {
+            display: block;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-bottom: 5px;
+        }
+
+        .faq-java-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .java-card {
+            border: 1px solid var(--border);
+            padding: 16px 14px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .java-card:hover {
+            background: rgba(245, 245, 240, 0.03);
+            border-color: var(--border-strong);
+        }
+
+        .java-card--highlight {
+            border-color: rgba(245, 245, 240, 0.22);
+        }
+
+        .java-badge {
+            font-family: 'DM Mono', monospace;
+            font-size: 8px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--white);
+            padding: 2px 6px;
+            display: inline-block;
+            align-self: flex-start;
+        }
+
+        .java-ver {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            letter-spacing: 2px;
+            color: var(--white);
+            line-height: 1;
+        }
+
+        .java-desc {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            color: var(--gray-600);
+            letter-spacing: 1px;
+            line-height: 1.6;
+        }
+
+        .java-link {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400) !important;
+            text-decoration: none !important;
+            border: 1px solid var(--border);
+            padding: 5px 8px;
+            margin-top: 4px;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .java-link:hover {
+            color: var(--white) !important;
+            border-color: var(--border-strong);
+            background: rgba(245, 245, 240, 0.05);
+        }
+
+        .faq-contact-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .faq-contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gray-400) !important;
+            text-decoration: none !important;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .faq-contact-btn svg { width: 13px; height: 13px; }
+
+        .faq-contact-btn:hover {
+            color: var(--white) !important;
+            border-color: var(--border-strong);
+            background: rgba(245, 245, 240, 0.04);
+        }
+
+        @media (max-width: 768px) {
+            .header-inner {
+                grid-template-columns: 1fr;
+                padding: 40px 20px 32px;
+                min-height: 240px;
+                gap: 0;
+            }
+
+            .header-right { display: none; }
+            .container { padding: 0 20px; }
+            .nav-strip { padding: 0 20px; }
+            .nav-left { display: none; }
+            .nav-right .tg-link { display: none; }
+            .hamburger { display: flex; }
+            .section { padding: 40px 0; }
+            .section-header { flex-wrap: wrap; gap: 6px; }
+            .section-rule { display: none; }
+            .section-label { font-size: 9px; }
+
+            .stats-row { grid-template-columns: 1fr; }
+
+            .stat-block {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 24px 20px;
+            }
+
+            .stat-block:last-child { border-bottom: none; }
+            .stat-num { font-size: 52px; }
+
+            .rating-row { flex-direction: column; align-items: flex-start; gap: 16px; }
+
+            .swiper-slide { width: 85% !important; height: auto; aspect-ratio: 16/9; }
+            .swiper-button-next, .swiper-button-prev { display: none !important; }
+
+            .sec-item { padding: 16px; flex-wrap: wrap; gap: 8px; }
+            .sec-right { width: 100%; justify-content: flex-end; }
+
+            .req-table, .req-table tbody, .req-table tr, .req-table td { display: block; width: 100%; }
+
+            .req-table tr {
+                padding: 12px 0;
+                border-bottom: 1px solid var(--border);
+                background: transparent !important;
+                transition: none;
+            }
+
+            .req-table tr:hover { background: transparent; }
+            .req-table td { padding: 4px 16px !important; border: none !important; }
+            .req-table td:first-child { width: auto; color: var(--gray-400); font-size: 10px !important; margin-bottom: 2px; }
+            .req-table td:last-child { font-size: 14px !important; color: var(--white); }
+
+            footer { padding: 24px 20px; }
+
+            .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
+            .footer-info { align-items: center; gap: 8px; }
+            .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+
+            .auth-modal {
+                max-width: 100%;
+                height: 100%;
+                max-height: 100%;
+                border: none;
+                border-top: 1px solid var(--border-strong);
+                border-radius: 0;
+                padding: 28px 24px 40px;
+                overflow-y: auto;
+                align-self: flex-end;
+                transform: translateY(100%);
+            }
+
+            .modal-overlay { align-items: flex-end; }
+            .modal-overlay.active .auth-modal { transform: translateY(0); }
+
+            .toast { right: 16px; left: 16px; max-width: none; bottom: 16px; }
+
+            /* FAQ mobile */
+            .faq-trigger { padding: 18px 16px; }
+            .faq-cat { display: none; }
+            .faq-body-inner { padding: 0 16px; }
+            .faq-body.open .faq-body-inner { padding-bottom: 20px; }
+            .faq-java-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 64px; }
+            .header-sub { font-size: 13px; }
+            .stat-num { font-size: 44px; }
+            .faq-java-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 
 <body>
-
-    <div class="giveaway-banner" id="giveawayBanner">
-        <div class="giveaway-inner">
-            <div class="giveaway-text-wrap">
-                <div class="giveaway-badge">Розыгрыш</div>
-                <div>
-                    <div class="giveaway-title">Бесплатный розыгрыш <strong>10 подписок Premium</strong></div>
-                    <div class="giveaway-sub">В честь 1000 скачиваний лаунчера</div>
-                </div>
-            </div>
-            <div class="giveaway-prize">
-                <div class="giveaway-prize-num">10</div>
-                <div class="mono" style="font-size: 10px; color: var(--gray-400);">PREMIUM</div>
-                <a class="giveaway-btn" href="https://t.me/mxlauncher/176" target="_blank" rel="noopener">
-                    Участвовать
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="nav-wrapper">
-        <header class="nav-strip">
-            <a href="#" class="nav-logo">
-                <img src="icon.png" alt="MX Logo"
-                    style="width: 32px; height: 32px; object-fit: contain; border-radius: 4px;"
-                    onerror="this.src='logo.ico'">
-                MX LAUNCHER
-            </a>
-            <nav class="nav-links">
-                <a class="nav-link" href="support.html" style="display:flex; align-items:center; gap:6px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                    </svg> Поддержка
-                </a>
-                <a class="nav-link" href="https://t.me/mxlauncher" target="_blank"
-                    style="display:flex; align-items:center; gap:6px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                        <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
-                    </svg> Telegram
-                </a>
-                <a class="nav-link" href="#" id="auth-btn-footer" onclick="openAuthModal(event)"
-                    style="display:flex; align-items:center; gap:6px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg> Войти
-                </a>
-                <a class="nav-link download-btn" href="#" onclick="handleDownload(event)">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-                    </svg> Скачать для Windows
-                </a>
-            </nav>
-            <button class="hamburger" onclick="openMobileNav()">
-                <span></span><span></span><span></span>
-            </button>
-        </header>
-    </div>
-
-    <main class="hero">
-        <div class="hero-video-wrap">
+    <header class="site-header">
+        <div class="header-video-wrap">
             <video autoplay muted loop playsinline>
                 <source src="video.mp4" type="video/mp4">
             </video>
         </div>
-        <div class="hero-content hero-enter">
-            <div class="hero-eyebrow">Многофункциональный Лаунчер</div>
-            <h1 class="hero-title">Прокачай Свою<br>Игру</h1>
-            <p class="hero-desc">Бесплатный лаунчер с премиальным дизайном для запуска читов и визуальных модификаций.
-                Никаких ограничений.</p>
-            <div class="hero-meta">
-                <span id="version-label">Ver. —</span>
-                <span>Free Forever</span>
-                <span>Windows 64-bit</span>
+        <div class="header-inner">
+            <div class="header-left anim-in anim-in-1">
+                <div class="header-eyebrow">Minecraft Launcher</div>
+                <h1>MX<br>LAUNCHER</h1>
+                <p class="header-sub">Бесплатный лаунчер для запуска читов и визуальных модификаций.</p>
+            </div>
+            <div class="header-right anim-in anim-in-2">
+                <div class="header-meta-item" id="version-label">Ver. —</div>
+                <div class="header-meta-item">Free Forever</div>
+                <div class="header-meta-item">Windows 64-bit</div>
             </div>
         </div>
-    </main>
+    </header>
 
-    <section class="container">
-        <div class="bento-grid">
-
-            <div class="bento-item col-span-4 reveal">
-                <div class="stat-status">
-                    <div class="s-dot" id="server-dot"></div>
-                    <span class="status-text" id="server-text">Проверка...</span>
-                </div>
-                <div class="stat-label">Игроков онлайн</div>
-                <div class="stat-value" id="online-counter">—</div>
-                <div class="mono" style="font-size: 11px; color: var(--gray-400);">В сети прямо сейчас</div>
-            </div>
-
-            <div class="bento-item col-span-4 reveal">
-                <div class="stat-label">Всего загрузок</div>
-                <div class="stat-value" id="download-counter">—</div>
-                <div class="mono" style="font-size: 11px; color: var(--gray-400);">Доверяют тысячи</div>
-            </div>
-
-            <div class="bento-item rating-bento col-span-4 reveal">
-                <div class="rating-header">
-                    <div class="rating-title">Оценка пользователей</div>
-                </div>
-                <div>
-                    <div class="rating-btns" style="margin-bottom: 16px;">
-                        <button class="btn-rate like" onclick="handleRate('like')">
-                            <svg viewBox="0 0 24 24">
-                                <path
-                                    d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
-                            </svg>
-                            <span id="like-count">0</span>
-                        </button>
-                        <button class="btn-rate dislike" onclick="handleRate('dislike')">
-                            <svg viewBox="0 0 24 24">
-                                <path
-                                    d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z" />
-                            </svg>
-                            <span id="dislike-count">0</span>
-                        </button>
-                    </div>
-                    <div class="rating-track">
-                        <div class="rating-like-fill" id="rating-bar-like" style="width: 50%;"></div>
-                        <div class="rating-dislike-fill" id="rating-bar-dislike" style="width: 50%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bento-item col-span-6 reveal">
-                <h3 style="font-size: 24px; margin-bottom: 24px;">Системные требования</h3>
-                <div class="sys-req-list">
-                    <div class="sys-req-item">
-                        <span class="sys-req-label">ОС</span>
-                        <span class="sys-req-val">Windows 10/11 (64-bit)</span>
-                    </div>
-                    <div class="sys-req-item">
-                        <span class="sys-req-label">Процессор</span>
-                        <span class="sys-req-val">Intel Core i3 / AMD Ryzen 3</span>
-                    </div>
-                    <div class="sys-req-item">
-                        <span class="sys-req-label">Память</span>
-                        <span class="sys-req-val">4 GB (Рекомендуется 8 GB)</span>
-                    </div>
-                    <div class="sys-req-item">
-                        <span class="sys-req-label">Место на диске</span>
-                        <span class="sys-req-val">5 GB+</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bento-item col-span-6 reveal">
-                <h3 style="font-size: 24px; margin-bottom: 16px;">Безопасность</h3>
-                <p style="color: var(--gray-400); margin-bottom: 24px; font-size: 14px; line-height: 1.5;">Мы открыты
-                    перед пользователями. Ложные срабатывания — норма для игровых лаунчеров. Изучите отчеты независимых
-                    проверок.</p>
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <a href="https://www.youtube.com/watch?v=1maKKxoljtU" target="_blank" class="download-btn"
-                        style="background: transparent; border: 1px solid var(--border); color: var(--white); justify-content: space-between;">
-                        Видео-проверка на YouTube <span class="mono">↗</span>
+    <div style="border-bottom: 1px solid var(--border);">
+        <div class="nav-strip anim-in anim-in-2">
+            <div class="nav-strip-inner">
+                <nav class="nav-left">
+                    <a class="nav-link download-btn" href="#" onclick="handleDownload(event)">
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                        </svg>
+                        Скачать для Windows
                     </a>
-                    <a href="https://www.virustotal.com/gui/file/b0142a493e98c43ea9d944fd0b37c13de5131dc120d8213449493ecd07cd3e8a?nocache=1"
-                        target="_blank" class="download-btn"
-                        style="background: transparent; border: 1px solid var(--border); color: var(--white); justify-content: space-between;">
-                        VirusTotal: Лаунчер <span class="mono">↗</span>
+                    <a class="nav-link" href="support.html">Поддержка</a>
+                    <a class="nav-link" href="#" id="auth-btn-footer" onclick="openAuthModal(event)">Войти</a>
+                </nav>
+                <div class="nav-right">
+                    <a class="tg-link" href="https://t.me/mxlauncher" target="_blank">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
+                        </svg>
+                        Telegram
                     </a>
-                    <a href="https://www.virustotal.com/gui/file/3053b4b2e5d38061ddddcad2925bb94dc472215729ba81977c738f6613548380?nocache=1"
-                        target="_blank" class="download-btn"
-                        style="background: transparent; border: 1px solid var(--border); color: var(--white); justify-content: space-between;">
-                        VirusTotal: MXSetup <span class="mono">↗</span>
-                    </a>
+                    <button class="hamburger" onclick="openMobileNav()" aria-label="Меню">
+                        <span></span><span></span><span></span>
+                    </button>
                 </div>
             </div>
-
         </div>
-    </section>
+    </div>
 
-    <section class="swiper-section reveal">
-        <div class="swiper-section-header">
-            <h2 class="section-title">Интерфейс</h2>
-            <p class="section-subtitle">Оцените плавность и дизайн приложения</p>
-        </div>
-        <div class="swiper mySwiper">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="screen/1.jpg" alt="Screen 1"></div>
-                <div class="swiper-slide"><img src="screen/2.jpg" alt="Screen 2"></div>
-                <div class="swiper-slide"><img src="screen/3.jpg" alt="Screen 3"></div>
-                <div class="swiper-slide"><img src="screen/4.jpg" alt="Screen 4"></div>
-                <div class="swiper-slide"><img src="screen/5.jpg" alt="Screen 5"></div>
+    <div class="container">
+
+        <section class="section anim-in anim-in-3">
+            <div class="section-header reveal">
+                <span class="section-label">01</span>
+                <span class="section-title">Статистика</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Серверы / Загрузки</span>
             </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-        </div>
-    </section>
-
-    <section class="faq-section reveal" id="faq">
-        <h2 class="section-title" style="margin-bottom: 32px; text-align: center;">Частые вопросы</h2>
-        <div class="faq-list">
-            <div class="faq-item">
-                <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
-                    <span class="faq-q">Не загружается капча</span>
-                    <span class="faq-chevron"><svg>
-                            <path d="M6 9l6 6 6-6" />
-                        </svg></span>
-                </button>
-                <div class="faq-body">
-                    <div class="faq-body-inner">
-                        Сервер капчи недоступен из вашего региона. Решение — использовать VPN (например AvoVpn).
-                        Включите VPN, обновите страницу и нажмите кнопку ↻ рядом с картинкой капчи.
+            <div class="stats-row">
+                <div class="stat-block reveal reveal-d1">
+                    <div class="stat-num" id="online-counter">—</div>
+                    <div class="stat-label">Игроков онлайн</div>
+                    <div class="stat-status">
+                        <div class="s-dot" id="server-dot"></div>
+                        <span class="status-text" id="server-text">Проверка...</span>
                     </div>
                 </div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
-                    <span class="faq-q">Чит / визуалы не запускаются</span>
-                    <span class="faq-chevron"><svg>
-                            <path d="M6 9l6 6 6-6" />
-                        </svg></span>
-                </button>
-                <div class="faq-body">
-                    <div class="faq-body-inner">
-                        Большинство читов требуют конкретную версию Java.
-                        <br><br>
-                        <strong>Java 8:</strong> Старые читы (1.8 - 1.12)<br>
-                        <strong>Java 17:</strong> Актуальные читы (1.17 - 1.20)<br>
-                        <strong>Java 21+:</strong> Новые читы<br>
-                        Убедитесь, что установлена правильная версия.
-                    </div>
+                <div class="stat-block reveal reveal-d2">
+                    <div class="stat-num" id="download-counter">—</div>
+                    <div class="stat-label">Скачиваний</div>
                 </div>
             </div>
-            <div class="faq-item">
-                <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
-                    <span class="faq-q">Где найти дополнительную помощь?</span>
-                    <span class="faq-chevron"><svg>
-                            <path d="M6 9l6 6 6-6" />
-                        </svg></span>
-                </button>
-                <div class="faq-body">
-                    <div class="faq-body-inner">
-                        Перейдите на <a href="support.html"
-                            style="color:var(--white); text-decoration: underline;">страницу поддержки</a> или свяжитесь
-                        с нами в <a href="https://t.me/mxlauncher" target="_blank"
-                            style="color:var(--white); text-decoration: underline;">Telegram</a>.
+        </section>
+
+        <section class="section">
+            <div class="section-header reveal">
+                <span class="section-label">02</span>
+                <span class="section-title">Интерфейс</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Скриншоты</span>
+            </div>
+            <div class="reveal reveal-d1">
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img src="screen/1.jpg" alt="Скриншот 1"></div>
+                        <div class="swiper-slide"><img src="screen/2.jpg" alt="Скриншот 2"></div>
+                        <div class="swiper-slide"><img src="screen/3.jpg" alt="Скриншот 3"></div>
+                        <div class="swiper-slide"><img src="screen/4.jpg" alt="Скриншот 4"></div>
+                        <div class="swiper-slide"><img src="screen/5.jpg" alt="Скриншот 5"></div>
+                        <div class="swiper-slide"><img src="screen/6.jpg" alt="Скриншот 6"></div>
+                        <div class="swiper-slide"><img src="screen/7.jpg" alt="Скриншот 7"></div>
+                        <div class="swiper-slide"><img src="screen/8.jpg" alt="Скриншот 8"></div>
                     </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
                 </div>
             </div>
-        </div>
-    </section>
+            <p class="screenshots-note">* Внешний вид может незначительно отличаться от скриншотов</p>
+        </section>
+
+        <section class="section">
+            <div class="section-header reveal">
+                <span class="section-label">03</span>
+                <span class="section-title">Оценка пользователей</span>
+                <div class="section-rule"></div>
+            </div>
+            <div class="rating-row reveal reveal-d1">
+                <p class="rating-desc">Нравится ли вам MX Launcher?</p>
+                <div class="rating-btns">
+                    <button class="btn-rate like" onclick="handleRate('like')">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
+                        </svg>
+                        <span id="like-count">0</span>
+                    </button>
+                    <button class="btn-rate dislike" onclick="handleRate('dislike')">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z" />
+                        </svg>
+                        <span id="dislike-count">0</span>
+                    </button>
+                </div>
+            </div>
+            <div class="rating-track reveal reveal-d2">
+                <div class="rating-like-fill" id="rating-bar-like" style="width: 50%;"></div>
+                <div class="rating-dislike-fill" id="rating-bar-dislike" style="width: 50%;"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header reveal">
+                <span class="section-label">04</span>
+                <span class="section-title">Безопасность</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Независимые проверки</span>
+            </div>
+            <p class="reveal reveal-d1"
+                style="font-size: 13px; color: var(--gray-400); font-weight: 300; margin-bottom: 20px; max-width: 520px;">
+                MX Launcher проверен независимыми сервисами. Ложные срабатывания антивируса — стандартная ситуация для
+                любого лаунчера.
+            </p>
+            <div class="sec-list reveal reveal-d2">
+                <a href="https://www.youtube.com/watch?v=1maKKxoljtU" target="_blank" class="sec-item">
+                    <div class="sec-left"><span class="sec-num">01</span><span class="sec-name">Видео-проверка на YouTube</span></div>
+                    <div class="sec-right"><span class="sec-tag">YouTube</span><span class="sec-arrow">↗</span></div>
+                </a>
+                <a href="https://www.virustotal.com/gui/file/b0142a493e98c43ea9d944fd0b37c13de5131dc120d8213449493ecd07cd3e8a?nocache=1" target="_blank" class="sec-item">
+                    <div class="sec-left"><span class="sec-num">02</span><span class="sec-name">Отчёт VirusTotal — Лаунчер</span></div>
+                    <div class="sec-right"><span class="sec-tag">3 / 72</span><span class="sec-arrow">↗</span></div>
+                </a>
+                <a href="https://www.virustotal.com/gui/file/3053b4b2e5d38061ddddcad2925bb94dc472215729ba81977c738f6613548380?nocache=1" target="_blank" class="sec-item">
+                    <div class="sec-left"><span class="sec-num">03</span><span class="sec-name">Отчёт VirusTotal — MXSetup</span></div>
+                    <div class="sec-right"><span class="sec-tag">3 / 72</span><span class="sec-arrow">↗</span></div>
+                </a>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header reveal">
+                <span class="section-label">05</span>
+                <span class="section-title">Системные требования</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Минимальные</span>
+            </div>
+            <table class="req-table reveal reveal-d1">
+                <tbody>
+                    <tr><td>ОС</td><td>Windows 10 (64-bit)</td></tr>
+                    <tr><td>Процессор (CPU)</td><td>Intel Core i3 / AMD Ryzen 3</td></tr>
+                    <tr><td>Память (RAM)</td><td>4 GB — рекомендуется 8 GB</td></tr>
+                    <tr><td>Место на диске</td><td>5 GB+ (лаунчер + софты)</td></tr>
+                    <tr><td>Видеокарта (GPU)</td><td>Intel HD Graphics 4000+</td></tr>
+                    <tr><td>Доп. ПО</td><td>Java 8 / 17 / 21</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section" id="faq">
+            <div class="section-header reveal">
+                <span class="section-label">06</span>
+                <span class="section-title">FAQ</span>
+                <div class="section-rule"></div>
+                <span class="section-label">Частые вопросы</span>
+            </div>
+
+            <div class="faq-list reveal reveal-d1">
+
+                <div class="faq-item">
+                    <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+                        <div class="faq-trigger-left">
+                            <span class="faq-num">01</span>
+                            <span class="faq-q">Не загружается капча</span>
+                        </div>
+                        <div class="faq-trigger-right">
+                            <span class="faq-cat">Сеть</span>
+                            <span class="faq-chevron">
+                                <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                            </span>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <div class="faq-body-inner">
+                            <p>Сервер капчи недоступен из вашего региона. Решение — использовать VPN.</p>
+                            <div class="faq-steps">
+                                <div class="faq-step">
+                                    <span class="step-n">1</span>
+                                    <span>Скачайте и включите VPN — подойдёт AvoVpn, PureVpn, любой робочий в РФ.</span>
+                                </div>
+                                <div class="faq-step">
+                                    <span class="step-n">2</span>
+                                    <span>Обновите страницу после подключения</span>
+                                </div>
+                                <div class="faq-step">
+                                    <span class="step-n">3</span>
+                                    <span>Нажмите кнопку <code>↻</code> рядом с картинкой капчи</span>
+                                </div>
+                            </div>
+                            <div class="faq-tip">
+                                <span class="tip-label">Совет</span>
+                                Если VPN уже включён — попробуйте сменить сервер на другую страну.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+                        <div class="faq-trigger-left">
+                            <span class="faq-num">02</span>
+                            <span class="faq-q">Чит / визуалы не запускаются</span>
+                        </div>
+                        <div class="faq-trigger-right">
+                            <span class="faq-cat">Запуск</span>
+                            <span class="faq-chevron">
+                                <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                            </span>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <div class="faq-body-inner">
+                            <p>Большинство читов и визуалов требуют конкретную версию Java. Установите нужную и перезапустите лаунчер.</p>
+                            <div class="faq-java-grid">
+                                <div class="java-card">
+                                    <div class="java-ver">Java 8</div>
+                                    <div class="java-desc">Старые читы<br>1.8 – 1.12</div>
+                                    <a href="https://www.java.com/ru/download/" target="_blank" class="java-link">Скачать ↗</a>
+                                </div>
+                                <div class="java-card">
+                                    <div class="java-ver">Java 17</div>
+                                    <div class="java-desc">Актуальные читы<br>1.17 – 1.20</div>
+                                    <a href="https://adoptium.net/temurin/releases/?version=17" target="_blank" class="java-link">Скачать ↗</a>
+                                </div>
+                                <div class="java-card">
+                                    <div class="java-ver">Java 21</div>
+                                    <div class="java-desc">Новые читы<br>1.20+</div>
+                                    <a href="https://adoptium.net/temurin/releases/?version=21" target="_blank" class="java-link">Скачать ↗</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+                        <div class="faq-trigger-left">
+                            <span class="faq-num">03</span>
+                            <span class="faq-q">Не нашёл ответ на свой вопрос</span>
+                        </div>
+                        <div class="faq-trigger-right">
+                            <span class="faq-cat">Поддержка</span>
+                            <span class="faq-chevron">
+                                <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                            </span>
+                        </div>
+                    </button>
+                    <div class="faq-body">
+                        <div class="faq-body-inner">
+                            <p>Свяжитесь с поддержкой — обычно отвечаем в течение нескольких часов.</p>
+                            <div class="faq-contact-row">
+                                <a href="https://t.me/mxlauncher" target="_blank" class="faq-contact-btn">
+                                    <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z"/></svg>
+                                    Telegram
+                                </a>
+                                <a href="support.html" class="faq-contact-btn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                    Страница поддержки
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
 
     <footer>
         <div class="footer-inner">
-            <div class="mono" style="font-size: 11px; color: var(--gray-400);">
-                MX Launcher © 2026. <span id="footer-version-label">Ver. —</span>
+            <div class="footer-info">
+                <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
+                <div class="footer-subtitle"><span id="footer-version-label">Ver. —</span> — Free Forever</div>
             </div>
-            <div style="display: flex; gap: 24px; font-size: 13px;">
-                <a href="support.html" style="color: var(--gray-400); transition: color 0.3s;" title="Поддержка"
-                    onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--gray-400)'">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                    </svg>
-                </a>
-                <a href="https://t.me/mxlauncher" target="_blank"
-                    style="color: var(--gray-400); transition: color 0.3s;" title="Telegram"
-                    onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--gray-400)'">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                        <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
-                    </svg>
-                </a>
+            <div class="footer-links">
+                <a href="support.html">Поддержка</a>
+                <a href="https://t.me/mxlauncher" target="_blank">Telegram</a>
+                <a href="#" onclick="openAuthModal(event)">Войти</a>
             </div>
         </div>
     </footer>
 
     <div id="notificationToast" class="toast">
-        <div id="toastTitle" style="font-weight: 600; font-size: 14px;">Уведомление</div>
-        <div id="toastDesc" style="font-size: 12px; color: var(--gray-200);">—</div>
+        <div class="toast-title" id="toastTitle">Уведомление</div>
+        <div class="toast-desc" id="toastDesc">—</div>
     </div>
 
     <div class="modal-overlay" id="authModal">
         <div class="auth-modal">
-            <div class="close-modal" onclick="closeAuthModal()">✕</div>
+            <div class="close-modal" onclick="closeAuthModal()">ESC</div>
             <div class="auth-modal-title" id="auth-modal-title-text">Добро пожаловать</div>
-            <div class="mono" id="auth-modal-sub-text"
-                style="font-size: 12px; color: var(--gray-400); margin-bottom: 24px;">Войдите в аккаунт</div>
+            <div class="auth-modal-sub" id="auth-modal-sub-text">Войдите в свой аккаунт</div>
 
             <div class="auth-tabs">
                 <div class="auth-tab active" id="tab-login" onclick="switchAuthMode('login')">Войти</div>
@@ -307,59 +1639,536 @@
 
             <form id="auth-form" onsubmit="handleAuthSubmit(event)">
                 <div class="form-group" id="auth-username-group">
-                    <input type="text" id="auth-username" class="form-control" placeholder="Логин">
+                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Никнейм</label>
+                    <input type="text" id="auth-username" class="form-control" placeholder="Логин или E-mail" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 13px; margin-bottom: 15px;">
+                </div>
+
+                <div class="form-group" id="auth-email-group" style="display: none;">
+                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">E-mail</label>
+                    <input type="email" id="auth-email" class="form-control" placeholder="example@mail.ru" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 13px; margin-bottom: 15px;">
                 </div>
 
                 <div class="form-group" id="auth-pass-group">
-                    <div style="position: relative;">
-                        <input type="password" id="auth-password" class="form-control" placeholder="Пароль"
-                            minlength="5" style="padding-right: 40px;">
-                        <button type="button" onclick="togglePasswordVisibility()"
-                            style="position: absolute; right: 12px; top: 12px; color: var(--gray-400);">👁</button>
+                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Пароль</label>
+                    <div style="display: flex; background: rgba(0,0,0,0.2); border: 1px solid var(--border); margin-bottom: 15px;">
+                        <input type="password" id="auth-password" class="form-control" placeholder="Пароль" minlength="5" style="border: none; background: transparent; flex: 1; padding: 11px 13px; color: var(--white); font-size: 13px;">
+                        <button type="button" onclick="togglePasswordVisibility()" style="background: transparent; border: none; color: var(--gray-400); padding: 0 15px; cursor: pointer;">👁</button>
                     </div>
                 </div>
 
                 <div class="form-group" id="auth-captcha-group">
-                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                        <img id="auth-captcha-image" src="" alt="Загрузка..."
-                            style="flex: 1; height: 48px; border-radius: var(--radius-sm); border: 1px solid var(--border); object-fit: contain; background: var(--white);">
-                        <button type="button" onclick="loadCaptcha()"
-                            style="width: 48px; height: 48px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--gray-800);">↻</button>
+                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Код с картинки</label>
+                    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                        <img id="auth-captcha-image" src="" alt="Загрузка..." style="flex: 1; height: 42px; border: 1px solid var(--border); background: var(--white); object-fit: contain; border-radius: 2px;">
+                        <button type="button" onclick="loadCaptcha()" style="background: transparent; border: 1px solid var(--border); color: var(--gray-400); width: 42px; height: 42px; cursor: pointer; font-size: 16px; border-radius: 2px;">↻</button>
                     </div>
-                    <input type="text" id="auth-captcha-text" class="form-control" autocomplete="off"
-                        placeholder="Код с картинки">
+                    <input type="text" id="auth-captcha-text" class="form-control" autocomplete="off" placeholder="Код" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-size: 13px;">
                     <input type="hidden" id="auth-captcha-id">
                 </div>
 
-                <div id="auth-status" style="font-size: 13px; margin: 12px 0; text-align: center;"></div>
+                <div class="form-group" id="auth-code-group" style="display: none;">
+                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Код подтверждения</label>
+                    <input type="text" id="auth-code" class="form-control" placeholder="6 цифр из письма" maxlength="6" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-size: 13px; text-align: center; letter-spacing: 5px; margin-bottom: 15px;">
+                </div>
 
-                <button type="submit" id="auth-submit-btn" class="btn-auth">ВОЙТИ</button>
+                <div id="auth-status" style="color: var(--red); text-align: center; margin-bottom: 10px; font-size: 12px; min-height: 15px;"></div>
 
-                <button type="button" id="auth-forgot-btn"
-                    style="width: 100%; margin-top: 16px; font-size: 12px; color: var(--gray-400);"
-                    onclick="switchAuthMode('reset')">Забыли пароль?</button>
-                <button type="button" id="auth-switch-btn"
-                    style="width: 100%; margin-top: 8px; font-size: 12px; color: var(--gray-400);"
-                    onclick="switchAuthMode('register')">Нет аккаунта? Регистрация</button>
+                <button type="submit" id="auth-submit-btn" class="btn-auth" style="width: 100%; background: var(--white); color: var(--black); border: none; padding: 13px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer;">ВОЙТИ</button>
+
+                <button type="button" id="auth-forgot-btn" style="width: 100%; margin-top: 15px; background: transparent; border: none; color: var(--gray-400); cursor: pointer; font-size: 11px; font-family: 'DM Mono', monospace;" onclick="switchAuthMode('reset')">Забыли пароль?</button>
+                <button type="button" id="auth-switch-btn" style="width: 100%; margin-top: 10px; background: transparent; border: none; color: var(--gray-400); cursor: pointer; font-size: 11px; font-family: 'DM Mono', monospace;" onclick="switchAuthMode('register')">Нет аккаунта? Регистрация</button>
             </form>
         </div>
     </div>
 
     <div class="mobile-nav-overlay" id="mobileNav">
         <div class="mobile-nav-header">
-            <span style="font-family: 'Bebas Neue'; font-size: 28px; color: var(--white);">MX LAUNCHER</span>
-            <button class="close-modal" style="position: relative; top: 0; right: 0;"
-                onclick="closeMobileNav()">✕</button>
+            <div class="mobile-nav-title">MX LAUNCHER</div>
+            <button class="mobile-nav-close" onclick="closeMobileNav()">✕ Закрыть</button>
         </div>
-        <a href="#" class="mobile-nav-link" onclick="closeMobileNav(); handleDownload(event)">Скачать</a>
-        <a href="support.html" class="mobile-nav-link">Поддержка</a>
-        <a href="#" class="mobile-nav-link" id="mobile-auth-link"
-            onclick="closeMobileNav(); openAuthModal(event)">Войти</a>
-        <a href="https://t.me/mxlauncher" class="mobile-nav-link" target="_blank">Telegram</a>
+        <div class="mobile-nav-links">
+            <a class="mobile-nav-link highlight" href="#" onclick="closeMobileNav(); handleDownload(event)">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                </svg>
+                Скачать для Windows
+            </a>
+            <a class="mobile-nav-link" href="support.html">Поддержка</a>
+            <a class="mobile-nav-link" href="#" id="mobile-auth-link" onclick="closeMobileNav(); openAuthModal(event)">Войти</a>
+            <a class="mobile-nav-link" href="https://t.me/mxlauncher" target="_blank">
+                <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:16px;height:16px">
+                    <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
+                </svg>
+                Telegram
+            </a>
+        </div>
+        <div class="mobile-nav-footer">MX Launcher © 2026 — Free Forever</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script src="script.js"></script>
+
+    <script>
+        const API_URL = "https://api.mxlauncher.fun";
+
+        async function getSha256Hash(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        const origFetch = window.fetch;
+        window.fetch = async function (url, options = {}) {
+            if (typeof url === 'string' && url.includes(API_URL)) {
+                const exempt = ['/handshake', '/check_update', '/online', '/get_downloads', '/get_ad'];
+                const isExempt = exempt.some(endpoint => url.includes(endpoint));
+                if (!isExempt) {
+                    let session_id = sessionStorage.getItem('mx_session_id');
+                    let session_secret = sessionStorage.getItem('mx_session_secret');
+                    if (!session_id || !session_secret) {
+                        try {
+                            const hs_res = await origFetch(`${API_URL}/handshake`);
+                            if (hs_res.ok) {
+                                const hs_data = await hs_res.json();
+                                session_id = hs_data.session_id;
+                                session_secret = hs_data.session_secret;
+                                sessionStorage.setItem('mx_session_id', session_id);
+                                sessionStorage.setItem('mx_session_secret', session_secret);
+                            }
+                        } catch (e) { console.error("Handshake failed:", e); }
+                    }
+                    if (session_id && session_secret) {
+                        const timestamp = (Date.now() / 1000).toString();
+                        const nonce = crypto.randomUUID();
+                        const urlObj = new URL(url);
+                        const path = urlObj.pathname;
+                        const method = (options.method || 'GET').toUpperCase();
+                        let bodyString = "";
+                        if (options.body) bodyString = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
+                        const bodyHash = await getSha256Hash(bodyString);
+                        const message = `${method}:${path}:${timestamp}:${nonce}:${bodyHash}`;
+                        const encoder = new TextEncoder();
+                        const keyData = encoder.encode(session_secret);
+                        const msgData = encoder.encode(message);
+                        const cryptoKey = await crypto.subtle.importKey("raw", keyData, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+                        const signatureBuffer = await crypto.subtle.sign("HMAC", cryptoKey, msgData);
+                        const signatureArray = Array.from(new Uint8Array(signatureBuffer));
+                        const signatureHex = signatureArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                        options.headers = {
+                            ...options.headers,
+                            'X-Session-Id': session_id,
+                            'X-Signature': signatureHex,
+                            'X-Timestamp': timestamp,
+                            'X-Nonce': nonce
+                        };
+                    }
+                }
+            }
+            return origFetch(url, options);
+        };
+
+        origFetch(`${API_URL}/handshake`).then(r => r.json()).then(d => {
+            if (d.session_id) {
+                sessionStorage.setItem('mx_session_id', d.session_id);
+                sessionStorage.setItem('mx_session_secret', d.session_secret);
+            }
+        }).catch(() => {});
+
+        function openMobileNav() {
+            document.getElementById('mobileNav').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileNav() {
+            document.getElementById('mobileNav').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function showNotification(title, text, isSuccess = false) {
+            const toast = document.getElementById('notificationToast');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastDesc').innerText = text;
+            toast.className = 'toast';
+            if (!isSuccess) toast.classList.add('toast-error');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        // --- НОВАЯ СИСТЕМА АВТОРИЗАЦИИ ---
+        let authMode = 'login'; // 'login', 'register', 'reset', 'link'
+        let isCodeSent = false;
+        let linkUsername = "";
+
+        function openAuthModal(e) {
+            if(e) e.preventDefault();
+            document.getElementById('authModal').classList.add('active');
+            switchAuthMode('login');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        document.getElementById('authModal').addEventListener('click', function (e) {
+            if (e.target === this) closeAuthModal();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeAuthModal();
+        });
+
+        function togglePasswordVisibility() {
+            const inp = document.getElementById('auth-password');
+            inp.type = inp.type === 'password' ? 'text' : 'password';
+        }
+
+        async function loadCaptcha() {
+            const img = document.getElementById('auth-captcha-image');
+            const idInput = document.getElementById('auth-captcha-id');
+            const textInput = document.getElementById('auth-captcha-text');
+            if (!img) return;
+            
+            img.style.opacity = '0.4';
+            textInput.value = '';
+            try {
+                const res = await fetch(`${API_URL}/get_captcha`);
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    img.src = data.image_base64;
+                    idInput.value = data.captcha_id;
+                    img.style.opacity = '1';
+                }
+            } catch (e) { img.style.opacity = '1'; }
+        }
+
+        function switchAuthMode(mode) {
+            authMode = mode;
+            isCodeSent = false;
+            
+            document.getElementById('auth-status').innerText = "";
+            document.getElementById('auth-status').style.color = "var(--red)";
+            document.getElementById('auth-code').value = "";
+            
+            const title = document.getElementById('auth-modal-title-text');
+            const sub = document.getElementById('auth-modal-sub-text');
+            const btn = document.getElementById('auth-submit-btn');
+
+            document.getElementById('tab-login').classList.remove('active');
+            document.getElementById('tab-register').classList.remove('active');
+
+            document.getElementById('auth-username-group').style.display = 'none';
+            document.getElementById('auth-email-group').style.display = 'none';
+            document.getElementById('auth-pass-group').style.display = 'none';
+            document.getElementById('auth-code-group').style.display = 'none';
+            document.getElementById('auth-captcha-group').style.display = 'block';
+            document.getElementById('auth-forgot-btn').style.display = 'none';
+            document.getElementById('auth-switch-btn').style.display = 'block';
+
+            document.getElementById('auth-username').disabled = false;
+
+            if (mode === 'login') {
+                document.getElementById('tab-login').classList.add('active');
+                title.innerText = "Добро пожаловать";
+                sub.innerText = "Войдите в свой аккаунт";
+                document.getElementById('auth-username-group').style.display = 'block';
+                document.getElementById('auth-pass-group').style.display = 'block';
+                document.getElementById('auth-forgot-btn').style.display = 'block';
+                document.getElementById('auth-username').placeholder = "Логин или E-mail";
+                document.getElementById('auth-switch-btn').innerText = "Нет аккаунта? Регистрация";
+                document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('register');
+                btn.innerText = "ВОЙТИ";
+                loadCaptcha();
+            } 
+            else if (mode === 'register') {
+                document.getElementById('tab-register').classList.add('active');
+                title.innerText = "Создать аккаунт";
+                sub.innerText = "Регистрация займет минуту";
+                document.getElementById('auth-username-group').style.display = 'block';
+                document.getElementById('auth-email-group').style.display = 'block';
+                document.getElementById('auth-pass-group').style.display = 'block';
+                document.getElementById('auth-username').placeholder = "Придумайте логин";
+                document.getElementById('auth-switch-btn').innerText = "Уже есть аккаунт? Войти";
+                document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
+                btn.innerText = "ОТПРАВИТЬ КОД";
+                loadCaptcha();
+            } 
+            else if (mode === 'reset') {
+                title.innerText = "Сброс пароля";
+                sub.innerText = "Восстановление доступа";
+                document.getElementById('auth-email-group').style.display = 'block';
+                document.getElementById('auth-pass-group').style.display = 'block';
+                document.getElementById('auth-switch-btn').innerText = "Вспомнили? Войти";
+                document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
+                btn.innerText = "ОТПРАВИТЬ КОД";
+                loadCaptcha();
+            } 
+            else if (mode === 'link') {
+                title.innerText = "Привязка почты";
+                sub.innerText = "Требование безопасности";
+                document.getElementById('auth-username-group').style.display = 'block';
+                document.getElementById('auth-email-group').style.display = 'block';
+                document.getElementById('auth-username').value = linkUsername;
+                document.getElementById('auth-username').disabled = true;
+                document.getElementById('auth-switch-btn').innerText = "Войти в другой аккаунт";
+                document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
+                btn.innerText = "ОТПРАВИТЬ КОД";
+                loadCaptcha();
+            }
+        }
+
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            const user = document.getElementById('auth-username').value.trim();
+            const email = document.getElementById('auth-email').value.trim();
+            const pass = document.getElementById('auth-password').value.trim();
+            const capText = document.getElementById('auth-captcha-text').value.trim();
+            const capId = document.getElementById('auth-captcha-id').value;
+            const code = document.getElementById('auth-code').value.trim();
+            
+            const btn = document.getElementById('auth-submit-btn');
+            const status = document.getElementById('auth-status');
+            status.style.color = 'var(--red)';
+
+            if (authMode === 'login' && (!user || !pass || !capText)) { status.innerText = "Заполните все поля!"; return; }
+            if (authMode === 'reset' && (!email || !pass)) { status.innerText = "Укажите почту и новый пароль!"; return; }
+            if ((authMode === 'register' || authMode === 'link') && (!user || !email)) { status.innerText = "Заполните логин и почту!"; return; }
+
+            if (authMode !== 'login' && !isCodeSent) {
+                if (!capText) { status.innerText = "Введите капчу!"; return; }
+                btn.disabled = true; btn.innerText = "ОТПРАВКА...";
+                
+                try {
+                    const res = await fetch(`${API_URL}/send_code`, {
+                        method: 'POST', headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ email: email, action: authMode, captcha_id: capId, captcha_text: capText })
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        isCodeSent = true;
+                        status.style.color = 'var(--green)';
+                        status.innerText = "Код отправлен на почту!";
+                        
+                        document.getElementById('auth-captcha-group').style.display = 'none';
+                        document.getElementById('auth-code-group').style.display = 'block';
+                        if(authMode === 'register') btn.innerText = "ЗАВЕРШИТЬ РЕГИСТРАЦИЮ";
+                        if(authMode === 'reset') btn.innerText = "СМЕНИТЬ ПАРОЛЬ";
+                        if(authMode === 'link') {
+                            btn.innerText = "ПРИВЯЗАТЬ";
+                            document.getElementById('auth-pass-group').style.display = 'block';
+                        }
+                    } else {
+                        status.innerText = data.error || "Ошибка отправки кода";
+                        loadCaptcha();
+                    }
+                } catch(e) { status.innerText = "Ошибка сервера"; }
+                btn.disabled = false;
+                return;
+            }
+
+            btn.disabled = true; btn.innerText = "ОБРАБОТКА...";
+            
+            let endpoint = "";
+            let payload = {};
+            
+            if (authMode === 'login') {
+                endpoint = "/login";
+                payload = { username: user, password: pass, captcha_id: capId, captcha_text: capText };
+            } else if (authMode === 'register') {
+                endpoint = "/register";
+                payload = { username: user, email: email, password: pass, code: code };
+            } else if (authMode === 'reset') {
+                endpoint = "/reset_password";
+                payload = { email: email, new_password: pass, code: code };
+            } else if (authMode === 'link') {
+                endpoint = "/link_email";
+                payload = { username: user, email: email, password: pass, code: code };
+            }
+
+            try {
+                const res = await fetch(`${API_URL}${endpoint}`, {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    status.style.color = 'var(--green)';
+                    if (authMode === 'login') {
+                        localStorage.setItem('mx_token', data.token);
+                        localStorage.setItem('mx_username', data.username);
+                        closeAuthModal();
+                        showNotification("Добро пожаловать", data.username, true);
+                        setTimeout(() => window.location.reload(), 1000);
+                    } else {
+                        status.innerText = data.message || "Успешно!";
+                        setTimeout(() => switchAuthMode('login'), 2000);
+                    }
+                } else {
+                    if (authMode === 'login' && data.error === 'no_email' && data.require_link) {
+                        linkUsername = data.username || user;
+                        switchAuthMode('link');
+                        document.getElementById('auth-status').innerText = "Требуется привязка E-mail!";
+                    } else {
+                        status.innerText = data.error || "Ошибка";
+                        if (authMode === 'login' || !isCodeSent) loadCaptcha();
+                    }
+                }
+            } catch(e) { status.innerText = "Ошибка сервера"; }
+            
+            btn.disabled = false;
+            if(authMode === 'login') btn.innerText = "ВОЙТИ";
+            else if(!isCodeSent) btn.innerText = "ОТПРАВИТЬ КОД";
+        }
+        // --- КОНЕЦ НОВОЙ СИСТЕМЫ АВТОРИЗАЦИИ ---
+
+        async function fetchDownloadCount() {
+            try {
+                const res = await fetch(`${API_URL}/get_downloads`);
+                const data = await res.json();
+                if (data.status === 'ok') document.getElementById('download-counter').innerText = data.count.toLocaleString('ru');
+            } catch {}
+        }
+
+        async function handleDownload(e) {
+            e.preventDefault();
+            try { await fetch(`${API_URL}/increment_downloads`, { method: 'POST' }); fetchDownloadCount(); } catch {}
+            showNotification("Загрузка", "Скачивание началось...", true);
+            window.location.href = "https://github.com/Kermi716/MXlauncher/releases/download/mxupdate/MXSetup.exe";
+        }
+
+        async function fetchLauncherRating() {
+            try {
+                const res = await fetch(`${API_URL}/get_launcher_rating`);
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    const likes = data.likes || 0, dislikes = data.dislikes || 0;
+                    const total = likes + dislikes;
+                    document.getElementById('like-count').innerText = likes;
+                    document.getElementById('dislike-count').innerText = dislikes;
+                    const lp = total > 0 ? (likes / total) * 100 : 50;
+                    document.getElementById('rating-bar-like').style.width = `${lp}%`;
+                    document.getElementById('rating-bar-dislike').style.width = `${100 - lp}%`;
+                }
+            } catch {}
+        }
+
+        async function handleRate(action) {
+            const token = localStorage.getItem('mx_token');
+            const username = localStorage.getItem('mx_username');
+            if (!token || !username) {
+                showNotification("Требуется вход", "Оценки доступны только для зарегистрированных пользователей");
+                openAuthModal(); return;
+            }
+            try {
+                const res = await fetch(`${API_URL}/rate_launcher`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, token, action })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.status === 'ok') { showNotification("Голос учтён", "", true); fetchLauncherRating(); }
+                    else if (data.error === "unauthorized") {
+                        showNotification("Сессия истекла", "Войдите снова");
+                        localStorage.removeItem('mx_token'); localStorage.removeItem('mx_username');
+                        openAuthModal();
+                    }
+                }
+            } catch { showNotification("Ошибка", "Сервер недоступен"); }
+        }
+
+        async function checkServerStatus() {
+            const dot = document.getElementById('server-dot');
+            const text = document.getElementById('server-text');
+            try {
+                const controller = new AbortController();
+                const t = setTimeout(() => controller.abort(), 5000);
+                const res = await fetch(`${API_URL}/get_downloads?t=${Date.now()}`, { signal: controller.signal });
+                clearTimeout(t);
+                if (res.ok) { dot.classList.add('online'); text.innerText = 'ONLINE'; } else throw new Error();
+            } catch { text.innerText = 'OFFLINE'; }
+        }
+
+        async function fetchOnlineCount() {
+            try {
+                const res = await fetch(`${API_URL}/online?t=${Date.now()}`);
+                const data = await res.json();
+                if (data.online !== undefined) document.getElementById('online-counter').innerText = data.online;
+            } catch { document.getElementById('online-counter').innerText = "—"; }
+        }
+
+        async function fetchVersion() {
+            try {
+                const res = await fetch(`${API_URL}/check_update`);
+                const data = await res.json();
+                const ver = data.latest_version || data.version;
+                if (ver) {
+                    const el = document.getElementById('version-label');
+                    if (el) el.textContent = `Ver. ${ver}`;
+                    const footerEl = document.getElementById('footer-version-label');
+                    if (footerEl) footerEl.textContent = `Ver. ${ver}`;
+                }
+            } catch {}
+        }
+
+        function initScrollReveal() {
+            const els = document.querySelectorAll('.reveal');
+            if (!els.length) return;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            els.forEach(el => observer.observe(el));
+        }
+
+        function toggleFaq(btn) {
+            const item = btn.closest('.faq-item');
+            const body = item.querySelector('.faq-body');
+            const isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+            document.querySelectorAll('.faq-trigger[aria-expanded="true"]').forEach(b => {
+                b.setAttribute('aria-expanded', 'false');
+                b.closest('.faq-item').querySelector('.faq-body').classList.remove('open');
+            });
+
+            if (!isOpen) {
+                btn.setAttribute('aria-expanded', 'true');
+                body.classList.add('open');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchDownloadCount();
+            fetchLauncherRating();
+            checkServerStatus();
+            fetchOnlineCount();
+            fetchVersion();
+            initScrollReveal();
+
+            const savedUser = localStorage.getItem('mx_username');
+            if (savedUser) {
+                const btn = document.getElementById('auth-btn-footer');
+                if (btn) { btn.textContent = 'Личный кабинет'; btn.onclick = null; btn.href = "profile.html"; }
+                const mobileBtn = document.getElementById('mobile-auth-link');
+                if (mobileBtn) { mobileBtn.textContent = 'Личный кабинет'; mobileBtn.onclick = null; mobileBtn.href = "profile.html"; }
+            }
+
+            new Swiper('.mySwiper', {
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                slidesPerView: 'auto',
+                loop: true,
+                autoplay: { delay: 3500, disableOnInteraction: false },
+                coverflowEffect: { rotate: 15, stretch: 0, depth: 120, modifier: 1, slideShadows: false },
+                pagination: { el: '.swiper-pagination', clickable: true, dynamicBullets: true },
+                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            });
+        });
+    </script>
 </body>
 
 </html>
