@@ -381,9 +381,17 @@
         }
 
         @keyframes pulse-w {
-            0% { box-shadow: 0 0 0 0 rgba(245, 245, 240, 0.4); }
-            60% { box-shadow: 0 0 0 6px rgba(245, 245, 240, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(245, 245, 240, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(245, 245, 240, 0.4);
+            }
+
+            60% {
+                box-shadow: 0 0 0 6px rgba(245, 245, 240, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(245, 245, 240, 0);
+            }
         }
 
         .status-text {
@@ -503,7 +511,9 @@
             background: rgba(245, 245, 240, 0.04);
         }
 
-        .btn-rate.like:hover svg { transform: translateY(-2px); }
+        .btn-rate.like:hover svg {
+            transform: translateY(-2px);
+        }
 
         .btn-rate.dislike:hover {
             color: var(--gray-200);
@@ -511,7 +521,9 @@
             background: rgba(245, 245, 240, 0.02);
         }
 
-        .btn-rate.dislike:hover svg { transform: translateY(2px); }
+        .btn-rate.dislike:hover svg {
+            transform: translateY(2px);
+        }
 
         .rating-track {
             height: 2px;
@@ -550,7 +562,9 @@
             transition: background 0.2s, color 0.2s;
         }
 
-        .sec-item:last-child { border-bottom: none; }
+        .sec-item:last-child {
+            border-bottom: none;
+        }
 
         .sec-item:hover {
             background: rgba(245, 245, 240, 0.04);
@@ -571,7 +585,10 @@
             min-width: 24px;
         }
 
-        .sec-name { font-size: 14px; font-weight: 400; }
+        .sec-name {
+            font-size: 14px;
+            font-weight: 400;
+        }
 
         .sec-right {
             display: flex;
@@ -609,11 +626,18 @@
             transition: background 0.15s;
         }
 
-        .req-table tr:last-child { border-bottom: none; }
+        .req-table tr:last-child {
+            border-bottom: none;
+        }
 
-        .req-table tr:hover { background: rgba(245, 245, 240, 0.025); }
+        .req-table tr:hover {
+            background: rgba(245, 245, 240, 0.025);
+        }
 
-        .req-table td { padding: 16px 24px; font-size: 13px; }
+        .req-table td {
+            padding: 16px 24px;
+            font-size: 13px;
+        }
 
         .req-table td:first-child {
             font-family: 'DM Mono', monospace;
@@ -625,7 +649,10 @@
             border-right: 1px solid var(--border);
         }
 
-        .req-table td:last-child { color: var(--gray-200); font-weight: 300; }
+        .req-table td:last-child {
+            color: var(--gray-200);
+            font-weight: 300;
+        }
 
         .toast {
             position: fixed;
@@ -642,11 +669,23 @@
             max-width: 320px;
         }
 
-        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
 
-        .toast-title { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 3px; }
+        .toast-title {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
 
-        .toast-desc { font-size: 11px; color: var(--gray-600); font-family: 'DM Mono', monospace; }
+        .toast-desc {
+            font-size: 11px;
+            color: var(--gray-600);
+            font-family: 'DM Mono', monospace;
+        }
 
         .toast.toast-error {
             background: var(--black);
@@ -654,7 +693,9 @@
             border-left-color: var(--white);
         }
 
-        .toast.toast-error .toast-desc { color: var(--gray-400); }
+        .toast.toast-error .toast-desc {
+            color: var(--gray-400);
+        }
 
         .modal-overlay {
             position: fixed;
@@ -671,7 +712,10 @@
             transition: opacity 0.25s;
         }
 
-        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
 
         .auth-modal {
             background: var(--gray-900);
@@ -684,7 +728,9 @@
             position: relative;
         }
 
-        .modal-overlay.active .auth-modal { transform: translateY(0) scale(1); }
+        .modal-overlay.active .auth-modal {
+            transform: translateY(0) scale(1);
+        }
 
         .auth-modal-title {
             font-family: 'DM Sans', sans-serif;
@@ -720,7 +766,10 @@
             border-radius: 2px;
         }
 
-        .close-modal:hover { color: var(--white); border-color: var(--border); }
+        .close-modal:hover {
+            color: var(--white);
+            border-color: var(--border);
+        }
 
         .auth-tabs {
             display: flex;
@@ -742,10 +791,18 @@
             transition: all 0.2s;
         }
 
-        .auth-tab.active { color: var(--white); border-bottom-color: var(--white); }
-        .auth-tab:hover:not(.active) { color: var(--gray-400); }
+        .auth-tab.active {
+            color: var(--white);
+            border-bottom-color: var(--white);
+        }
 
-        .form-group { margin-bottom: 15px; }
+        .auth-tab:hover:not(.active) {
+            color: var(--gray-400);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
 
         .btn-auth {
             width: 100%;
@@ -763,8 +820,14 @@
             margin-top: 6px;
         }
 
-        .btn-auth:hover { background: var(--gray-100); }
-        .btn-auth:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-auth:hover {
+            background: var(--gray-100);
+        }
+
+        .btn-auth:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
 
         footer {
             border-top: 1px solid var(--border);
@@ -779,7 +842,11 @@
             justify-content: space-between;
         }
 
-        .footer-info { display: flex; flex-direction: column; gap: 8px; }
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
         .footer-copy {
             font-family: 'DM Mono', monospace;
@@ -797,7 +864,10 @@
             text-transform: uppercase;
         }
 
-        .footer-links { display: flex; gap: 24px; }
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
 
         .footer-links a {
             font-family: 'DM Mono', monospace;
@@ -809,17 +879,38 @@
             transition: color 0.2s;
         }
 
-        .footer-links a:hover { color: var(--white); }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .footer-links a:hover {
+            color: var(--white);
         }
 
-        .anim-in { opacity: 0; animation: fadeUp 0.7s ease forwards; }
-        .anim-in-1 { animation-delay: 0.1s; }
-        .anim-in-2 { animation-delay: 0.2s; }
-        .anim-in-3 { animation-delay: 0.3s; }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .anim-in {
+            opacity: 0;
+            animation: fadeUp 0.7s ease forwards;
+        }
+
+        .anim-in-1 {
+            animation-delay: 0.1s;
+        }
+
+        .anim-in-2 {
+            animation-delay: 0.2s;
+        }
+
+        .anim-in-3 {
+            animation-delay: 0.3s;
+        }
 
         .reveal {
             opacity: 0;
@@ -827,12 +918,30 @@
             transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-        .reveal-d1 { transition-delay: 0.05s; }
-        .reveal-d2 { transition-delay: 0.12s; }
-        .reveal-d3 { transition-delay: 0.19s; }
-        .reveal-d4 { transition-delay: 0.26s; }
-        .reveal-d5 { transition-delay: 0.33s; }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-d1 {
+            transition-delay: 0.05s;
+        }
+
+        .reveal-d2 {
+            transition-delay: 0.12s;
+        }
+
+        .reveal-d3 {
+            transition-delay: 0.19s;
+        }
+
+        .reveal-d4 {
+            transition-delay: 0.26s;
+        }
+
+        .reveal-d5 {
+            transition-delay: 0.33s;
+        }
 
         .mobile-nav-overlay {
             display: none;
@@ -844,7 +953,9 @@
             padding: 24px;
         }
 
-        .mobile-nav-overlay.open { display: flex; }
+        .mobile-nav-overlay.open {
+            display: flex;
+        }
 
         .mobile-nav-header {
             display: flex;
@@ -874,9 +985,17 @@
             background: transparent;
         }
 
-        .mobile-nav-close:hover { color: var(--white); border-color: var(--border-strong); }
+        .mobile-nav-close:hover {
+            color: var(--white);
+            border-color: var(--border-strong);
+        }
 
-        .mobile-nav-links { display: flex; flex-direction: column; gap: 0; flex: 1; }
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            flex: 1;
+        }
 
         .mobile-nav-link {
             display: flex;
@@ -895,9 +1014,17 @@
         }
 
         .mobile-nav-link:hover,
-        .mobile-nav-link.highlight { color: var(--white); }
+        .mobile-nav-link.highlight {
+            color: var(--white);
+        }
 
-        .mobile-nav-link svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+        .mobile-nav-link svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+        }
 
         .mobile-nav-footer {
             margin-top: 32px;
@@ -926,8 +1053,18 @@
             padding: 0;
         }
 
-        .hamburger:hover { border-color: var(--border-strong); color: var(--white); }
-        .hamburger span { display: block; width: 16px; height: 1px; background: currentColor; transition: all 0.2s; }
+        .hamburger:hover {
+            border-color: var(--border-strong);
+            color: var(--white);
+        }
+
+        .hamburger span {
+            display: block;
+            width: 16px;
+            height: 1px;
+            background: currentColor;
+            transition: all 0.2s;
+        }
 
         .faq-list {
             border: 1px solid var(--border);
@@ -1208,7 +1345,10 @@
             transition: all 0.2s;
         }
 
-        .faq-contact-btn svg { width: 13px; height: 13px; }
+        .faq-contact-btn svg {
+            width: 13px;
+            height: 13px;
+        }
 
         .faq-contact-btn:hover {
             color: var(--white) !important;
@@ -1224,18 +1364,50 @@
                 gap: 0;
             }
 
-            .header-right { display: none; }
-            .container { padding: 0 20px; }
-            .nav-strip { padding: 0 20px; }
-            .nav-left { display: none; }
-            .nav-right .tg-link { display: none; }
-            .hamburger { display: flex; }
-            .section { padding: 40px 0; }
-            .section-header { flex-wrap: wrap; gap: 6px; }
-            .section-rule { display: none; }
-            .section-label { font-size: 9px; }
+            .header-right {
+                display: none;
+            }
 
-            .stats-row { grid-template-columns: 1fr; }
+            .container {
+                padding: 0 20px;
+            }
+
+            .nav-strip {
+                padding: 0 20px;
+            }
+
+            .nav-left {
+                display: none;
+            }
+
+            .nav-right .tg-link {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .section {
+                padding: 40px 0;
+            }
+
+            .section-header {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            .section-rule {
+                display: none;
+            }
+
+            .section-label {
+                font-size: 9px;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
 
             .stat-block {
                 border-right: none;
@@ -1243,18 +1415,49 @@
                 padding: 24px 20px;
             }
 
-            .stat-block:last-child { border-bottom: none; }
-            .stat-num { font-size: 52px; }
+            .stat-block:last-child {
+                border-bottom: none;
+            }
 
-            .rating-row { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .stat-num {
+                font-size: 52px;
+            }
 
-            .swiper-slide { width: 85% !important; height: auto; aspect-ratio: 16/9; }
-            .swiper-button-next, .swiper-button-prev { display: none !important; }
+            .rating-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
 
-            .sec-item { padding: 16px; flex-wrap: wrap; gap: 8px; }
-            .sec-right { width: 100%; justify-content: flex-end; }
+            .swiper-slide {
+                width: 85% !important;
+                height: auto;
+                aspect-ratio: 16/9;
+            }
 
-            .req-table, .req-table tbody, .req-table tr, .req-table td { display: block; width: 100%; }
+            .swiper-button-next,
+            .swiper-button-prev {
+                display: none !important;
+            }
+
+            .sec-item {
+                padding: 16px;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .sec-right {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .req-table,
+            .req-table tbody,
+            .req-table tr,
+            .req-table td {
+                display: block;
+                width: 100%;
+            }
 
             .req-table tr {
                 padding: 12px 0;
@@ -1263,16 +1466,47 @@
                 transition: none;
             }
 
-            .req-table tr:hover { background: transparent; }
-            .req-table td { padding: 4px 16px !important; border: none !important; }
-            .req-table td:first-child { width: auto; color: var(--gray-400); font-size: 10px !important; margin-bottom: 2px; }
-            .req-table td:last-child { font-size: 14px !important; color: var(--white); }
+            .req-table tr:hover {
+                background: transparent;
+            }
 
-            footer { padding: 24px 20px; }
+            .req-table td {
+                padding: 4px 16px !important;
+                border: none !important;
+            }
 
-            .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
-            .footer-info { align-items: center; gap: 8px; }
-            .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+            .req-table td:first-child {
+                width: auto;
+                color: var(--gray-400);
+                font-size: 10px !important;
+                margin-bottom: 2px;
+            }
+
+            .req-table td:last-child {
+                font-size: 14px !important;
+                color: var(--white);
+            }
+
+            footer {
+                padding: 24px 20px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .footer-info {
+                align-items: center;
+                gap: 8px;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 16px;
+            }
 
             .auth-modal {
                 max-width: 100%;
@@ -1287,24 +1521,59 @@
                 transform: translateY(100%);
             }
 
-            .modal-overlay { align-items: flex-end; }
-            .modal-overlay.active .auth-modal { transform: translateY(0); }
+            .modal-overlay {
+                align-items: flex-end;
+            }
 
-            .toast { right: 16px; left: 16px; max-width: none; bottom: 16px; }
+            .modal-overlay.active .auth-modal {
+                transform: translateY(0);
+            }
+
+            .toast {
+                right: 16px;
+                left: 16px;
+                max-width: none;
+                bottom: 16px;
+            }
 
             /* FAQ mobile */
-            .faq-trigger { padding: 18px 16px; }
-            .faq-cat { display: none; }
-            .faq-body-inner { padding: 0 16px; }
-            .faq-body.open .faq-body-inner { padding-bottom: 20px; }
-            .faq-java-grid { grid-template-columns: 1fr 1fr; }
+            .faq-trigger {
+                padding: 18px 16px;
+            }
+
+            .faq-cat {
+                display: none;
+            }
+
+            .faq-body-inner {
+                padding: 0 16px;
+            }
+
+            .faq-body.open .faq-body-inner {
+                padding-bottom: 20px;
+            }
+
+            .faq-java-grid {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         @media (max-width: 480px) {
-            h1 { font-size: 64px; }
-            .header-sub { font-size: 13px; }
-            .stat-num { font-size: 44px; }
-            .faq-java-grid { grid-template-columns: 1fr; }
+            h1 {
+                font-size: 64px;
+            }
+
+            .header-sub {
+                font-size: 13px;
+            }
+
+            .stat-num {
+                font-size: 44px;
+            }
+
+            .faq-java-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -1421,13 +1690,15 @@
                 <div class="rating-btns">
                     <button class="btn-rate like" onclick="handleRate('like')">
                         <svg viewBox="0 0 24 24">
-                            <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
+                            <path
+                                d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
                         </svg>
                         <span id="like-count">0</span>
                     </button>
                     <button class="btn-rate dislike" onclick="handleRate('dislike')">
                         <svg viewBox="0 0 24 24">
-                            <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z" />
+                            <path
+                                d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z" />
                         </svg>
                         <span id="dislike-count">0</span>
                     </button>
@@ -1453,15 +1724,20 @@
             </p>
             <div class="sec-list reveal reveal-d2">
                 <a href="https://www.youtube.com/watch?v=1maKKxoljtU" target="_blank" class="sec-item">
-                    <div class="sec-left"><span class="sec-num">01</span><span class="sec-name">Видео-проверка на YouTube</span></div>
+                    <div class="sec-left"><span class="sec-num">01</span><span class="sec-name">Видео-проверка на
+                            YouTube</span></div>
                     <div class="sec-right"><span class="sec-tag">YouTube</span><span class="sec-arrow">↗</span></div>
                 </a>
-                <a href="https://www.virustotal.com/gui/file/b0142a493e98c43ea9d944fd0b37c13de5131dc120d8213449493ecd07cd3e8a?nocache=1" target="_blank" class="sec-item">
-                    <div class="sec-left"><span class="sec-num">02</span><span class="sec-name">Отчёт VirusTotal — Лаунчер</span></div>
+                <a href="https://www.virustotal.com/gui/file/b0142a493e98c43ea9d944fd0b37c13de5131dc120d8213449493ecd07cd3e8a?nocache=1"
+                    target="_blank" class="sec-item">
+                    <div class="sec-left"><span class="sec-num">02</span><span class="sec-name">Отчёт VirusTotal —
+                            Лаунчер</span></div>
                     <div class="sec-right"><span class="sec-tag">3 / 72</span><span class="sec-arrow">↗</span></div>
                 </a>
-                <a href="https://www.virustotal.com/gui/file/3053b4b2e5d38061ddddcad2925bb94dc472215729ba81977c738f6613548380?nocache=1" target="_blank" class="sec-item">
-                    <div class="sec-left"><span class="sec-num">03</span><span class="sec-name">Отчёт VirusTotal — MXSetup</span></div>
+                <a href="https://www.virustotal.com/gui/file/3053b4b2e5d38061ddddcad2925bb94dc472215729ba81977c738f6613548380?nocache=1"
+                    target="_blank" class="sec-item">
+                    <div class="sec-left"><span class="sec-num">03</span><span class="sec-name">Отчёт VirusTotal —
+                            MXSetup</span></div>
                     <div class="sec-right"><span class="sec-tag">3 / 72</span><span class="sec-arrow">↗</span></div>
                 </a>
             </div>
@@ -1476,12 +1752,30 @@
             </div>
             <table class="req-table reveal reveal-d1">
                 <tbody>
-                    <tr><td>ОС</td><td>Windows 10 (64-bit)</td></tr>
-                    <tr><td>Процессор (CPU)</td><td>Intel Core i3 / AMD Ryzen 3</td></tr>
-                    <tr><td>Память (RAM)</td><td>4 GB — рекомендуется 8 GB</td></tr>
-                    <tr><td>Место на диске</td><td>5 GB+ (лаунчер + софты)</td></tr>
-                    <tr><td>Видеокарта (GPU)</td><td>Intel HD Graphics 4000+</td></tr>
-                    <tr><td>Доп. ПО</td><td>Java 8 / 17 / 21</td></tr>
+                    <tr>
+                        <td>ОС</td>
+                        <td>Windows 10 (64-bit)</td>
+                    </tr>
+                    <tr>
+                        <td>Процессор (CPU)</td>
+                        <td>Intel Core i3 / AMD Ryzen 3</td>
+                    </tr>
+                    <tr>
+                        <td>Память (RAM)</td>
+                        <td>4 GB — рекомендуется 8 GB</td>
+                    </tr>
+                    <tr>
+                        <td>Место на диске</td>
+                        <td>5 GB+ (лаунчер + софты)</td>
+                    </tr>
+                    <tr>
+                        <td>Видеокарта (GPU)</td>
+                        <td>Intel HD Graphics 4000+</td>
+                    </tr>
+                    <tr>
+                        <td>Доп. ПО</td>
+                        <td>Java 8 / 17 / 21</td>
+                    </tr>
                 </tbody>
             </table>
         </section>
@@ -1505,7 +1799,9 @@
                         <div class="faq-trigger-right">
                             <span class="faq-cat">Сеть</span>
                             <span class="faq-chevron">
-                                <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
                             </span>
                         </div>
                     </button>
@@ -1543,28 +1839,34 @@
                         <div class="faq-trigger-right">
                             <span class="faq-cat">Запуск</span>
                             <span class="faq-chevron">
-                                <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
                             </span>
                         </div>
                     </button>
                     <div class="faq-body">
                         <div class="faq-body-inner">
-                            <p>Большинство читов и визуалов требуют конкретную версию Java. Установите нужную и перезапустите лаунчер.</p>
+                            <p>Большинство читов и визуалов требуют конкретную версию Java. Установите нужную и
+                                перезапустите лаунчер.</p>
                             <div class="faq-java-grid">
                                 <div class="java-card">
                                     <div class="java-ver">Java 8</div>
                                     <div class="java-desc">Старые читы<br>1.8 – 1.12</div>
-                                    <a href="https://www.java.com/ru/download/" target="_blank" class="java-link">Скачать ↗</a>
+                                    <a href="https://www.java.com/ru/download/" target="_blank"
+                                        class="java-link">Скачать ↗</a>
                                 </div>
                                 <div class="java-card">
                                     <div class="java-ver">Java 17</div>
                                     <div class="java-desc">Актуальные читы<br>1.17 – 1.20</div>
-                                    <a href="https://adoptium.net/temurin/releases/?version=17" target="_blank" class="java-link">Скачать ↗</a>
+                                    <a href="https://adoptium.net/temurin/releases/?version=17" target="_blank"
+                                        class="java-link">Скачать ↗</a>
                                 </div>
                                 <div class="java-card">
                                     <div class="java-ver">Java 21</div>
                                     <div class="java-desc">Новые читы<br>1.20+</div>
-                                    <a href="https://adoptium.net/temurin/releases/?version=21" target="_blank" class="java-link">Скачать ↗</a>
+                                    <a href="https://adoptium.net/temurin/releases/?version=21" target="_blank"
+                                        class="java-link">Скачать ↗</a>
                                 </div>
                             </div>
 
@@ -1581,7 +1883,9 @@
                         <div class="faq-trigger-right">
                             <span class="faq-cat">Поддержка</span>
                             <span class="faq-chevron">
-                                <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
                             </span>
                         </div>
                     </button>
@@ -1590,11 +1894,16 @@
                             <p>Свяжитесь с поддержкой — обычно отвечаем в течение нескольких часов.</p>
                             <div class="faq-contact-row">
                                 <a href="https://t.me/mxlauncher" target="_blank" class="faq-contact-btn">
-                                    <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z"/></svg>
+                                    <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none">
+                                        <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
+                                    </svg>
                                     Telegram
                                 </a>
                                 <a href="support.html" class="faq-contact-btn">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    </svg>
                                     Страница поддержки
                                 </a>
                             </div>
@@ -1639,44 +1948,63 @@
 
             <form id="auth-form" onsubmit="handleAuthSubmit(event)">
                 <div class="form-group" id="auth-username-group">
-                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Никнейм</label>
-                    <input type="text" id="auth-username" class="form-control" placeholder="Логин или E-mail" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 13px; margin-bottom: 15px;">
-                </div>
-
-                <div class="form-group" id="auth-email-group" style="display: none;">
-                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">E-mail</label>
-                    <input type="email" id="auth-email" class="form-control" placeholder="example@mail.ru" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 13px; margin-bottom: 15px;">
+                    <label class="form-label"
+                        style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Никнейм</label>
+                    <input type="text" id="auth-username" class="form-control" placeholder="Логин"
+                        style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 13px; margin-bottom: 15px;">
                 </div>
 
                 <div class="form-group" id="auth-pass-group">
-                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Пароль</label>
-                    <div style="display: flex; background: rgba(0,0,0,0.2); border: 1px solid var(--border); margin-bottom: 15px;">
-                        <input type="password" id="auth-password" class="form-control" placeholder="Пароль" minlength="5" style="border: none; background: transparent; flex: 1; padding: 11px 13px; color: var(--white); font-size: 13px;">
-                        <button type="button" onclick="togglePasswordVisibility()" style="background: transparent; border: none; color: var(--gray-400); padding: 0 15px; cursor: pointer;">👁</button>
+                    <label class="form-label"
+                        style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Пароль</label>
+                    <div
+                        style="display: flex; background: rgba(0,0,0,0.2); border: 1px solid var(--border); margin-bottom: 15px;">
+                        <input type="password" id="auth-password" class="form-control" placeholder="Пароль"
+                            minlength="5"
+                            style="border: none; background: transparent; flex: 1; padding: 11px 13px; color: var(--white); font-size: 13px;">
+                        <button type="button" onclick="togglePasswordVisibility()"
+                            style="background: transparent; border: none; color: var(--gray-400); padding: 0 15px; cursor: pointer;">👁</button>
                     </div>
                 </div>
 
                 <div class="form-group" id="auth-captcha-group">
-                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Код с картинки</label>
+                    <label class="form-label"
+                        style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Код
+                        с картинки</label>
                     <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-                        <img id="auth-captcha-image" src="" alt="Загрузка..." style="flex: 1; height: 42px; border: 1px solid var(--border); background: var(--white); object-fit: contain; border-radius: 2px;">
-                        <button type="button" onclick="loadCaptcha()" style="background: transparent; border: 1px solid var(--border); color: var(--gray-400); width: 42px; height: 42px; cursor: pointer; font-size: 16px; border-radius: 2px;">↻</button>
+                        <img id="auth-captcha-image" src="" alt="Загрузка..."
+                            style="flex: 1; height: 42px; border: 1px solid var(--border); background: var(--white); object-fit: contain; border-radius: 2px;">
+                        <button type="button" onclick="loadCaptcha()"
+                            style="background: transparent; border: 1px solid var(--border); color: var(--gray-400); width: 42px; height: 42px; cursor: pointer; font-size: 16px; border-radius: 2px;">↻</button>
                     </div>
-                    <input type="text" id="auth-captcha-text" class="form-control" autocomplete="off" placeholder="Код" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-size: 13px;">
+                    <input type="text" id="auth-captcha-text" class="form-control" autocomplete="off" placeholder="Код"
+                        style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-size: 13px;">
                     <input type="hidden" id="auth-captcha-id">
                 </div>
 
-                <div class="form-group" id="auth-code-group" style="display: none;">
-                    <label class="form-label" style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Код подтверждения</label>
-                    <input type="text" id="auth-code" class="form-control" placeholder="6 цифр из письма" maxlength="6" style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-size: 13px; text-align: center; letter-spacing: 5px; margin-bottom: 15px;">
+                <div class="form-group" id="auth-tg-group" style="display: none; margin-bottom: 15px;">
+                    <a href="#" id="auth-tg-link" target="_blank" class="btn-auth"
+                        style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: var(--white); color: var(--black); text-decoration: none; padding: 13px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; transition: background 0.2s;">
+                        <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor; stroke: none;">
+                            <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
+                        </svg>
+                        ОТКРЫТЬ ТЕЛЕГРАМ БОТА
+                    </a>
                 </div>
 
-                <div id="auth-status" style="color: var(--red); text-align: center; margin-bottom: 10px; font-size: 12px; min-height: 15px;"></div>
+                <div id="auth-status"
+                    style="color: var(--red); text-align: center; margin-bottom: 10px; font-size: 12px; min-height: 15px;">
+                </div>
 
-                <button type="submit" id="auth-submit-btn" class="btn-auth" style="width: 100%; background: var(--white); color: var(--black); border: none; padding: 13px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer;">ВОЙТИ</button>
+                <button type="submit" id="auth-submit-btn" class="btn-auth"
+                    style="width: 100%; background: var(--white); color: var(--black); border: none; padding: 13px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer;">ВОЙТИ</button>
 
-                <button type="button" id="auth-forgot-btn" style="width: 100%; margin-top: 15px; background: transparent; border: none; color: var(--gray-400); cursor: pointer; font-size: 11px; font-family: 'DM Mono', monospace;" onclick="switchAuthMode('reset')">Забыли пароль?</button>
-                <button type="button" id="auth-switch-btn" style="width: 100%; margin-top: 10px; background: transparent; border: none; color: var(--gray-400); cursor: pointer; font-size: 11px; font-family: 'DM Mono', monospace;" onclick="switchAuthMode('register')">Нет аккаунта? Регистрация</button>
+                <button type="button" id="auth-forgot-btn"
+                    style="width: 100%; margin-top: 15px; background: transparent; border: none; color: var(--gray-400); cursor: pointer; font-size: 11px; font-family: 'DM Mono', monospace;"
+                    onclick="switchAuthMode('reset')">Забыли пароль?</button>
+                <button type="button" id="auth-switch-btn"
+                    style="width: 100%; margin-top: 10px; background: transparent; border: none; color: var(--gray-400); cursor: pointer; font-size: 11px; font-family: 'DM Mono', monospace;"
+                    onclick="switchAuthMode('register')">Нет аккаунта? Регистрация</button>
             </form>
         </div>
     </div>
@@ -1694,7 +2022,8 @@
                 Скачать для Windows
             </a>
             <a class="mobile-nav-link" href="support.html">Поддержка</a>
-            <a class="mobile-nav-link" href="#" id="mobile-auth-link" onclick="closeMobileNav(); openAuthModal(event)">Войти</a>
+            <a class="mobile-nav-link" href="#" id="mobile-auth-link"
+                onclick="closeMobileNav(); openAuthModal(event)">Войти</a>
             <a class="mobile-nav-link" href="https://t.me/mxlauncher" target="_blank">
                 <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:16px;height:16px">
                     <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
@@ -1772,7 +2101,7 @@
                 sessionStorage.setItem('mx_session_id', d.session_id);
                 sessionStorage.setItem('mx_session_secret', d.session_secret);
             }
-        }).catch(() => {});
+        }).catch(() => { });
 
         function openMobileNav() {
             document.getElementById('mobileNav').classList.add('open');
@@ -1800,7 +2129,7 @@
         let linkUsername = "";
 
         function openAuthModal(e) {
-            if(e) e.preventDefault();
+            if (e) e.preventDefault();
             document.getElementById('authModal').classList.add('active');
             switchAuthMode('login');
         }
@@ -1826,7 +2155,7 @@
             const idInput = document.getElementById('auth-captcha-id');
             const textInput = document.getElementById('auth-captcha-text');
             if (!img) return;
-            
+
             img.style.opacity = '0.4';
             textInput.value = '';
             try {
@@ -1843,11 +2172,10 @@
         function switchAuthMode(mode) {
             authMode = mode;
             isCodeSent = false;
-            
+
             document.getElementById('auth-status').innerText = "";
             document.getElementById('auth-status').style.color = "var(--red)";
-            document.getElementById('auth-code').value = "";
-            
+
             const title = document.getElementById('auth-modal-title-text');
             const sub = document.getElementById('auth-modal-sub-text');
             const btn = document.getElementById('auth-submit-btn');
@@ -1856,10 +2184,9 @@
             document.getElementById('tab-register').classList.remove('active');
 
             document.getElementById('auth-username-group').style.display = 'none';
-            document.getElementById('auth-email-group').style.display = 'none';
             document.getElementById('auth-pass-group').style.display = 'none';
-            document.getElementById('auth-code-group').style.display = 'none';
             document.getElementById('auth-captcha-group').style.display = 'block';
+            document.getElementById('auth-tg-group').style.display = 'none';
             document.getElementById('auth-forgot-btn').style.display = 'none';
             document.getElementById('auth-switch-btn').style.display = 'block';
 
@@ -1872,45 +2199,49 @@
                 document.getElementById('auth-username-group').style.display = 'block';
                 document.getElementById('auth-pass-group').style.display = 'block';
                 document.getElementById('auth-forgot-btn').style.display = 'block';
-                document.getElementById('auth-username').placeholder = "Логин или E-mail";
+                document.getElementById('auth-username').placeholder = "Логин";
                 document.getElementById('auth-switch-btn').innerText = "Нет аккаунта? Регистрация";
                 document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('register');
                 btn.innerText = "ВОЙТИ";
+                btn.style.display = "block";
                 loadCaptcha();
-            } 
+            }
             else if (mode === 'register') {
                 document.getElementById('tab-register').classList.add('active');
                 title.innerText = "Создать аккаунт";
                 sub.innerText = "Регистрация займет минуту";
                 document.getElementById('auth-username-group').style.display = 'block';
-                document.getElementById('auth-email-group').style.display = 'block';
                 document.getElementById('auth-pass-group').style.display = 'block';
                 document.getElementById('auth-username').placeholder = "Придумайте логин";
                 document.getElementById('auth-switch-btn').innerText = "Уже есть аккаунт? Войти";
                 document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
-                btn.innerText = "ОТПРАВИТЬ КОД";
+                btn.innerText = "ОТПРАВИТЬ ССЫЛКУ в ТГ БОТ";
+                btn.style.display = "block";
                 loadCaptcha();
-            } 
+            }
             else if (mode === 'reset') {
                 title.innerText = "Сброс пароля";
                 sub.innerText = "Восстановление доступа";
-                document.getElementById('auth-email-group').style.display = 'block';
+                document.getElementById('auth-username-group').style.display = 'block';
+                document.getElementById('auth-username').placeholder = "Логин";
                 document.getElementById('auth-pass-group').style.display = 'block';
                 document.getElementById('auth-switch-btn').innerText = "Вспомнили? Войти";
                 document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
-                btn.innerText = "ОТПРАВИТЬ КОД";
+                btn.innerText = "ОТПРАВИТЬ ССЫЛКУ в ТГ БОТ";
+                btn.style.display = "block";
                 loadCaptcha();
-            } 
+            }
             else if (mode === 'link') {
-                title.innerText = "Привязка почты";
+                title.innerText = "Привязка Telegram";
                 sub.innerText = "Требование безопасности";
                 document.getElementById('auth-username-group').style.display = 'block';
-                document.getElementById('auth-email-group').style.display = 'block';
                 document.getElementById('auth-username').value = linkUsername;
                 document.getElementById('auth-username').disabled = true;
+                document.getElementById('auth-pass-group').style.display = 'block';
                 document.getElementById('auth-switch-btn').innerText = "Войти в другой аккаунт";
                 document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
-                btn.innerText = "ОТПРАВИТЬ КОД";
+                btn.innerText = "ОТПРАВИТЬ ССЫЛКУ в ТГ БОТ";
+                btn.style.display = "block";
                 loadCaptcha();
             }
         }
@@ -1918,78 +2249,76 @@
         async function handleAuthSubmit(e) {
             e.preventDefault();
             const user = document.getElementById('auth-username').value.trim();
-            const email = document.getElementById('auth-email').value.trim();
             const pass = document.getElementById('auth-password').value.trim();
             const capText = document.getElementById('auth-captcha-text').value.trim();
             const capId = document.getElementById('auth-captcha-id').value;
-            const code = document.getElementById('auth-code').value.trim();
-            
+
             const btn = document.getElementById('auth-submit-btn');
             const status = document.getElementById('auth-status');
             status.style.color = 'var(--red)';
 
             if (authMode === 'login' && (!user || !pass || !capText)) { status.innerText = "Заполните все поля!"; return; }
-            if (authMode === 'reset' && (!email || !pass)) { status.innerText = "Укажите почту и новый пароль!"; return; }
-            if ((authMode === 'register' || authMode === 'link') && (!user || !email)) { status.innerText = "Заполните логин и почту!"; return; }
+            if ((authMode === 'register' || authMode === 'reset' || authMode === 'link') && (!user || !pass || (!isCodeSent && !capText))) { status.innerText = "Заполните все поля!"; return; }
 
             if (authMode !== 'login' && !isCodeSent) {
                 if (!capText) { status.innerText = "Введите капчу!"; return; }
-                btn.disabled = true; btn.innerText = "ОТПРАВКА...";
-                
+                btn.disabled = true; btn.innerText = "ПОЛУЧЕНИЕ ССЫЛКИ...";
+
                 try {
-                    const res = await fetch(`${API_URL}/send_code`, {
-                        method: 'POST', headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ email: email, action: authMode, captcha_id: capId, captcha_text: capText })
+                    const res = await fetch(`${API_URL}/get_tg_link`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: user, action: authMode, captcha_id: capId, captcha_text: capText })
                     });
                     const data = await res.json();
                     if (res.ok) {
                         isCodeSent = true;
                         status.style.color = 'var(--green)';
-                        status.innerText = "Код отправлен на почту!";
-                        
+                        status.innerText = "Перейдите в Telegram по ссылке!";
+
                         document.getElementById('auth-captcha-group').style.display = 'none';
-                        document.getElementById('auth-code-group').style.display = 'block';
-                        if(authMode === 'register') btn.innerText = "ЗАВЕРШИТЬ РЕГИСТРАЦИЮ";
-                        if(authMode === 'reset') btn.innerText = "СМЕНИТЬ ПАРОЛЬ";
-                        if(authMode === 'link') {
-                            btn.innerText = "ПРИВЯЗАТЬ";
-                            document.getElementById('auth-pass-group').style.display = 'block';
-                        }
+                        const tgGroup = document.getElementById('auth-tg-group');
+                        const tgLink = document.getElementById('auth-tg-link');
+                        tgGroup.style.display = 'block';
+                        tgLink.href = data.link;
+
+                        if (authMode === 'register') btn.innerText = "ПОДТВЕРДИЛ РЕГИСТРАЦИЮ В ТГ";
+                        if (authMode === 'reset') btn.innerText = "ПОДТВЕРДИЛ СБРОС В ТГ";
+                        if (authMode === 'link') btn.innerText = "ПОДТВЕРДИЛ ПРИВЯЗКУ В ТГ";
                     } else {
-                        status.innerText = data.error || "Ошибка отправки кода";
+                        status.innerText = data.error || "Ошибка получения ссылки";
                         loadCaptcha();
                     }
-                } catch(e) { status.innerText = "Ошибка сервера"; }
+                } catch (e) { status.innerText = "Ошибка сервера"; }
                 btn.disabled = false;
                 return;
             }
 
             btn.disabled = true; btn.innerText = "ОБРАБОТКА...";
-            
+
             let endpoint = "";
             let payload = {};
-            
+
             if (authMode === 'login') {
                 endpoint = "/login";
                 payload = { username: user, password: pass, captcha_id: capId, captcha_text: capText };
             } else if (authMode === 'register') {
                 endpoint = "/register";
-                payload = { username: user, email: email, password: pass, code: code };
+                payload = { username: user, password: pass };
             } else if (authMode === 'reset') {
                 endpoint = "/reset_password";
-                payload = { email: email, new_password: pass, code: code };
+                payload = { username: user, new_password: pass };
             } else if (authMode === 'link') {
-                endpoint = "/link_email";
-                payload = { username: user, email: email, password: pass, code: code };
+                endpoint = "/link_tg";
+                payload = { username: user, password: pass };
             }
 
             try {
                 const res = await fetch(`${API_URL}${endpoint}`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
                 const data = await res.json();
-                
+
                 if (res.ok) {
                     status.style.color = 'var(--green)';
                     if (authMode === 'login') {
@@ -2003,20 +2332,20 @@
                         setTimeout(() => switchAuthMode('login'), 2000);
                     }
                 } else {
-                    if (authMode === 'login' && data.error === 'no_email' && data.require_link) {
+                    if (authMode === 'login' && data.error === 'no_tg' && data.require_link) {
                         linkUsername = data.username || user;
                         switchAuthMode('link');
-                        document.getElementById('auth-status').innerText = "Требуется привязка E-mail!";
+                        document.getElementById('auth-status').innerText = "Требуется привязка Telegram!";
                     } else {
                         status.innerText = data.error || "Ошибка";
                         if (authMode === 'login' || !isCodeSent) loadCaptcha();
                     }
                 }
-            } catch(e) { status.innerText = "Ошибка сервера"; }
-            
+            } catch (e) { status.innerText = "Ошибка сервера"; }
+
             btn.disabled = false;
-            if(authMode === 'login') btn.innerText = "ВОЙТИ";
-            else if(!isCodeSent) btn.innerText = "ОТПРАВИТЬ КОД";
+            if (authMode === 'login') btn.innerText = "ВОЙТИ";
+            else if (!isCodeSent) btn.innerText = "ОТПРАВИТЬ ССЫЛКУ в ТГ БОТ";
         }
         // --- КОНЕЦ НОВОЙ СИСТЕМЫ АВТОРИЗАЦИИ ---
 
@@ -2025,12 +2354,12 @@
                 const res = await fetch(`${API_URL}/get_downloads`);
                 const data = await res.json();
                 if (data.status === 'ok') document.getElementById('download-counter').innerText = data.count.toLocaleString('ru');
-            } catch {}
+            } catch { }
         }
 
         async function handleDownload(e) {
             e.preventDefault();
-            try { await fetch(`${API_URL}/increment_downloads`, { method: 'POST' }); fetchDownloadCount(); } catch {}
+            try { await fetch(`${API_URL}/increment_downloads`, { method: 'POST' }); fetchDownloadCount(); } catch { }
             showNotification("Загрузка", "Скачивание началось...", true);
             window.location.href = "https://github.com/Kermi716/MXlauncher/releases/download/mxupdate/MXSetup.exe";
         }
@@ -2048,7 +2377,7 @@
                     document.getElementById('rating-bar-like').style.width = `${lp}%`;
                     document.getElementById('rating-bar-dislike').style.width = `${100 - lp}%`;
                 }
-            } catch {}
+            } catch { }
         }
 
         async function handleRate(action) {
@@ -2107,7 +2436,7 @@
                     const footerEl = document.getElementById('footer-version-label');
                     if (footerEl) footerEl.textContent = `Ver. ${ver}`;
                 }
-            } catch {}
+            } catch { }
         }
 
         function initScrollReveal() {
