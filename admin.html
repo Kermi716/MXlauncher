@@ -16,19 +16,19 @@
         rel="stylesheet">
     <style>
         :root {
-            --black: #0a0a0a;
-            --white: #f5f5f0;
-            --gray-100: #e8e8e3;
-            --gray-200: #c8c8c2;
-            --gray-400: #888882;
-            --gray-600: #444440;
-            --gray-800: #1a1a18;
-            --gray-900: #111110;
-            --border: rgba(245, 245, 240, 0.12);
-            --border-strong: rgba(245, 245, 240, 0.28);
-            --red: #990000;
-            --green: #2ecc71;
-            --gold: #ffcc00;
+            --bg-base: #09090b;
+            --bg-accent: #18181b;
+            --text: #ffffff;
+            --text-muted: #a1a1aa;
+            --border: #27272a;
+            --border-hover: #3f3f46;
+            --online: #22c55e;
+            --offline: #ef4444;
+            --glass-bg: rgba(24, 24, 27, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --red: #ef4444;
+            --green: #22c55e;
+            --gold: #f59e0b;
         }
 
         * {
@@ -45,161 +45,181 @@
         }
 
         body {
-            background-color: var(--black);
+            background-color: var(--bg-base);
             font-family: 'DM Sans', sans-serif;
-            color: var(--white);
+            color: var(--text);
             overflow-x: hidden;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            cursor: default;
+            transition: opacity 0.3s ease;
         }
 
-        body::before {
-            content: '';
+        body.lang-switching {
+            opacity: 0;
+        }
+
+        .glass-header {
             position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-            opacity: 0.03;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        .site-header {
-            position: relative;
-            width: 100%;
-            border-bottom: 1px solid var(--border);
-            overflow: hidden;
-        }
-
-        .header-video-wrap {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-        }
-
-        .header-video-wrap video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.18;
-            filter: grayscale(100%) contrast(1.2);
-        }
-
-        .header-video-wrap::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(10, 10, 10, 0) 40%, rgba(10, 10, 10, 1) 100%);
-        }
-
-        .header-inner {
-            position: relative;
-            z-index: 2;
-            padding: 80px 60px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .header-eyebrow {
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-eyebrow::before {
-            content: '';
-            display: inline-block;
-            width: 28px;
-            height: 1px;
-            background: var(--gray-600);
-        }
-
-        h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(48px, 8vw, 80px);
-            letter-spacing: 4px;
-            color: var(--white);
-            line-height: 1;
-            margin-bottom: 0;
-            text-transform: uppercase;
-        }
-
-        .nav-strip-wrap {
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav-strip {
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 48px);
+            max-width: 860px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 10px 16px 10px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 60px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
-        .nav-left {
+        .header-logo {
             display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
+            transition: opacity 0.2s;
         }
 
-        .nav-link {
+        .header-logo:hover {
+            opacity: 0.8;
+        }
+
+        .header-logo img {
+            height: 28px;
+            width: auto;
+            border-radius: 50%;
+        }
+
+        .header-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            letter-spacing: 2px;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .header-eyebrow-badge {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--red);
+            border: 1px solid var(--red);
+            padding: 2px 7px;
+            border-radius: 4px;
+            margin-left: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+            width: 36px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
+        }
+
+        .btn-icon:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 16px 20px 16px 0;
-            margin-right: 24px;
+            height: 36px;
+            padding: 0 16px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #e4e4e7 0%, #a1a1aa 100%);
+            border: 1px solid #a1a1aa;
+            box-shadow: inset 0 2px 2px rgba(255, 255, 255, 1), 0 4px 15px rgba(255, 255, 255, 0.1);
+            color: #09090b;
             font-family: 'DM Mono', monospace;
             font-size: 11px;
+            font-weight: 600;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            color: var(--gray-400);
-            text-decoration: none;
-            transition: color 0.2s;
             cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .nav-link:hover {
-            color: var(--white);
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(180deg, #f4f4f5 0%, #b4b4b8 100%);
+            box-shadow: inset 0 2px 2px rgba(255, 255, 255, 1), 0 8px 25px rgba(255, 255, 255, 0.2);
         }
 
-        .nav-link.back-link {
-            color: var(--gray-600);
-            padding-right: 0;
-            margin-right: 32px;
-            border-right: 1px solid var(--border);
-            padding-right: 32px;
+        .btn-primary:active {
+            transform: scale(0.98);
         }
 
-        .nav-link.back-link:hover {
-            color: var(--gray-400);
-        }
-
-        .nav-link svg {
+        .btn-primary svg {
             width: 14px;
             height: 14px;
             fill: none;
             stroke: currentColor;
-            stroke-width: 1.5;
+            stroke-width: 2;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 60px;
-            width: 100%;
+        .page-wrap {
             flex: 1;
+            padding-top: 100px;
+            padding-bottom: 60px;
+            max-width: 960px;
+            margin: 0 auto;
+            width: 100%;
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        .page-header {
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(40px, 7vw, 72px);
+            letter-spacing: 3px;
+            color: var(--text);
+            line-height: 0.95;
         }
 
         .section {
-            padding: 40px 0;
+            padding: 36px 0;
             border-bottom: 1px solid var(--border);
         }
 
@@ -211,9 +231,9 @@
             display: flex;
             align-items: baseline;
             justify-content: space-between;
-            margin-bottom: 36px;
+            margin-bottom: 28px;
+            gap: 12px;
             flex-wrap: wrap;
-            gap: 16px;
         }
 
         .section-label {
@@ -221,220 +241,176 @@
             font-size: 10px;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: var(--gray-600);
-            margin-right: 20px;
+            color: var(--border-hover);
+            flex-shrink: 0;
         }
 
         .section-title {
             font-family: 'DM Sans', sans-serif;
             font-size: 13px;
             font-weight: 500;
-            letter-spacing: 0.5px;
-            color: var(--gray-200);
+            color: var(--text-muted);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .section-rule {
             flex: 1;
             height: 1px;
             background: var(--border);
-            margin: 0 20px;
-            min-width: 50px;
+            margin: 0 16px;
+            min-width: 30px;
         }
 
         .controls {
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
         }
 
         .sort-select {
-            background: var(--black);
-            color: var(--white);
+            background: var(--bg-accent);
             border: 1px solid var(--border);
-            padding: 8px 16px;
+            color: var(--text-muted);
             font-family: 'DM Mono', monospace;
             font-size: 10px;
             letter-spacing: 1px;
             text-transform: uppercase;
+            padding: 6px 10px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: 0.2s;
-            appearance: none;
-            -webkit-appearance: none;
+            outline: none;
+            transition: border-color 0.2s;
         }
 
         .sort-select:hover {
-            border-color: var(--white);
+            border-color: var(--border-hover);
         }
 
         .ticket-item {
             border: 1px solid var(--border);
-            margin-bottom: 16px;
+            border-radius: 10px;
+            margin-bottom: 12px;
             transition: background 0.2s;
-            background: var(--black);
+            overflow: hidden;
         }
 
         .ticket-item:hover {
-            background: rgba(245, 245, 240, 0.02);
-            border-color: var(--border-strong);
-        }
-
-        .ticket-item.premium {
-            border-left: 3px solid var(--gold);
+            background: rgba(255, 255, 255, 0.02);
+            border-color: var(--border-hover);
         }
 
         .ticket-header {
-            padding: 16px 24px;
+            padding: 14px 20px;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
 
         .ticket-status {
             font-family: 'DM Mono', monospace;
             font-size: 10px;
-            padding: 4px 8px;
+            padding: 3px 8px;
             border: 1px solid var(--border);
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: var(--gray-400);
-        }
-
-        .ticket-status.open {
-            color: var(--black);
-            background: var(--white);
-            border-color: var(--white);
+            border-radius: 4px;
+            color: var(--text-muted);
         }
 
         .ticket-status.answered {
-            color: var(--white);
-            background: transparent;
-            border-color: var(--white);
+            color: var(--text);
+            border-color: var(--text);
         }
 
         .ticket-status.rejected {
-            color: var(--white);
-            background: var(--red);
+            color: var(--red);
             border-color: var(--red);
         }
 
         .ticket-user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-family: 'DM Mono', monospace;
             font-size: 10px;
-            color: var(--gray-400);
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            color: var(--text-muted);
         }
 
         .premium-badge {
             background: var(--gold);
-            color: var(--black);
+            color: #000;
             padding: 2px 6px;
-            font-weight: 600;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 9px;
+            letter-spacing: 1px;
         }
 
         .ticket-body {
-            padding: 24px;
+            padding: 20px;
         }
 
-        .ticket-q-label {
+        .ticket-q-label,
+        .ticket-a-label {
             font-family: 'DM Mono', monospace;
             font-size: 9px;
-            color: var(--gray-600);
+            color: var(--text-muted);
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .ticket-q {
             font-size: 14px;
-            color: var(--gray-200);
+            color: var(--text-muted);
             line-height: 1.6;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .ticket-a-block {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
-            padding: 16px 20px;
-            margin-bottom: 24px;
-            border-left: 2px solid var(--gray-600);
-        }
-
-        .ticket-a-block.rejected {
-            border-left-color: var(--red);
-            background: rgba(153, 0, 0, 0.05);
-        }
-
-        .ticket-a-label {
-            font-family: 'DM Mono', monospace;
-            font-size: 9px;
-            color: var(--gray-400);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
         }
 
         .ticket-a {
             font-size: 13px;
-            color: var(--white);
+            color: var(--text);
             line-height: 1.5;
         }
 
-        .btn-auth {
-            background: var(--white);
-            color: var(--black);
-            border: 1px solid var(--white);
-            padding: 11px 20px;
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            font-weight: 500;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .btn-auth:hover {
-            background: transparent;
-            color: var(--white);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--gray-400);
+        .ticket-reply-area {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border);
-            padding: 11px 20px;
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            padding: 12px 16px;
+            resize: vertical;
+            min-height: 80px;
+            outline: none;
+            transition: border-color 0.2s;
+            -webkit-user-select: text;
+            user-select: text;
         }
 
-        .btn-outline:hover {
-            border-color: var(--white);
-            color: var(--white);
+        .ticket-reply-area:focus {
+            border-color: var(--border-hover);
         }
 
         .action-section {
             display: none;
-            margin-top: 24px;
+            margin-top: 16px;
+            padding-top: 16px;
             border-top: 1px solid var(--border);
-            padding-top: 24px;
         }
 
         .action-section.active {
@@ -443,60 +419,82 @@
 
         .reply-input {
             width: 100%;
-            background: transparent;
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border);
-            padding: 16px;
-            color: var(--white);
+            border-radius: 8px;
+            color: var(--text);
             font-family: 'DM Sans', sans-serif;
             font-size: 13px;
+            padding: 12px 16px;
             resize: vertical;
-            min-height: 100px;
-            margin-bottom: 16px;
-            transition: 0.2s;
+            min-height: 80px;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 12px;
         }
 
         .reply-input:focus {
-            border-color: var(--white);
+            border-color: var(--border-hover);
         }
 
-        .chat-link {
-            color: var(--white);
-            text-decoration: underline;
-            transition: opacity 0.2s;
-            word-break: break-all;
-        }
-
-        .chat-link:hover {
-            opacity: 0.7;
-        }
-
-        .empty-state {
-            padding: 60px 20px;
-            text-align: center;
+        .btn-outline {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
             font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            color: var(--gray-600);
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 8px;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text);
+            color: var(--text);
+        }
+
+        .btn-auth {
+            background: linear-gradient(180deg, #e4e4e7 0%, #a1a1aa 100%);
+            color: #09090b;
+            border: 1px solid #a1a1aa;
+            padding: 10px 20px;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            border: 1px dashed var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: inset 0 2px 2px rgba(255, 255, 255, 1), 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-auth:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(180deg, #f4f4f5 0%, #b4b4b8 100%);
         }
 
         .toast {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: var(--white);
-            color: var(--black);
-            padding: 16px 24px;
+            background: var(--bg-accent);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 20px;
             z-index: 99999;
             transform: translateY(120%);
             opacity: 0;
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
-            border-left: 3px solid var(--black);
             max-width: 320px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
         }
 
         .toast.show {
@@ -505,46 +503,21 @@
         }
 
         .toast-title {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .toast-desc {
+            font-size: 11px;
+            color: var(--text-muted);
             font-family: 'DM Mono', monospace;
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .anim-in {
-            opacity: 0;
-            animation: fadeUp 0.7s ease forwards;
-        }
-
-        .anim-in-1 {
-            animation-delay: 0.1s;
-        }
-
-        .anim-in-2 {
-            animation-delay: 0.2s;
-        }
-
-        .anim-in-3 {
-            animation-delay: 0.3s;
         }
 
         .reveal {
             opacity: 0;
-            transform: translateY(28px);
-            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateY(24px);
+            transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .reveal.visible {
@@ -554,28 +527,22 @@
 
         footer {
             border-top: 1px solid var(--border);
-            padding: 32px 60px;
+            padding: 28px 24px;
             margin-top: auto;
         }
 
         .footer-inner {
-            max-width: 1200px;
+            max-width: 960px;
             margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .footer-info {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
         .footer-copy {
             font-family: 'DM Mono', monospace;
             font-size: 10px;
-            color: var(--gray-600);
+            color: var(--text-muted);
             letter-spacing: 1.5px;
             text-transform: uppercase;
         }
@@ -583,157 +550,161 @@
         .footer-subtitle {
             font-family: 'DM Mono', monospace;
             font-size: 10px;
-            color: var(--gray-600);
+            color: var(--border-hover);
             letter-spacing: 1.5px;
-            text-transform: uppercase;
         }
 
         @media (max-width: 768px) {
-            .header-inner {
-                padding: 40px 20px 20px;
+            .page-wrap {
+                padding-left: 16px;
+                padding-right: 16px;
+                padding-top: 90px;
             }
 
-            h1 {
-                font-size: 40px;
+            .glass-header {
+                width: calc(100% - 24px);
+                padding: 10px 12px;
             }
 
-            .container {
-                padding: 30px 20px;
+            .header-title {
+                display: none;
             }
 
-            .nav-strip {
-                padding: 0 20px;
+            footer {
+                padding: 20px 16px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .toast {
+                right: 12px;
+                left: 12px;
+                max-width: none;
+                bottom: 12px;
+            }
+
+            .controls {
+                flex-wrap: wrap;
             }
 
             .ticket-header {
                 flex-direction: column;
                 align-items: flex-start;
             }
-
-            .controls {
-                width: 100%;
-                flex-direction: column;
-            }
-
-            footer {
-                padding: 24px 20px;
-            }
-
-            .footer-inner {
-                flex-direction: column;
-                gap: 16px;
-                text-align: center;
-            }
-
-            .footer-info {
-                align-items: center;
-                gap: 8px;
-            }
-
-            .toast {
-                right: 16px;
-                left: 16px;
-                max-width: none;
-                bottom: 16px;
-            }
         }
     </style>
 </head>
 
 <body>
-    <header class="site-header">
-        <div class="header-video-wrap">
-            <video autoplay muted loop playsinline>
-                <source src="video.mp4" type="video/mp4">
-            </video>
-        </div>
-        <div class="header-inner anim-in anim-in-1">
-            <div class="header-eyebrow">Администрирование</div>
-            <h1>Панель управления</h1>
+
+    <header class="glass-header">
+        <a href="index.html" class="header-logo" style="gap: 12px; text-decoration: none; transition: opacity 0.2s;"
+            onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+            <span style="color: #fff; display: flex; align-items: center;">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </span>
+            <span
+                style="font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; margin-top: 2px;"
+                data-i18n="nav_home">НА ГЛАВНУЮ</span>
+            <span class="header-eyebrow-badge">ADMIN</span>
+        </a>
+        <div class="header-actions">
+            <a href="profile.html" class="btn-icon" title="Профиль">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </a>
+            <button class="btn-primary" onclick="toggleLanguage()" id="lang-btn-admin" style="cursor:pointer;">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                    </path>
+                    <path d="M2 12h20"></path>
+                </svg>
+                <span class="lang-indicator">RU</span>
+            </button>
         </div>
     </header>
 
-    <div class="nav-strip-wrap anim-in anim-in-2">
-        <div class="nav-strip">
-            <nav class="nav-left">
-                <a class="nav-link back-link" href="profile.html">
-                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 12H5M12 5l-7 7 7 7" />
-                    </svg>
-                    В профиль
-                </a>
-                <a class="nav-link" href="index.html">На главную</a>
-            </nav>
-        </div>
-    </div>
-
-    <div class="container">
+    <div class="page-wrap">
         <section class="section anim-in anim-in-3" style="padding-top: 0;">
             <div class="section-header">
                 <span class="section-label">01</span>
-                <span class="section-title">Тикеты поддержки</span>
+                <span class="section-title" data-i18n="adm_sec1_title">Тикеты поддержки</span>
                 <div class="section-rule"></div>
                 <div class="controls">
                     <select class="sort-select" id="status-filter" onchange="renderTickets()">
-                        <option value="open">Ожидающие ответа</option>
-                        <option value="answered">Отвеченные / Отклоненные</option>
+                        <option value="open" data-i18n="adm_filter_open">Ожидающие ответа</option>
+                        <option value="answered" data-i18n="adm_filter_answered">Отвеченные / Отклоненные</option>
                     </select>
                     <select class="sort-select" id="sort-select" onchange="renderTickets()">
-                        <option value="old">Сначала старые</option>
-                        <option value="new">Сначала новые</option>
+                        <option value="old" data-i18n="adm_sort_old">Сначала старые</option>
+                        <option value="new" data-i18n="adm_sort_new">Сначала новые</option>
                     </select>
                 </div>
             </div>
 
             <div id="admin-tickets">
-                <div class="empty-state">Проверка прав и загрузка данных...</div>
+                <div class="empty-state" data-i18n="adm_empty_loading">Проверка прав и загрузка данных...</div>
             </div>
         </section>
 
         <section class="section reveal">
             <div class="section-header">
                 <span class="section-label">02</span>
-                <span class="section-title">Модерация Ресурспаков</span>
+                <span class="section-title" data-i18n="adm_sec2_title">Модерация Ресурспаков</span>
                 <div class="section-rule"></div>
             </div>
             <div id="admin-rp">
-                <div class="empty-state">Проверка прав и загрузка данных...</div>
+                <div class="empty-state" data-i18n="adm_empty_loading">Проверка прав и загрузка данных...</div>
             </div>
         </section>
 
         <section class="section reveal">
             <div class="section-header">
                 <span class="section-label">03</span>
-                <span class="section-title">Управление игроками</span>
+                <span class="section-title" data-i18n="adm_sec3_title">Управление игроками</span>
                 <div class="section-rule"></div>
             </div>
 
             <div class="ticket-item" style="padding: 24px;">
                 <div style="display: flex; flex-direction: column; gap: 20px;">
                     <div>
-                        <div class="ticket-q-label" style="margin-bottom: 8px;">Никнейм игрока</div>
-                        <input type="text" id="target-username" class="reply-input"
+                        <div class="ticket-q-label" style="margin-bottom: 8px;" data-i18n="adm_target_user">Никнейм
+                            игрока</div>
+                        <input type="text" id="target-username" class="reply-input" data-i18n="adm_target_ph"
                             style="min-height: auto; padding: 12px; margin-bottom: 0;"
                             placeholder="Введите точный никнейм...">
                     </div>
 
                     <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                         <button class="btn-outline" style="color: var(--red); border-color: var(--border);"
-                            onclick="manageUser('ban')">Забанить</button>
+                            onclick="manageUser('ban')" data-i18n="adm_ban">Забанить</button>
                         <button class="btn-outline" style="color: var(--green); border-color: var(--border);"
-                            onclick="manageUser('unban')">Разбанить</button>
+                            onclick="manageUser('unban')" data-i18n="adm_unban">Разбанить</button>
                     </div>
 
                     <div
                         style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; border-top: 1px solid var(--border); padding-top: 20px;">
                         <select class="sort-select" id="premium-duration" style="padding: 11px 16px;">
-                            <option value="7">На 1 Неделю</option>
-                            <option value="30">На 1 Месяц</option>
-                            <option value="60">На 2 Месяца</option>
-                            <option value="forever">Навсегда</option>
-                            <option value="remove">Забрать Premium</option>
+                            <option value="7" data-i18n="adm_prem_7">На 1 Неделю</option>
+                            <option value="30" data-i18n="adm_prem_30">На 1 Месяц</option>
+                            <option value="60" data-i18n="adm_prem_60">На 2 Месяца</option>
+                            <option value="forever" data-i18n="adm_prem_forever">Навсегда</option>
+                            <option value="remove" data-i18n="adm_prem_remove">Забрать Premium</option>
                         </select>
-                        <button class="btn-auth" onclick="manageUser('premium')">Выдать / Забрать Premium</button>
+                        <button class="btn-auth" onclick="manageUser('premium')" data-i18n="adm_prem_btn">Выдать /
+                            Забрать Premium</button>
                     </div>
                 </div>
             </div>
@@ -744,8 +715,9 @@
     <footer>
         <div class="footer-inner">
             <div class="footer-info">
-                <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
-                <div class="footer-subtitle"><span id="footer-version-label">Ver. —</span> — Free Forever</div>
+                <div class="footer-copy" data-i18n="adm_footer_copy">MX Launcher © 2026 — All rights reserved</div>
+                <div class="footer-subtitle"><span id="footer-version-label">Ver. —</span> <span
+                        data-i18n="adm_footer_free">— Free Forever</span></div>
             </div>
         </div>
     </footer>
@@ -756,6 +728,144 @@
 
     <script>
         const API_URL = "https://api.mxlauncher.fun";
+
+        const admTranslations = {
+            ru: {
+                nav_home: "НА ГЛАВНУЮ",
+                adm_nav_profile: "Профиль",
+                adm_sec1_title: "Тикеты поддержки",
+                adm_filter_open: "Ожидающие ответа",
+                adm_filter_answered: "Отвеченные / Отклоненные",
+                adm_sort_old: "Сначала старые",
+                adm_sort_new: "Сначала новые",
+                adm_empty_loading: "Проверка прав и загрузка данных...",
+                adm_sec2_title: "Модерация Ресурспаков",
+                adm_sec3_title: "Управление игроками",
+                adm_target_user: "Никнейм игрока",
+                adm_target_ph: "Введите точный никнейм...",
+                adm_ban: "Забанить",
+                adm_unban: "Разбанить",
+                adm_prem_7: "На 1 Неделю",
+                adm_prem_30: "На 1 Месяц",
+                adm_prem_60: "На 2 Месяца",
+                adm_prem_forever: "Навсегда",
+                adm_prem_remove: "Забрать Premium",
+                adm_prem_btn: "Выдать / Забрать Premium",
+                adm_footer_copy: "MX Launcher © 2026 — All rights reserved",
+                adm_footer_free: "— Free Forever",
+                adm_t_open: "Ожидает ответа",
+                adm_t_user: "Пользователь:",
+                adm_t_q: "Суть обращения",
+                adm_t_reply: "Ответить",
+                adm_t_reject: "Отклонить",
+                adm_t_del: "Удалить",
+                adm_t_reply_ph: "Введите ответ для игрока...",
+                adm_t_send_reply: "Отправить ответ",
+                adm_t_reject_ph: "Укажите причину отклонения...",
+                adm_t_send_reject: "Отклонить тикет",
+                adm_t_rejected: "Отклонено",
+                adm_t_answered: "Отвечено",
+                adm_t_reject_reason: "Причина отказа",
+                adm_t_admin_reply: "Ответ администрации",
+                adm_t_del_forever: "Удалить навсегда",
+                adm_rp_wait: "Ожидает модерации",
+                adm_rp_author: "Автор:",
+                adm_rp_info: "Информация о паке",
+                adm_rp_name: "Название:",
+                adm_rp_dl: "[ Скачать .zip ]",
+                adm_rp_screen: "[ Посмотреть скриншот ]",
+                adm_rp_approve: "Одобрить",
+                adm_empty_queue: "Все тикеты разобраны. Очередь пуста.",
+                adm_empty_answered: "Список отвеченных тикетов пуст.",
+                adm_no_rights: "У вас нет прав для модерации ресурспаков.",
+                adm_rp_empty: "Очередь ресурспаков пуста."
+            },
+            en: {
+                nav_home: "HOME",
+                adm_nav_profile: "Profile",
+                adm_sec1_title: "Support Tickets",
+                adm_filter_open: "Pending Response",
+                adm_filter_answered: "Answered / Rejected",
+                adm_sort_old: "Oldest First",
+                adm_sort_new: "Newest First",
+                adm_empty_loading: "Checking permissions and loading data...",
+                adm_sec2_title: "Resource Pack Moderation",
+                adm_sec3_title: "Player Management",
+                adm_target_user: "Player Username",
+                adm_target_ph: "Enter exact username...",
+                adm_ban: "Ban",
+                adm_unban: "Unban",
+                adm_prem_7: "For 1 Week",
+                adm_prem_30: "For 1 Month",
+                adm_prem_60: "For 2 Months",
+                adm_prem_forever: "Forever",
+                adm_prem_remove: "Remove Premium",
+                adm_prem_btn: "Give / Remove Premium",
+                adm_footer_copy: "MX Launcher © 2026 — All rights reserved",
+                adm_footer_free: "— Free Forever",
+                adm_t_open: "Awaiting Response",
+                adm_t_user: "User:",
+                adm_t_q: "Issue Details",
+                adm_t_reply: "Reply",
+                adm_t_reject: "Reject",
+                adm_t_del: "Delete",
+                adm_t_reply_ph: "Enter reply for the player...",
+                adm_t_send_reply: "Send Reply",
+                adm_t_reject_ph: "Specify reason for rejection...",
+                adm_t_send_reject: "Reject Ticket",
+                adm_t_rejected: "Rejected",
+                adm_t_answered: "Answered",
+                adm_t_reject_reason: "Reason for Rejection",
+                adm_t_admin_reply: "Admin Reply",
+                adm_t_del_forever: "Delete Forever",
+                adm_rp_wait: "Awaiting Moderation",
+                adm_rp_author: "Author:",
+                adm_rp_info: "Pack Information",
+                adm_rp_name: "Name:",
+                adm_rp_dl: "[ Download .zip ]",
+                adm_rp_screen: "[ View Screenshot ]",
+                adm_rp_approve: "Approve",
+                adm_empty_queue: "All tickets are resolved. Queue is empty.",
+                adm_empty_answered: "Answered tickets list is empty.",
+                adm_no_rights: "You do not have permissions for resource pack moderation.",
+                adm_rp_empty: "Resource pack queue is empty."
+            }
+        };
+
+        let currentLang = localStorage.getItem('mx_lang') || 'ru';
+
+        function t(key) {
+            return admTranslations[currentLang][key] || key;
+        }
+
+        function applyLang(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (admTranslations[lang][key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'OPTION') {
+                        el.placeholder = admTranslations[lang][key];
+                        if (el.tagName === 'OPTION') el.innerText = admTranslations[lang][key];
+                    } else {
+                        el.innerHTML = admTranslations[lang][key];
+                    }
+                }
+            });
+            document.querySelectorAll('.lang-indicator').forEach(el => el.innerText = lang.toUpperCase());
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+            localStorage.setItem('mx_lang', currentLang);
+            document.body.classList.add('lang-switching');
+            setTimeout(() => {
+                applyLang(currentLang);
+                renderTickets();
+                pollAdminRP();
+                document.body.classList.remove('lang-switching');
+            }, 200);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => applyLang(currentLang));
 
         async function getSha256Hash(message) {
             const msgBuffer = new TextEncoder().encode(message);
@@ -799,13 +909,10 @@
                             bodyString = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
                         }
                         const bodyHash = await getSha256Hash(bodyString);
-
                         const message = `${method}:${path}:${timestamp}:${nonce}:${bodyHash}`;
-
                         const encoder = new TextEncoder();
                         const keyData = encoder.encode(session_secret);
                         const msgData = encoder.encode(message);
-
                         const cryptoKey = await crypto.subtle.importKey(
                             "raw", keyData, { name: "HMAC", hash: "SHA-256" },
                             false, ["sign"]
@@ -884,13 +991,10 @@
 
         async function initAdmin() {
             if (!savedUser || !savedToken) { window.location.href = "index.html"; return; }
-
             initScrollReveal();
-
             await pollAdminTickets(true);
             await pollAdminRP();
             await fetchVersion();
-
             setInterval(() => pollAdminTickets(false), 10000);
             setInterval(() => pollAdminRP(), 10000);
         }
@@ -908,7 +1012,6 @@
                 }
 
                 const data = await res.json();
-
                 const newHash = JSON.stringify(data.tickets || {});
 
                 if (newHash !== rawDataHash) {
@@ -936,7 +1039,7 @@
             let filteredTickets = globalTickets.filter(t => t.status === statusFilter);
 
             if (filteredTickets.length === 0) {
-                const emptyMsg = statusFilter === 'open' ? "Все тикеты разобраны. Очередь пуста." : "Список отвеченных тикетов пуст.";
+                const emptyMsg = statusFilter === 'open' ? t('adm_empty_queue') : t('adm_empty_answered');
                 cont.innerHTML = `<div class="empty-state">${emptyMsg}</div>`;
                 return;
             }
@@ -951,7 +1054,7 @@
             });
 
             filteredTickets.forEach(tData => {
-                const dateStr = new Date(tData.date).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                const dateStr = new Date(tData.date).toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
                 const safeMessage = formatText(tData.message);
                 let html = '';
                 const premiumClass = tData.is_premium ? ' premium' : '';
@@ -961,24 +1064,24 @@
                     html = `
                         <div class="ticket-item${premiumClass}" id="ticket-wrapper-${tData.id}">
                             <div class="ticket-header">
-                                <div class="ticket-status open">Ожидает ответа</div>
-                                <div class="ticket-user-info">${premiumBadge} <span>Пользователь: ${tData.user}</span> <span>|</span> <span>${dateStr}</span></div>
+                                <div class="ticket-status open">${t('adm_t_open')}</div>
+                                <div class="ticket-user-info">${premiumBadge} <span>${t('adm_t_user')} ${tData.user}</span> <span>|</span> <span>${dateStr}</span></div>
                             </div>
                             <div class="ticket-body">
-                                <div class="ticket-q-label">Суть обращения</div>
+                                <div class="ticket-q-label">${t('adm_t_q')}</div>
                                 <div class="ticket-q">${safeMessage}</div>
                                 <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                                    <button class="btn-outline" onclick="toggleForm('${tData.id}', 'reply')">Ответить</button>
-                                    <button class="btn-outline" style="color: var(--red); border-color: var(--border);" onclick="toggleForm('${tData.id}', 'reject')">Отклонить</button>
-                                    <button class="btn-outline" style="border-color: transparent;" onclick="deleteTicket('${tData.id}')">Удалить</button>
+                                    <button class="btn-outline" onclick="toggleForm('${tData.id}', 'reply')">${t('adm_t_reply')}</button>
+                                    <button class="btn-outline" style="color: var(--red); border-color: var(--border);" onclick="toggleForm('${tData.id}', 'reject')">${t('adm_t_reject')}</button>
+                                    <button class="btn-outline" style="border-color: transparent;" onclick="deleteTicket('${tData.id}')">${t('adm_t_del')}</button>
                                 </div>
                                 <div class="action-section" id="form-reply-${tData.id}">
-                                    <textarea id="input-reply-${tData.id}" class="reply-input" placeholder="Введите ответ для игрока..."></textarea>
-                                    <button class="btn-auth" style="width: 100%;" onclick="submitReply('${tData.id}')">Отправить ответ</button>
+                                    <textarea id="input-reply-${tData.id}" class="reply-input" placeholder="${t('adm_t_reply_ph')}"></textarea>
+                                    <button class="btn-auth" style="width: 100%;" onclick="submitReply('${tData.id}')">${t('adm_t_send_reply')}</button>
                                 </div>
                                 <div class="action-section" id="form-reject-${tData.id}">
-                                    <textarea id="input-reject-${tData.id}" class="reply-input" style="border-color: var(--red);" placeholder="Укажите причину отклонения..."></textarea>
-                                    <button class="btn-auth" style="width: 100%; background: var(--red); border-color: var(--red); color: var(--white);" onclick="submitReject('${tData.id}')">Отклонить тикет</button>
+                                    <textarea id="input-reject-${tData.id}" class="reply-input" style="border-color: var(--red);" placeholder="${t('adm_t_reject_ph')}"></textarea>
+                                    <button class="btn-auth" style="width: 100%; background: var(--red); border-color: var(--red); color: var(--white);" onclick="submitReject('${tData.id}')">${t('adm_t_send_reject')}</button>
                                 </div>
                             </div>
                         </div>
@@ -993,17 +1096,17 @@
                     html = `
                         <div class="ticket-item${premiumClass}" id="ticket-wrapper-${tData.id}">
                             <div class="ticket-header">
-                                <div class="ticket-status ${isRejected ? 'rejected' : 'answered'}">${isRejected ? 'Отклонено' : 'Отвечено'}</div>
-                                <div class="ticket-user-info">${premiumBadge} <span>Пользователь: ${tData.user}</span> <span>|</span> <span>${dateStr}</span></div>
+                                <div class="ticket-status ${isRejected ? 'rejected' : 'answered'}">${isRejected ? t('adm_t_rejected') : t('adm_t_answered')}</div>
+                                <div class="ticket-user-info">${premiumBadge} <span>${t('adm_t_user')} ${tData.user}</span> <span>|</span> <span>${dateStr}</span></div>
                             </div>
                             <div class="ticket-body">
-                                <div class="ticket-q-label">Суть обращения</div>
+                                <div class="ticket-q-label">${t('adm_t_q')}</div>
                                 <div class="ticket-q">${safeMessage}</div>
                                 <div class="ticket-a-block ${isRejected ? 'rejected' : ''}">
-                                    <div class="ticket-a-label">${isRejected ? 'Причина отказа' : 'Ответ администрации'}</div>
-                                    <div class="ticket-a" style="${isRejected ? 'color: var(--gray-400);' : ''}">${safeReply}</div>
+                                    <div class="ticket-a-label">${isRejected ? t('adm_t_reject_reason') : t('adm_t_admin_reply')}</div>
+                                    <div class="ticket-a" style="${isRejected ? 'color: var(--text-muted);' : ''}">${safeReply}</div>
                                 </div>
-                                <button class="btn-outline" style="border-color: transparent;" onclick="deleteTicket('${tData.id}')">Удалить навсегда</button>
+                                <button class="btn-outline" style="border-color: transparent;" onclick="deleteTicket('${tData.id}')">${t('adm_t_del_forever')}</button>
                             </div>
                         </div>
                     `;
@@ -1029,14 +1132,14 @@
 
         async function submitReply(ticketId) {
             const replyText = document.getElementById(`input-reply-${ticketId}`).value.trim();
-            if (replyText.length < 2) { alert("Ответ слишком короткий!"); return; }
+            if (replyText.length < 2) return;
             const finalReply = `Ответил администратор @${savedUser}:\n${replyText}`;
             await executeReplyAction(ticketId, finalReply, "Ответ отправлен");
         }
 
         async function submitReject(ticketId) {
             const reasonText = document.getElementById(`input-reject-${ticketId}`).value.trim();
-            if (reasonText.length < 2) { alert("Укажите причину отклонения!"); return; }
+            if (reasonText.length < 2) return;
             const rejectMsg = `Отклонено администратором @${savedUser}\nПричина: ${reasonText}`;
             await executeReplyAction(ticketId, rejectMsg, "Тикет отклонен");
         }
@@ -1053,14 +1156,13 @@
         }
 
         async function deleteTicket(ticketId) {
-            if (!confirm("ВЫ УВЕРЕНЫ? Тикет будет полностью удален с сервера и исчезнет у пользователя навсегда.")) return;
+            if (!confirm("ВЫ УВЕРЕНЫ? Тикет будет удален навсегда.")) return;
             try {
                 const res = await fetch(`${API_URL}/delete_ticket`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: savedUser, token: savedToken, ticket_id: ticketId })
                 });
-                if (res.ok) { showToast("Удалено с сервера"); pollAdminTickets(false); }
-                else { alert("Ошибка при удалении тикета."); }
+                if (res.ok) { showToast("Удалено"); pollAdminTickets(false); }
             } catch (e) { alert("Ошибка сети."); }
         }
 
@@ -1074,7 +1176,7 @@
                     const data = await res.json();
                     renderRP(data.rp_data.pending || {});
                 } else if (res.status === 403) {
-                    document.getElementById('admin-rp').innerHTML = '<div class="empty-state">У вас нет прав для модерации ресурспаков.</div>';
+                    document.getElementById('admin-rp').innerHTML = `<div class="empty-state">${t('adm_no_rights')}</div>`;
                 }
             } catch (e) { }
         }
@@ -1084,26 +1186,26 @@
             cont.innerHTML = '';
             const entries = Object.entries(pendingPacks);
 
-            if (entries.length === 0) { cont.innerHTML = `<div class="empty-state">Очередь ресурспаков пуста.</div>`; return; }
+            if (entries.length === 0) { cont.innerHTML = `<div class="empty-state">${t('adm_rp_empty')}</div>`; return; }
 
             entries.forEach(([id, pack]) => {
-                const dateStr = new Date(pack.date).toLocaleString('ru-RU');
+                const dateStr = new Date(pack.date).toLocaleString(currentLang === 'ru' ? 'ru-RU' : 'en-US');
                 cont.innerHTML += `
                     <div class="ticket-item">
                         <div class="ticket-header">
-                            <div class="ticket-status open">Ожидает модерации</div>
-                            <div class="ticket-user-info"><span>Автор: ${pack.author}</span> <span>|</span> <span>${dateStr}</span></div>
+                            <div class="ticket-status open">${t('adm_rp_wait')}</div>
+                            <div class="ticket-user-info"><span>${t('adm_rp_author')} ${pack.author}</span> <span>|</span> <span>${dateStr}</span></div>
                         </div>
                         <div class="ticket-body">
-                            <div class="ticket-q-label">Информация о паке</div>
+                            <div class="ticket-q-label">${t('adm_rp_info')}</div>
                             <div class="ticket-q">
-                                <b>Название:</b> ${pack.name} <span style="color: var(--gray-400);">(v${pack.version})</span><br><br>
-                                <a href="${pack.url}" target="_blank" class="chat-link" style="margin-right: 16px;">[ Скачать .zip ]</a>
-                                <a href="${pack.image}" target="_blank" class="chat-link">[ Посмотреть скриншот ]</a>
+                                <b>${t('adm_rp_name')}</b> ${pack.name} <span style="color: var(--text-muted);">(v${pack.version})</span><br><br>
+                                <a href="${pack.url}" target="_blank" class="chat-link" style="margin-right: 16px;">${t('adm_rp_dl')}</a>
+                                <a href="${pack.image}" target="_blank" class="chat-link">${t('adm_rp_screen')}</a>
                             </div>
                             <div style="display: flex; gap: 12px; margin-top: 24px;">
-                                <button class="btn-outline" style="color: var(--green); border-color: var(--border);" onclick="reviewRP('${id}', 'approve')">Одобрить</button>
-                                <button class="btn-outline" style="color: var(--red); border-color: transparent;" onclick="reviewRP('${id}', 'reject')">Отклонить</button>
+                                <button class="btn-outline" style="color: var(--green); border-color: var(--border);" onclick="reviewRP('${id}', 'approve')">${t('adm_rp_approve')}</button>
+                                <button class="btn-outline" style="color: var(--red); border-color: transparent;" onclick="reviewRP('${id}', 'reject')">${t('adm_t_reject')}</button>
                             </div>
                         </div>
                     </div>
@@ -1112,57 +1214,36 @@
         }
 
         async function reviewRP(id, action) {
-            if (action === 'reject' && !confirm('Точно отклонить этот ресурспак?')) return;
+            if (action === 'reject' && !confirm('Точно отклонить?')) return;
             try {
                 const res = await fetch(`${API_URL}/review_rp`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: savedUser, token: savedToken, rp_id: id, action: action })
                 });
-                if (res.ok) { showToast(action === 'approve' ? "Пак одобрен!" : "Пак отклонен"); pollAdminRP(); }
-                else { alert("Ошибка при обработке запроса."); }
-            } catch (e) { alert("Ошибка сети."); }
+                if (res.ok) { showToast(action === 'approve' ? "Одобрено!" : "Отклонено"); pollAdminRP(); }
+            } catch (e) { }
         }
 
         async function manageUser(action) {
             const targetUser = document.getElementById('target-username').value.trim();
-            if (!targetUser) {
-                alert("Сначала введите никнейм игрока!");
-                return;
-            }
-
+            if (!targetUser) { alert("Сначала введите никнейм игрока!"); return; }
             let duration = null;
-            if (action === 'premium') {
-                duration = document.getElementById('premium-duration').value;
-            }
-
-            if (!confirm(`Вы уверены, что хотите применить это действие к игроку ${targetUser}?`)) return;
+            if (action === 'premium') { duration = document.getElementById('premium-duration').value; }
+            if (!confirm(`Применить к игроку ${targetUser}?`)) return;
 
             try {
                 const res = await fetch(`${API_URL}/admin_manage_user`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: savedUser,
-                        token: savedToken,
-                        target_user: targetUser,
-                        action: action,
-                        duration: duration
-                    })
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken, target_user: targetUser, action: action, duration: duration })
                 });
-
                 const data = await res.json();
-
                 if (res.ok) {
                     showToast(data.message || "Успешно выполнено!");
-                    if (action === 'ban' || action === 'unban') {
-                        document.getElementById('target-username').value = '';
-                    }
+                    if (action === 'ban' || action === 'unban') document.getElementById('target-username').value = '';
                 } else {
-                    alert(data.error || "Ошибка при выполнении действия.");
+                    alert(data.error || "Ошибка.");
                 }
-            } catch (e) {
-                alert("Ошибка соединения с сервером.");
-            }
+            } catch (e) { alert("Ошибка соединения."); }
         }
 
         window.onload = initAdmin;

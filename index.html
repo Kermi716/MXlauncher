@@ -4,669 +4,754 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MX Launcher</title>
+    <title>MXlauncher</title>
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="manifest" href="site.webmanifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <style>
         :root {
-            --black: #0a0a0a;
-            --white: #f5f5f0;
-            --gray-100: #e8e8e3;
-            --gray-200: #c8c8c2;
-            --gray-400: #888882;
-            --gray-600: #444440;
-            --gray-800: #1a1a18;
-            --gray-900: #111110;
-            --accent: #f5f5f0;
-            --border: rgba(245, 245, 240, 0.12);
-            --border-strong: rgba(245, 245, 240, 0.28);
-            --red: #ff5555;
-            --green: #2ecc71;
+            --bg: #09090b;
+            --bg-accent: #111113;
+            --text: #ffffff;
+            --text-muted: #a1a1aa;
+            --border: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(255, 255, 255, 0.12);
+            --accent: #fff;
+            --online: #10b981;
+            --red: #ef4444;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            outline: none;
-            -webkit-user-select: none;
             user-select: none;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            background-color: var(--black);
-            font-family: 'DM Sans', sans-serif;
-            color: var(--white);
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
             overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.03), transparent 30%),
+                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.02), transparent 30%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            cursor: default;
+            transition: opacity 0.3s ease;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-            opacity: 0.03;
-            pointer-events: none;
-            z-index: 9999;
+        body.lang-switching {
+            opacity: 0;
         }
 
-        .top-alert-bar {
-            background: var(--white);
-            color: var(--black);
-            text-align: center;
-            padding: 9px 20px;
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .site-header {
-            position: relative;
-            width: 100%;
-            border-bottom: 1px solid var(--border);
-            overflow: hidden;
-        }
-
-        .header-video-wrap {
+        .base-header-container {
             position: absolute;
-            inset: 0;
-            z-index: 0;
-        }
-
-        .header-video-wrap video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.18;
-            filter: grayscale(100%) contrast(1.2);
-        }
-
-        .header-video-wrap::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(10, 10, 10, 0) 40%, rgba(10, 10, 10, 1) 100%);
-        }
-
-        .header-inner {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: 1fr auto;
-            align-items: end;
-            padding: 80px 60px 50px;
-            min-height: 360px;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
             max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            gap: 40px;
+            z-index: 50;
         }
 
-        .header-eyebrow {
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-eyebrow::before {
-            content: '';
-            display: inline-block;
-            width: 28px;
-            height: 1px;
-            background: var(--gray-600);
-        }
-
-        h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(72px, 12vw, 140px);
-            letter-spacing: 4px;
-            color: var(--white);
-            line-height: 0.9;
-            margin-bottom: 20px;
-        }
-
-        .header-sub {
-            font-size: 15px;
-            color: var(--gray-400);
-            font-weight: 300;
-            letter-spacing: 0.3px;
-            max-width: 400px;
-            line-height: 1.5;
-        }
-
-        .header-right {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 12px;
-            padding-bottom: 4px;
-        }
-
-        .header-meta-item {
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            color: var(--gray-600);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .nav-strip {
-            border-bottom: 1px solid var(--border);
+        .base-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 60px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
+            padding: 16px 32px;
+            background: rgba(15, 15, 17, 0.5);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
         }
 
-        .nav-strip-inner {
-            width: 100%;
+        .base-header-nav {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 24px;
         }
 
-        .nav-left {
+        .lang-switch {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
             display: flex;
-        }
-
-        .nav-link {
-            display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 16px 20px 16px 0;
-            margin-right: 24px;
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            text-decoration: none;
-            transition: color 0.2s;
-            cursor: pointer;
         }
 
-        .nav-link:hover {
-            color: var(--white);
+        .lang-switch:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--border-hover);
         }
 
-        .nav-link.download-btn {
-            color: var(--gray-200);
+        .glass-header {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translate(-50%, -150%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 8px 8px 24px;
+            background: rgba(15, 15, 17, 0.5);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
             border: 1px solid var(--border);
-            padding: 8px 16px 8px 12px;
-            margin-top: 8px;
-            margin-bottom: 8px;
-            border-radius: 2px;
-            transition: all 0.2s;
+            border-radius: 40px;
+            z-index: 1000;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
         }
 
-        .nav-link.download-btn:hover {
-            color: var(--white);
-            border-color: var(--border-strong);
-            background: rgba(245, 245, 240, 0.05);
+        .glass-header.scrolled {
+            transform: translate(-50%, 0);
         }
 
-        .nav-link svg {
-            width: 14px;
-            height: 14px;
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .header-logo img {
+            height: 32px;
+            width: auto;
+            border-radius: 50%;
+        }
+
+        .header-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 20px;
+            letter-spacing: 2px;
+            text-transform: none;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            background: transparent;
+            border: none;
+        }
+
+        .btn-icon:hover {
+            color: #fff;
+        }
+
+        .tg-img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: grayscale(100%) brightness(0.8);
+            opacity: 0.8;
+        }
+
+        .btn-icon:hover .tg-img {
+            filter: grayscale(0%) brightness(1);
+            opacity: 1;
+        }
+
+        .island-lang {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .island-lang:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--border-hover);
+        }
+
+        .glass-header .island-lang {
+            border-radius: 12px;
+            background: transparent;
+            border-color: transparent;
+            color: var(--text-muted);
+            padding: 8px;
+        }
+
+        .glass-header .island-lang:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--border-hover);
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(180deg, #e4e4e7 0%, #a1a1aa 100%);
+            color: #09090b;
+            padding: 14px 28px;
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid #a1a1aa;
+            cursor: pointer;
+            box-shadow: inset 0 2px 2px rgba(255, 255, 255, 1), 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(180deg, #f4f4f5 0%, #b4b4b8 100%);
+            box-shadow: inset 0 2px 2px rgba(255, 255, 255, 1), 0 8px 25px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary svg {
+            width: 18px;
+            height: 18px;
             fill: none;
             stroke: currentColor;
-            stroke-width: 1.5;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        .nav-right {
+        .glass-header .btn-primary {
+            border-radius: 30px;
+        }
+
+        .ambient-glow {
+            position: absolute;
+            top: -20vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80vw;
+            height: 60vh;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+            filter: blur(60px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero {
+            position: relative;
+            padding: 160px 40px 100px;
+            max-width: 1300px;
+            margin: 0 auto;
+            z-index: 10;
+        }
+
+        .hero-content-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+            margin-top: 40px;
+        }
+
+        .hero-text-block {
+            flex: 1.1;
+            text-align: left;
+        }
+
+        .hero-image-block {
+            flex: 1;
+            perspective: 1200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tilted-app-animator {
+            animation: floatApp 8s ease-in-out infinite;
+        }
+
+        .tilted-app {
+            width: 110%;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            display: block;
+            transform: rotateY(-18deg) rotateX(8deg) rotateZ(-2deg) scale(1.05);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tilted-app-animator:hover .tilted-app {
+            transform: rotateY(-5deg) rotateX(2deg) rotateZ(0deg) scale(1.1);
+        }
+
+        @keyframes floatApp {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(60px, 8vw, 130px);
+            line-height: 0.9;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            text-transform: none;
+        }
+
+        .mx-part {
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .launcher-part {
+            background: linear-gradient(135deg, #e4e4e7 0%, #52525b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            filter: blur(10px);
+            animation: charReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes charReveal {
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .hero-desc {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 480px;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards 0.3s;
+        }
+
+        .hero-actions {
             display: flex;
             align-items: center;
             gap: 20px;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards 0.5s;
+            margin-bottom: 16px;
         }
 
-        .tg-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            text-decoration: none;
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            transition: all 0.2s;
+        .hero-subtext {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.3);
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards 0.7s;
         }
 
-        .tg-link:hover {
-            color: var(--white);
-            border-color: var(--border-strong);
+        .content-wrap {
+            max-width: 1100px;
+            margin: 0 auto 80px;
+            padding: 0 40px;
+            z-index: 10;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+            font-family: 'Inter', sans-serif;
         }
 
-        .tg-link svg {
-            width: 14px;
-            height: 14px;
-            fill: currentColor;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 60px;
-            width: 100%;
-            flex: 1;
-        }
-
-        .section {
-            padding: 60px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .section:last-child {
-            border-bottom: none;
+        .modern-section {
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
         }
 
         .section-header {
             display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            margin-bottom: 36px;
-        }
-
-        .section-label {
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--gray-600);
-            margin-right: 20px;
+            flex-direction: column;
+            margin-bottom: 40px;
         }
 
         .section-title {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
             font-family: 'DM Sans', sans-serif;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            color: var(--gray-200);
-            text-transform: uppercase;
-        }
-
-        .section-rule {
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-            margin: 0 20px;
-        }
-
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            border: 1px solid var(--border);
-        }
-
-        .stat-block {
-            padding: 36px 40px;
-            border-right: 1px solid var(--border);
-            transition: background 0.2s;
-        }
-
-        .stat-block:last-child {
-            border-right: none;
-        }
-
-        .stat-block:hover {
-            background: rgba(245, 245, 240, 0.02);
-        }
-
-        .stat-num {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 64px;
-            letter-spacing: 2px;
-            color: var(--white);
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: var(--gray-600);
-        }
-
-        .stat-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .s-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--gray-600);
-        }
-
-        .s-dot.online {
-            background: var(--white);
-            box-shadow: 0 0 0 0 rgba(245, 245, 240, 0.4);
-            animation: pulse-w 2.5s infinite;
-        }
-
-        @keyframes pulse-w {
-            0% {
-                box-shadow: 0 0 0 0 rgba(245, 245, 240, 0.4);
-            }
-
-            60% {
-                box-shadow: 0 0 0 6px rgba(245, 245, 240, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(245, 245, 240, 0);
-            }
-        }
-
-        .status-text {
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--gray-400);
         }
 
         .swiper {
             width: 100%;
-            padding-bottom: 40px !important;
+            border-radius: 12px;
+            overflow: visible;
+            padding-bottom: 60px !important;
+        }
+
+        .swiper-wrapper {
+            align-items: center;
         }
 
         .swiper-slide {
-            width: 480px;
-            height: 280px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            filter: grayscale(20%);
-            transition: all 0.4s ease;
-        }
-
-        .swiper-slide img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease, filter 0.4s;
-            filter: brightness(0.85);
+            opacity: 0.4;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: scale(0.9);
+            filter: grayscale(100%);
         }
 
         .swiper-slide-active {
-            border-color: var(--border-strong);
+            opacity: 1;
+            transform: scale(1);
             filter: grayscale(0%);
+            z-index: 2;
         }
 
-        .swiper-slide-active img {
-            transform: scale(1.03);
-            filter: brightness(1);
-        }
-
-        .swiper-button-next,
-        .swiper-button-prev {
-            color: var(--gray-400) !important;
-            transition: color 0.2s;
-        }
-
-        .swiper-button-next:hover,
-        .swiper-button-prev:hover {
-            color: var(--white) !important;
+        .swiper-slide img {
+            width: 100%;
+            display: block;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            background: #18181b;
+            min-height: 200px;
         }
 
         .swiper-pagination-bullet {
-            background: var(--gray-600) !important;
-            opacity: 1 !important;
+            background: #fff !important;
+            opacity: 0.2 !important;
+            transition: all 0.3s;
         }
 
         .swiper-pagination-bullet-active {
-            background: var(--white) !important;
-            width: 20px !important;
-            border-radius: 2px !important;
+            opacity: 1 !important;
+            width: 32px !important;
+            border-radius: 4px !important;
+            background: #fff !important;
         }
 
-        .screenshots-note {
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            color: var(--gray-600);
-            letter-spacing: 1px;
-            margin-top: 16px;
-        }
-
-        .rating-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .rating-desc {
-            font-size: 13px;
-            color: var(--gray-400);
-            font-weight: 300;
-        }
-
-        .rating-btns {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-rate {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            font-family: 'DM Mono', monospace;
-            font-size: 12px;
-            letter-spacing: 1px;
+        .clean-list-container {
             border: 1px solid var(--border);
-            background: transparent;
-            color: var(--gray-400);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-rate svg {
-            width: 14px;
-            height: 14px;
-            fill: currentColor;
-            transition: transform 0.2s;
-        }
-
-        .btn-rate.like:hover {
-            color: var(--white);
-            border-color: var(--border-strong);
-            background: rgba(245, 245, 240, 0.04);
-        }
-
-        .btn-rate.like:hover svg {
-            transform: translateY(-2px);
-        }
-
-        .btn-rate.dislike:hover {
-            color: var(--gray-200);
-            border-color: rgba(245, 245, 240, 0.2);
-            background: rgba(245, 245, 240, 0.02);
-        }
-
-        .btn-rate.dislike:hover svg {
-            transform: translateY(2px);
-        }
-
-        .rating-track {
-            height: 2px;
-            background: var(--gray-800);
-            display: flex;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.015);
             overflow: hidden;
-        }
-
-        .rating-like-fill {
-            height: 100%;
-            background: var(--white);
-            transition: width 0.6s ease;
-        }
-
-        .rating-dislike-fill {
-            height: 100%;
-            background: var(--gray-600);
-            transition: width 0.6s ease;
-        }
-
-        .sec-list {
             display: flex;
             flex-direction: column;
-            gap: 0;
-            border: 1px solid var(--border);
         }
 
-        .sec-item {
+        .clean-row {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--text);
+            transition: background 0.3s;
+        }
+
+        .clean-row:last-child {
+            border-bottom: none;
+        }
+
+        a.clean-row:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .clean-label {
+            flex: 1;
+            padding: 24px 32px;
+            font-size: 14px;
+            color: var(--text-muted);
+            border-right: 1px solid var(--border);
+            max-width: 280px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .clean-value {
+            flex: 2;
+            padding: 24px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-            text-decoration: none;
-            color: var(--gray-200);
-            transition: background 0.2s, color 0.2s;
         }
 
-        .sec-item:last-child {
-            border-bottom: none;
-        }
-
-        .sec-item:hover {
-            background: rgba(245, 245, 240, 0.04);
-            color: var(--white);
-        }
-
-        .sec-left {
+        .clean-value-text {
             display: flex;
-            align-items: center;
-            gap: 16px;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .sec-num {
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            color: var(--gray-600);
-            letter-spacing: 1px;
-            min-width: 24px;
-        }
-
-        .sec-name {
-            font-size: 14px;
-            font-weight: 400;
-        }
-
-        .sec-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .sec-tag {
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-600);
-        }
-
-        .sec-arrow {
-            font-size: 16px;
-            color: var(--gray-600);
-            transition: transform 0.2s, color 0.2s;
-        }
-
-        .sec-item:hover .sec-arrow {
-            transform: translate(3px, -3px);
-            color: var(--white);
-        }
-
-        .req-table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid var(--border);
-        }
-
-        .req-table tr {
-            border-bottom: 1px solid var(--border);
-            transition: background 0.15s;
-        }
-
-        .req-table tr:last-child {
-            border-bottom: none;
-        }
-
-        .req-table tr:hover {
-            background: rgba(245, 245, 240, 0.025);
-        }
-
-        .req-table td {
-            padding: 16px 24px;
+        .clean-subtext {
             font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 400;
+            font-family: 'DM Sans', sans-serif;
         }
 
-        .req-table td:first-child {
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            color: var(--gray-600);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            width: 200px;
-            border-right: 1px solid var(--border);
+        .clean-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .req-table td:last-child {
-            color: var(--gray-200);
-            font-weight: 300;
+        .clean-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .clean-arrow {
+            opacity: 0.3;
+            transition: all 0.3s;
+        }
+
+        a.clean-row:hover .clean-arrow {
+            opacity: 1;
+            transform: translateX(5px) scale(1.1);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-item:first-child {
+            border-top: 1px solid var(--border);
+        }
+
+        .faq-trigger {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 28px 0;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            color: var(--text);
+        }
+
+        .faq-q {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .faq-chevron {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .faq-chevron svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--text);
+            fill: none;
+            stroke-width: 2;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-trigger[aria-expanded="true"] .faq-chevron {
+            background: var(--text);
+        }
+
+        .faq-trigger[aria-expanded="true"] .faq-chevron svg {
+            transform: rotate(180deg);
+            stroke: var(--bg);
+        }
+
+        .faq-body {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s ease;
+        }
+
+        .faq-body.open {
+            grid-template-rows: 1fr;
+        }
+
+        .faq-body-inner {
+            overflow: hidden;
+            padding: 0 40px 0 0;
+        }
+
+        .faq-body.open .faq-body-inner {
+            padding-bottom: 32px;
+        }
+
+        .faq-body-inner p {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .site-footer {
+            border-top: 1px solid var(--border);
+            padding: 40px;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+        }
+
+        .footer-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-anim {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .scroll-anim.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .toast {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: var(--white);
-            color: var(--black);
+            background: #fff;
+            color: #09090b;
             padding: 16px 24px;
             z-index: 99999;
             transform: translateY(120%);
             opacity: 0;
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
-            border-left: 3px solid var(--black);
+            border-left: 3px solid #09090b;
             max-width: 320px;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
         }
 
         .toast.show {
@@ -675,32 +760,33 @@
         }
 
         .toast-title {
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
             letter-spacing: 0.5px;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
 
         .toast-desc {
-            font-size: 11px;
-            color: var(--gray-600);
+            font-size: 12px;
+            color: #52525b;
             font-family: 'DM Mono', monospace;
         }
 
         .toast.toast-error {
-            background: var(--black);
-            color: var(--white);
-            border-left-color: var(--white);
+            background: #09090b;
+            color: #fff;
+            border: 1px solid var(--border);
+            border-left-color: #ef4444;
         }
 
         .toast.toast-error .toast-desc {
-            color: var(--gray-400);
+            color: #a1a1aa;
         }
 
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(10, 10, 10, 0.88);
+            background: rgba(9, 9, 11, 0.88);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             z-index: 10000;
@@ -718,14 +804,16 @@
         }
 
         .auth-modal {
-            background: var(--gray-900);
-            border: 1px solid var(--border-strong);
+            background: var(--bg-accent);
+            border: 1px solid var(--border);
+            border-radius: 20px;
             width: 100%;
-            max-width: 356px;
+            max-width: 380px;
             padding: 32px 30px 28px;
             transform: translateY(10px) scale(0.985);
             transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
 
         .modal-overlay.active .auth-modal {
@@ -735,40 +823,40 @@
         .auth-modal-title {
             font-family: 'DM Sans', sans-serif;
             font-size: 20px;
-            font-weight: 500;
-            letter-spacing: 0.2px;
-            color: var(--white);
+            font-weight: 600;
+            color: var(--text);
             margin-bottom: 4px;
         }
 
         .auth-modal-sub {
             font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            color: var(--gray-600);
-            letter-spacing: 1.5px;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
             text-transform: uppercase;
             margin-bottom: 24px;
         }
 
         .close-modal {
             position: absolute;
-            top: 14px;
-            right: 14px;
-            color: var(--gray-600);
+            top: 20px;
+            right: 20px;
+            color: var(--text-muted);
             cursor: pointer;
             font-family: 'DM Mono', monospace;
-            font-size: 10px;
+            font-size: 11px;
             letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: color 0.2s;
-            padding: 4px 7px;
+            padding: 6px 10px;
             border: 1px solid transparent;
-            border-radius: 2px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .close-modal:hover {
-            color: var(--white);
-            border-color: var(--border);
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--border-hover);
         }
 
         .auth-tabs {
@@ -778,1154 +866,672 @@
         }
 
         .auth-tab {
-            padding: 8px 0;
-            margin-right: 20px;
+            padding: 8px 12px;
+            margin-right: 12px;
             font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            letter-spacing: 2px;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            color: var(--gray-600);
+            color: var(--text-muted);
             cursor: pointer;
-            border-bottom: 1px solid transparent;
-            margin-bottom: -1px;
+            border-bottom: 2px solid transparent;
             transition: all 0.2s;
         }
 
         .auth-tab.active {
-            color: var(--white);
-            border-bottom-color: var(--white);
+            color: var(--text);
+            border-bottom-color: var(--text);
         }
 
         .auth-tab:hover:not(.active) {
-            color: var(--gray-400);
+            color: #d4d4d8;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 12px 14px;
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            border-radius: 10px;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--text-muted);
+            outline: none;
+        }
+
+        .btn-rate {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--gray-200);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-rate svg {
+            width: 15px;
+            height: 15px;
+            fill: currentColor;
+            transition: transform 0.2s;
+        }
+
+        .btn-rate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-rate:active {
+            transform: scale(0.96);
+        }
+
+        .btn-rate.like:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--online);
+            color: var(--online);
+        }
+
+        .btn-rate.like:hover svg {
+            transform: translateY(-2px) scale(1.1);
+        }
+
+        .btn-rate.dislike:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        .btn-rate.dislike:hover svg {
+            transform: translateY(2px) scale(1.1);
         }
 
         .btn-auth {
             width: 100%;
-            background: var(--white);
-            color: var(--black);
-            border: none;
-            padding: 13px;
+            background: linear-gradient(180deg, #e4e4e7 0%, #a1a1aa 100%);
+            color: #09090b;
+            border: 1px solid #a1a1aa;
+            padding: 14px;
             font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 2px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
             text-transform: uppercase;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background 0.2s, opacity 0.2s;
-            margin-top: 6px;
+            transition: all 0.2s;
+            margin-top: 8px;
+            box-shadow: inset 0 2px 2px rgba(255, 255, 255, 1), 0 4px 15px rgba(255, 255, 255, 0.1);
         }
 
         .btn-auth:hover {
-            background: var(--gray-100);
+            transform: translateY(-2px);
+            background: linear-gradient(180deg, #f4f4f5 0%, #b4b4b8 100%);
+        }
+
+        .btn-auth:active {
+            transform: scale(0.98);
         }
 
         .btn-auth:disabled {
-            opacity: 0.4;
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: none !important;
         }
 
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 32px 60px;
-        }
-
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .footer-info {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .footer-copy {
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            color: var(--gray-600);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        .footer-subtitle {
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            color: var(--gray-600);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-links a {
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: var(--white);
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .anim-in {
-            opacity: 0;
-            animation: fadeUp 0.7s ease forwards;
-        }
-
-        .anim-in-1 {
-            animation-delay: 0.1s;
-        }
-
-        .anim-in-2 {
-            animation-delay: 0.2s;
-        }
-
-        .anim-in-3 {
-            animation-delay: 0.3s;
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(28px);
-            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-d1 {
-            transition-delay: 0.05s;
-        }
-
-        .reveal-d2 {
-            transition-delay: 0.12s;
-        }
-
-        .reveal-d3 {
-            transition-delay: 0.19s;
-        }
-
-        .reveal-d4 {
-            transition-delay: 0.26s;
-        }
-
-        .reveal-d5 {
-            transition-delay: 0.33s;
-        }
-
-        .mobile-nav-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(10, 10, 10, 0.95);
-            z-index: 8000;
-            flex-direction: column;
-            padding: 24px;
-        }
-
-        .mobile-nav-overlay.open {
-            display: flex;
-        }
-
-        .mobile-nav-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 40px;
-        }
-
-        .mobile-nav-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 28px;
-            letter-spacing: 3px;
-            color: var(--white);
-        }
-
-        .mobile-nav-close {
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            cursor: pointer;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            transition: all 0.2s;
-            background: transparent;
-        }
-
-        .mobile-nav-close:hover {
-            color: var(--white);
-            border-color: var(--border-strong);
-        }
-
-        .mobile-nav-links {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            flex: 1;
-        }
-
-        .mobile-nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border);
-            font-family: 'DM Mono', monospace;
-            font-size: 13px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            text-decoration: none;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .mobile-nav-link:hover,
-        .mobile-nav-link.highlight {
-            color: var(--white);
-        }
-
-        .mobile-nav-link svg {
-            width: 16px;
-            height: 16px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 1.5;
-        }
-
-        .mobile-nav-footer {
-            margin-top: 32px;
-            font-family: 'DM Mono', monospace;
-            font-size: 9px;
-            color: var(--gray-600);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-align: center;
-        }
-
-        .hamburger {
-            display: none;
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--gray-400);
-            width: 38px;
-            height: 38px;
-            cursor: pointer;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 5px;
-            border-radius: 2px;
-            transition: all 0.2s;
-            padding: 0;
-        }
-
-        .hamburger:hover {
-            border-color: var(--border-strong);
-            color: var(--white);
-        }
-
-        .hamburger span {
-            display: block;
-            width: 16px;
-            height: 1px;
-            background: currentColor;
-            transition: all 0.2s;
-        }
-
-        .faq-list {
-            border: 1px solid var(--border);
-        }
-
-        .faq-item {
-            border-bottom: 1px solid var(--border);
-        }
-
-        .faq-item:last-child {
-            border-bottom: none;
-        }
-
-        .faq-trigger {
+        .auth-text-btn {
             width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 22px 24px;
             background: transparent;
             border: none;
+            color: var(--text-muted);
             cursor: pointer;
-            text-align: left;
-            transition: background 0.2s;
-            gap: 16px;
-        }
-
-        .faq-trigger:hover {
-            background: rgba(245, 245, 240, 0.03);
-        }
-
-        .faq-trigger[aria-expanded="true"] {
-            background: rgba(245, 245, 240, 0.04);
-        }
-
-        .faq-trigger-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            min-width: 0;
-        }
-
-        .faq-trigger-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-shrink: 0;
-        }
-
-        .faq-num {
+            font-size: 11px;
             font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            color: var(--gray-600);
-            letter-spacing: 1px;
-            min-width: 20px;
-        }
-
-        .faq-q {
-            font-size: 14px;
-            font-weight: 400;
-            color: var(--gray-200);
+            padding: 8px;
             transition: color 0.2s;
         }
 
-        .faq-trigger:hover .faq-q,
-        .faq-trigger[aria-expanded="true"] .faq-q {
-            color: var(--white);
+        .auth-text-btn:hover {
+            color: var(--text);
         }
 
-        .faq-cat {
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-600);
-        }
-
-        .faq-chevron svg {
-            width: 16px;
-            height: 16px;
-            stroke: var(--gray-600);
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.2s;
-            display: block;
-        }
-
-        .faq-trigger[aria-expanded="true"] .faq-chevron svg {
-            transform: rotate(180deg);
-            stroke: var(--gray-400);
-        }
-
-        .faq-body {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.38s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .faq-body.open {
-            grid-template-rows: 1fr;
-        }
-
-        .faq-body-inner {
-            overflow: hidden;
-            padding: 0 24px 0 56px;
-        }
-
-        .faq-body.open .faq-body-inner {
-            padding-bottom: 28px;
-        }
-
-        .faq-body-inner p {
-            font-size: 13px;
-            color: var(--gray-400);
-            font-weight: 300;
-            line-height: 1.65;
-            margin-bottom: 18px;
-        }
-
-        .faq-body-inner strong {
-            color: var(--gray-200);
-            font-weight: 500;
-        }
-
-        .faq-body-inner code {
-            font-family: 'DM Mono', monospace;
-            font-size: 12px;
-            color: var(--gray-200);
-            background: rgba(245, 245, 240, 0.06);
-            padding: 1px 6px;
-            border: 1px solid var(--border);
-        }
-
-        .faq-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 18px;
-        }
-
-        .faq-step {
-            display: flex;
-            align-items: baseline;
-            gap: 12px;
-            font-size: 13px;
-            color: var(--gray-400);
-            font-weight: 300;
-            line-height: 1.5;
-        }
-
-        .step-n {
-            font-family: 'DM Mono', monospace;
-            font-size: 9px;
-            letter-spacing: 1px;
-            color: var(--gray-600);
-            border: 1px solid var(--border);
-            min-width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .faq-tip {
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            color: var(--gray-600);
-            letter-spacing: 0.3px;
-            border-left: 2px solid var(--border-strong);
-            padding: 10px 14px;
-            line-height: 1.6;
-            margin-top: 4px;
-        }
-
-        .tip-label {
-            display: block;
-            font-size: 9px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            margin-bottom: 5px;
-        }
-
-        .faq-java-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .java-card {
-            border: 1px solid var(--border);
-            padding: 16px 14px 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            transition: background 0.2s, border-color 0.2s;
-        }
-
-        .java-card:hover {
-            background: rgba(245, 245, 240, 0.03);
-            border-color: var(--border-strong);
-        }
-
-        .java-card--highlight {
-            border-color: rgba(245, 245, 240, 0.22);
-        }
-
-        .java-badge {
-            font-family: 'DM Mono', monospace;
-            font-size: 8px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--black);
-            background: var(--white);
-            padding: 2px 6px;
-            display: inline-block;
-            align-self: flex-start;
-        }
-
-        .java-ver {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 36px;
-            letter-spacing: 2px;
-            color: var(--white);
-            line-height: 1;
-        }
-
-        .java-desc {
-            font-family: 'DM Mono', monospace;
-            font-size: 9px;
-            color: var(--gray-600);
-            letter-spacing: 1px;
-            line-height: 1.6;
-        }
-
-        .java-link {
-            font-family: 'DM Mono', monospace;
-            font-size: 9px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-400) !important;
-            text-decoration: none !important;
-            border: 1px solid var(--border);
-            padding: 5px 8px;
-            margin-top: 4px;
-            display: inline-block;
-            transition: all 0.2s;
-        }
-
-        .java-link:hover {
-            color: var(--white) !important;
-            border-color: var(--border-strong);
-            background: rgba(245, 245, 240, 0.05);
-        }
-
-        .faq-contact-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .faq-contact-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--gray-400) !important;
-            text-decoration: none !important;
-            border: 1px solid var(--border);
-            transition: all 0.2s;
-        }
-
-        .faq-contact-btn svg {
-            width: 13px;
-            height: 13px;
-        }
-
-        .faq-contact-btn:hover {
-            color: var(--white) !important;
-            border-color: var(--border-strong);
-            background: rgba(245, 245, 240, 0.04);
-        }
-
-        @media (max-width: 768px) {
-            .header-inner {
-                grid-template-columns: 1fr;
-                padding: 40px 20px 32px;
-                min-height: 240px;
-                gap: 0;
+        @media (max-width: 992px) {
+            .hero-content-wrap {
+                flex-direction: column;
+                text-align: center;
+                gap: 50px;
+                margin-top: 20px;
             }
 
-            .header-right {
-                display: none;
-            }
-
-            .container {
-                padding: 0 20px;
-            }
-
-            .nav-strip {
-                padding: 0 20px;
-            }
-
-            .nav-left {
-                display: none;
-            }
-
-            .nav-right .tg-link {
-                display: none;
-            }
-
-            .hamburger {
+            .hero-text-block {
                 display: flex;
-            }
-
-            .section {
-                padding: 40px 0;
-            }
-
-            .section-header {
-                flex-wrap: wrap;
-                gap: 6px;
-            }
-
-            .section-rule {
-                display: none;
-            }
-
-            .section-label {
-                font-size: 9px;
-            }
-
-            .stats-row {
-                grid-template-columns: 1fr;
-            }
-
-            .stat-block {
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-                padding: 24px 20px;
-            }
-
-            .stat-block:last-child {
-                border-bottom: none;
-            }
-
-            .stat-num {
-                font-size: 52px;
-            }
-
-            .rating-row {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
+                align-items: center;
             }
 
-            .swiper-slide {
-                width: 85% !important;
-                height: auto;
-                aspect-ratio: 16/9;
-            }
-
-            .swiper-button-next,
-            .swiper-button-prev {
-                display: none !important;
-            }
-
-            .sec-item {
-                padding: 16px;
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-
-            .sec-right {
-                width: 100%;
-                justify-content: flex-end;
-            }
-
-            .req-table,
-            .req-table tbody,
-            .req-table tr,
-            .req-table td {
-                display: block;
-                width: 100%;
-            }
-
-            .req-table tr {
-                padding: 12px 0;
-                border-bottom: 1px solid var(--border);
-                background: transparent !important;
-                transition: none;
-            }
-
-            .req-table tr:hover {
-                background: transparent;
-            }
-
-            .req-table td {
-                padding: 4px 16px !important;
-                border: none !important;
-            }
-
-            .req-table td:first-child {
-                width: auto;
-                color: var(--gray-400);
-                font-size: 10px !important;
-                margin-bottom: 2px;
-            }
-
-            .req-table td:last-child {
-                font-size: 14px !important;
-                color: var(--white);
-            }
-
-            footer {
-                padding: 24px 20px;
-            }
-
-            .footer-inner {
-                flex-direction: column;
-                gap: 16px;
+            .hero-desc {
                 text-align: center;
             }
 
-            .footer-info {
-                align-items: center;
-                gap: 8px;
+            .tilted-app-animator {
+                animation: none;
             }
 
-            .footer-links {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 16px;
-            }
-
-            .auth-modal {
+            .tilted-app {
+                transform: none;
+                width: 100%;
                 max-width: 100%;
-                height: 100%;
-                max-height: 100%;
-                border: none;
-                border-top: 1px solid var(--border-strong);
-                border-radius: 0;
-                padding: 28px 24px 40px;
-                overflow-y: auto;
-                align-self: flex-end;
-                transform: translateY(100%);
             }
 
-            .modal-overlay {
-                align-items: flex-end;
+            .tilted-app-animator:hover .tilted-app {
+                transform: translateY(-5px);
             }
 
-            .modal-overlay.active .auth-modal {
-                transform: translateY(0);
-            }
-
-            .toast {
-                right: 16px;
-                left: 16px;
-                max-width: none;
-                bottom: 16px;
-            }
-
-            /* FAQ mobile */
-            .faq-trigger {
-                padding: 18px 16px;
-            }
-
-            .faq-cat {
-                display: none;
-            }
-
-            .faq-body-inner {
-                padding: 0 16px;
-            }
-
-            .faq-body.open .faq-body-inner {
-                padding-bottom: 20px;
-            }
-
-            .faq-java-grid {
-                grid-template-columns: 1fr 1fr;
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
             }
         }
 
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 64px;
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: clamp(50px, 12vw, 80px);
             }
 
-            .header-sub {
-                font-size: 13px;
+            .hero-actions {
+                flex-direction: column;
             }
 
-            .stat-num {
-                font-size: 44px;
+            .hero-actions .btn-primary {
+                width: 100%;
+                max-width: 300px;
             }
 
-            .faq-java-grid {
-                grid-template-columns: 1fr;
+            .hero {
+                padding: 120px 20px 60px;
+            }
+
+            .content-wrap {
+                padding: 0 20px;
+                gap: 40px;
+            }
+
+            .base-header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .clean-row {
+                flex-direction: column;
+            }
+
+            .clean-label {
+                max-width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 16px 20px;
+            }
+
+            .clean-value {
+                padding: 16px 20px;
+            }
+
+            .glass-header {
+                width: 95%;
+                left: 50%;
+                padding: 6px 6px 6px 20px;
+            }
+
+            .desktop-only {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 26px;
+            }
+
+            .footer-content {
+                padding: 0 20px;
+            }
+
+            .glass-header .btn-icon {
+                display: none;
             }
         }
     </style>
 </head>
 
 <body>
-    <header class="site-header">
-        <div class="header-video-wrap">
-            <video autoplay muted loop playsinline>
-                <source src="video.mp4" type="video/mp4">
-            </video>
-        </div>
-        <div class="header-inner">
-            <div class="header-left anim-in anim-in-1">
-                <div class="header-eyebrow">Minecraft Launcher</div>
-                <h1>MX<br>LAUNCHER</h1>
-                <p class="header-sub">Бесплатный лаунчер для запуска читов и визуальных модификаций.</p>
+
+    <div class="ambient-glow"></div>
+
+    <div class="base-header-container">
+        <header class="base-header">
+            <a href="#" class="header-logo">
+                <img src="logo.png" alt="MX Logo"
+                    onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSI1MCIgZm9udC1zaXplPSI0MCIgZmlsbD0id2hpdGUiPk1YPC90ZXh0Pjwvc3ZnPg=='" />
+                <span class="header-title" data-i18n="logo_title">MXlauncher</span>
+            </a>
+            <div class="base-header-nav" style="gap: 4px;">
+                <a href="support.html" class="btn-icon desktop-only" title="Поддержка"
+                    style="width: 36px; height: 36px; color: #a1a1aa; transition: color 0.2s;"
+                    onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                        <path
+                            d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+                        </path>
+                    </svg>
+                </a>
+
+                <a href="https://t.me/mxlauncher" target="_blank" class="btn-icon" title="Telegram">
+                    <img src="telegram.png" alt="Telegram" class="tg-img"
+                        onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEgMTJsMjIgMTAtNC4yNS0yMUwxIDEyeiIgZmlsbD0id2hpdGUiLz48L3N2Zz4='">
+                </a>
+
+                <button class="btn-primary" onclick="openAuthModal(event)" id="auth-btn-base"
+                    style="padding: 0 16px; height: 36px; font-size: 12px; border-radius: 12px;">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span data-i18n="nav_login">Войти</span>
+                </button>
+
+                <button class="btn-primary" onclick="toggleLanguage()"
+                    style="padding: 0 14px; height: 36px; font-size: 12px; border-radius: 12px; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                        </path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                    <span class="lang-indicator">RU</span>
+                </button>
             </div>
-            <div class="header-right anim-in anim-in-2">
-                <div class="header-meta-item" id="version-label">Ver. —</div>
-                <div class="header-meta-item">Free Forever</div>
-                <div class="header-meta-item">Windows 64-bit</div>
-            </div>
+        </header>
+    </div>
+
+    <header class="glass-header" id="glassHeader">
+        <a href="#" class="header-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <img src="logo.png" alt="MX"
+                onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSI1MCIgZm9udC1zaXplPSI0MCIgZmlsbD0id2hpdGUiPk1YPC90ZXh0Pjwvc3ZnPg=='" />
+            <span class="header-title desktop-only" data-i18n="logo_title">MXlauncher</span>
+        </a>
+        <div class="header-actions" style="gap: 4px;">
+            <a href="support.html" class="btn-icon desktop-only" title="Поддержка"
+                style="width: 36px; height: 36px; color: #a1a1aa; transition: color 0.2s;"
+                onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                    <path
+                        d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
+                    </path>
+                </svg>
+            </a>
+
+            <a href="https://t.me/mxlauncher" target="_blank" class="btn-icon" title="Telegram">
+                <img src="telegram.png" alt="Telegram" class="tg-img"
+                    onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEgMTJsMjIgMTAtNC4yNS0yMUwxIDEyeiIgZmlsbD0id2hpdGUiLz48L3N2Zz4='">
+            </a>
+
+            <button class="island-lang desktop-only" onclick="openAuthModal(event)" id="auth-btn-island">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span data-i18n="nav_login">Войти</span>
+            </button>
+
+            <button class="island-lang" onclick="toggleLanguage()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                    </path>
+                    <path d="M2 12h20"></path>
+                </svg>
+                <span class="lang-indicator">RU</span>
+            </button>
+            <a href="#" class="btn-primary" onclick="handleDownload(event)"
+                style="padding: 0 14px; height: 34px; font-size: 11px; border-radius: 10px; gap: 6px; margin-right: 4px;">
+                <svg viewBox="0 0 24 24" style="width:14px;height:14px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span class="desktop-only" data-i18n="download_btn">СКАЧАТЬ</span>
+            </a>
         </div>
     </header>
 
-    <div style="border-bottom: 1px solid var(--border);">
-        <div class="nav-strip anim-in anim-in-2">
-            <div class="nav-strip-inner">
-                <nav class="nav-left">
-                    <a class="nav-link download-btn" href="#" onclick="handleDownload(event)">
-                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-                        </svg>
-                        Скачать для Windows
-                    </a>
-                    <a class="nav-link" href="support.html">Поддержка</a>
-                    <a class="nav-link" href="#" id="auth-btn-footer" onclick="openAuthModal(event)">Войти</a>
-                </nav>
-                <div class="nav-right">
-                    <a class="tg-link" href="https://t.me/mxlauncher" target="_blank">
+    <div class="hero">
+        <div class="hero-content-wrap">
+            <div class="hero-text-block">
+                <div class="hero-badge" data-i18n="hero_badge">Версия 1.0 — Бесплатно</div>
+
+                <h1 class="hero-title">
+                    <span class="char mx-part" style="animation-delay: 0.0s">M</span><span class="char mx-part"
+                        style="animation-delay: 0.05s">X</span><span class="char launcher-part"
+                        style="animation-delay: 0.1s">l</span><span class="char launcher-part"
+                        style="animation-delay: 0.15s">a</span><span class="char launcher-part"
+                        style="animation-delay: 0.2s">u</span><span class="char launcher-part"
+                        style="animation-delay: 0.25s">n</span><span class="char launcher-part"
+                        style="animation-delay: 0.3s">c</span><span class="char launcher-part"
+                        style="animation-delay: 0.35s">h</span><span class="char launcher-part"
+                        style="animation-delay: 0.4s">e</span><span class="char launcher-part"
+                        style="animation-delay: 0.45s">r</span>
+                </h1>
+
+                <p class="hero-desc" data-i18n="hero_desc">Единая библиотека игровых модификаций. Наше приложение
+                    поможет тебе скачать моды, читы и визуалы совершенно бесплатно, без вирусов и скрытых подписок.
+                    Искал удобный лоадер? Считай, что тебе повезло!</p>
+
+                <div class="hero-actions">
+                    <a href="#" class="btn-primary" onclick="handleDownload(event)">
                         <svg viewBox="0 0 24 24">
-                            <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
                         </svg>
-                        Telegram
+                        <span data-i18n="download_btn_full">СКАЧАТЬ БЕСПЛАТНО</span>
                     </a>
-                    <button class="hamburger" onclick="openMobileNav()" aria-label="Меню">
-                        <span></span><span></span><span></span>
-                    </button>
+                </div>
+                <p class="hero-subtext" data-i18n="hero_subtext">Вы скачиваете официальный установщик. Поддерживаются
+                    Windows 10/11 (x64).</p>
+            </div>
+
+            <div class="hero-image-block">
+                <div class="tilted-app-animator">
+                    <img src="screen/1.jpg" alt="MX Interface" class="tilted-app"
+                        onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface'" />
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container">
+    <div class="content-wrap">
 
-        <section class="section anim-in anim-in-3">
-            <div class="section-header reveal">
-                <span class="section-label">01</span>
-                <span class="section-title">Статистика</span>
-                <div class="section-rule"></div>
-                <span class="section-label">Серверы / Загрузки</span>
+        <div class="modern-section" id="screens-section">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="sec_screens">Интерфейс</h2>
+                <p class="section-subtitle" data-i18n="sec_screens_sub">Взгляните на то, как выглядит лоадер изнутри.
+                </p>
             </div>
-            <div class="stats-row">
-                <div class="stat-block reveal reveal-d1">
-                    <div class="stat-num" id="online-counter">—</div>
-                    <div class="stat-label">Игроков онлайн</div>
-                    <div class="stat-status">
-                        <div class="s-dot" id="server-dot"></div>
-                        <span class="status-text" id="server-text">Проверка...</span>
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="screen/1.jpg" alt="Screen 1"
+                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+1'"></div>
+                    <div class="swiper-slide"><img src="screen/2.jpg" alt="Screen 2"
+                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+2'"></div>
+                    <div class="swiper-slide"><img src="screen/3.jpg" alt="Screen 3"
+                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+3'"></div>
+                    <div class="swiper-slide"><img src="screen/4.jpg" alt="Screen 4"
+                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+4'"></div>
+                    <div class="swiper-slide"><img src="screen/5.jpg" alt="Screen 5"
+                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+5'"></div>
+                    <div class="swiper-slide"><img src="screen/6.jpg" alt="Screen 6"
+                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+6'"></div>
+                    <div class="swiper-slide"><img src="screen/7.jpg" alt="Screen 7"
+                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+7'"></div>
+                    <div class="swiper-slide"><img src="screen/8.jpg" alt="Screen 8"
+                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+8'"></div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+
+        <div class="modern-section">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="sec_stats">Статистика</h2>
+                <p class="section-subtitle" data-i18n="sec_stats_sub">Отражение нашего коммьюнити в цифрах.</p>
+            </div>
+            <div class="clean-list-container">
+                <div class="clean-row">
+                    <div class="clean-label">
+                        <div class="clean-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg></div>
+                        <span data-i18n="stat_online">Игроков онлайн</span>
+                    </div>
+                    <div class="clean-value">
+                        <span class="clean-value-text">
+                            <span id="online-counter"
+                                style="font-size: 24px; font-weight: 600; letter-spacing: -0.5px;">—</span>
+                            <span class="clean-subtext" data-i18n="stat_online_sub">Пользователей прямо сейчас</span>
+                        </span>
                     </div>
                 </div>
-                <div class="stat-block reveal reveal-d2">
-                    <div class="stat-num" id="download-counter">—</div>
-                    <div class="stat-label">Скачиваний</div>
-                </div>
-            </div>
-        </section>
 
-        <section class="section">
-            <div class="section-header reveal">
-                <span class="section-label">02</span>
-                <span class="section-title">Интерфейс</span>
-                <div class="section-rule"></div>
-                <span class="section-label">Скриншоты</span>
-            </div>
-            <div class="reveal reveal-d1">
-                <div class="swiper mySwiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><img src="screen/1.jpg" alt="Скриншот 1"></div>
-                        <div class="swiper-slide"><img src="screen/2.jpg" alt="Скриншот 2"></div>
-                        <div class="swiper-slide"><img src="screen/3.jpg" alt="Скриншот 3"></div>
-                        <div class="swiper-slide"><img src="screen/4.jpg" alt="Скриншот 4"></div>
-                        <div class="swiper-slide"><img src="screen/5.jpg" alt="Скриншот 5"></div>
-                        <div class="swiper-slide"><img src="screen/6.jpg" alt="Скриншот 6"></div>
-                        <div class="swiper-slide"><img src="screen/7.jpg" alt="Скриншот 7"></div>
-                        <div class="swiper-slide"><img src="screen/8.jpg" alt="Скриншот 8"></div>
+                <div class="clean-row">
+                    <div class="clean-label">
+                        <div class="clean-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg></div>
+                        <span data-i18n="stat_downloads">Скачиваний</span>
                     </div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
+                    <div class="clean-value">
+                        <span class="clean-value-text">
+                            <span id="download-counter"
+                                style="font-size: 24px; font-weight: 600; letter-spacing: -0.5px;">—</span>
+                            <span class="clean-subtext" data-i18n="stat_downloads_sub">Успешных скачиваний
+                                лоадера</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="clean-row">
+                    <div class="clean-label">
+                        <div class="clean-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                </polygon>
+                            </svg></div>
+                        <span data-i18n="sec_rating">Оценка пользователей</span>
+                    </div>
+                    <div class="clean-value"
+                        style="flex-direction: column; align-items: stretch; justify-content: center; gap: 12px; padding-top: 16px; padding-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <span class="clean-subtext" data-i18n="sec_rating_sub">Нравится ли вам MX Launcher?</span>
+                            <div class="rating-btns" style="display: flex; gap: 10px;">
+                                <button class="btn-rate like" onclick="handleRate('like')">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
+                                    </svg>
+                                    <span id="like-count">0</span>
+                                </button>
+                                <button class="btn-rate dislike" onclick="handleRate('dislike')">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z" />
+                                    </svg>
+                                    <span id="dislike-count">0</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="rating-track" style="border-radius: 4px; height: 4px; background: var(--border);">
+                            <div class="rating-like-fill" id="rating-bar-like"
+                                style="width: 50%; background: var(--green);"></div>
+                            <div class="rating-dislike-fill" id="rating-bar-dislike"
+                                style="width: 50%; background: var(--red);"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <p class="screenshots-note">* Внешний вид может незначительно отличаться от скриншотов</p>
-        </section>
+        </div>
 
-        <section class="section">
-            <div class="section-header reveal">
-                <span class="section-label">03</span>
-                <span class="section-title">Оценка пользователей</span>
-                <div class="section-rule"></div>
+        <div class="modern-section">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="sec_security">Безопасность</h2>
+                <p class="section-subtitle" data-i18n="sec_security_sub">Мы заботимся о вашей системе.</p>
             </div>
-            <div class="rating-row reveal reveal-d1">
-                <p class="rating-desc">Нравится ли вам MX Launcher?</p>
-                <div class="rating-btns">
-                    <button class="btn-rate like" onclick="handleRate('like')">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
-                        </svg>
-                        <span id="like-count">0</span>
-                    </button>
-                    <button class="btn-rate dislike" onclick="handleRate('dislike')">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z" />
-                        </svg>
-                        <span id="dislike-count">0</span>
-                    </button>
-                </div>
-            </div>
-            <div class="rating-track reveal reveal-d2">
-                <div class="rating-like-fill" id="rating-bar-like" style="width: 50%;"></div>
-                <div class="rating-dislike-fill" id="rating-bar-dislike" style="width: 50%;"></div>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-header reveal">
-                <span class="section-label">04</span>
-                <span class="section-title">Безопасность</span>
-                <div class="section-rule"></div>
-                <span class="section-label">Независимые проверки</span>
-            </div>
-            <p class="reveal reveal-d1"
-                style="font-size: 13px; color: var(--gray-400); font-weight: 300; margin-bottom: 20px; max-width: 520px;">
-                MX Launcher проверен независимыми сервисами. Ложные срабатывания антивируса — стандартная ситуация для
-                любого лаунчера.
-            </p>
-            <div class="sec-list reveal reveal-d2">
-                <a href="https://www.youtube.com/watch?v=1maKKxoljtU" target="_blank" class="sec-item">
-                    <div class="sec-left"><span class="sec-num">01</span><span class="sec-name">Видео-проверка на
-                            YouTube</span></div>
-                    <div class="sec-right"><span class="sec-tag">YouTube</span><span class="sec-arrow">↗</span></div>
-                </a>
-                <a href="https://www.virustotal.com/gui/file/b0142a493e98c43ea9d944fd0b37c13de5131dc120d8213449493ecd07cd3e8a?nocache=1"
-                    target="_blank" class="sec-item">
-                    <div class="sec-left"><span class="sec-num">02</span><span class="sec-name">Отчёт VirusTotal —
-                            Лаунчер</span></div>
-                    <div class="sec-right"><span class="sec-tag">3 / 72</span><span class="sec-arrow">↗</span></div>
+            <div class="clean-list-container">
+                <a href="https://www.youtube.com/watch?v=1maKKxoljtU" target="_blank" class="clean-row">
+                    <div class="clean-label">
+                        <div class="clean-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                            </svg></div>
+                        <span data-i18n="sec_video">Видео-проверка</span>
+                    </div>
+                    <div class="clean-value">
+                        <span class="clean-value-text">
+                            <span data-i18n="sec_video_value">Обзор на YouTube</span>
+                            <span class="clean-subtext" data-i18n="sec_video_sub">Независимая проверка на вирусы</span>
+                        </span>
+                        <div class="clean-arrow"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg></div>
+                    </div>
                 </a>
                 <a href="https://www.virustotal.com/gui/file/3053b4b2e5d38061ddddcad2925bb94dc472215729ba81977c738f6613548380?nocache=1"
-                    target="_blank" class="sec-item">
-                    <div class="sec-left"><span class="sec-num">03</span><span class="sec-name">Отчёт VirusTotal —
-                            MXSetup</span></div>
-                    <div class="sec-right"><span class="sec-tag">3 / 72</span><span class="sec-arrow">↗</span></div>
+                    target="_blank" class="clean-row">
+                    <div class="clean-label">
+                        <div class="clean-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg></div>
+                        <span data-i18n="sec_vt">Отчёт VirusTotal</span>
+                    </div>
+                    <div class="clean-value">
+                        <span class="clean-value-text">
+                            <span data-i18n="sec_vt_value">Результат: 3 / 53</span>
+                            <span class="clean-subtext" data-i18n="sec_vt_sub">Проверка пройдена успешно</span>
+                        </span>
+                        <div class="clean-arrow"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg></div>
+                    </div>
                 </a>
             </div>
-        </section>
+        </div>
 
-        <section class="section">
-            <div class="section-header reveal">
-                <span class="section-label">05</span>
-                <span class="section-title">Системные требования</span>
-                <div class="section-rule"></div>
-                <span class="section-label">Минимальные</span>
+        <div class="modern-section">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="sec_req">Требования</h2>
+                <p class="section-subtitle" data-i18n="sec_req_sub">Убедитесь, что ваша система подходит.</p>
             </div>
-            <table class="req-table reveal reveal-d1">
-                <tbody>
-                    <tr>
-                        <td>ОС</td>
-                        <td>Windows 10 (64-bit)</td>
-                    </tr>
-                    <tr>
-                        <td>Процессор (CPU)</td>
-                        <td>Intel Core i3 / AMD Ryzen 3</td>
-                    </tr>
-                    <tr>
-                        <td>Память (RAM)</td>
-                        <td>4 GB — рекомендуется 8 GB</td>
-                    </tr>
-                    <tr>
-                        <td>Место на диске</td>
-                        <td>5 GB+ (лаунчер + софты)</td>
-                    </tr>
-                    <tr>
-                        <td>Видеокарта (GPU)</td>
-                        <td>Intel HD Graphics 4000+</td>
-                    </tr>
-                    <tr>
-                        <td>Доп. ПО</td>
-                        <td>Java 8 / 17 / 21</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <section class="section" id="faq">
-            <div class="section-header reveal">
-                <span class="section-label">06</span>
-                <span class="section-title">FAQ</span>
-                <div class="section-rule"></div>
-                <span class="section-label">Частые вопросы</span>
+            <div class="clean-list-container">
+                <div class="clean-row">
+                    <div class="clean-label" data-i18n="req_os">Операционная система</div>
+                    <div class="clean-value" data-i18n="req_os_val">Windows 10 / 11 (только 64-bit)</div>
+                </div>
+                <div class="clean-row">
+                    <div class="clean-label" data-i18n="req_cpu">Процессор (CPU)</div>
+                    <div class="clean-value" data-i18n="req_cpu_val">Intel Core i3 / AMD Ryzen 3 или лучше</div>
+                </div>
+                <div class="clean-row">
+                    <div class="clean-label" data-i18n="req_ram">Память (RAM)</div>
+                    <div class="clean-value" data-i18n="req_ram_val">4 GB минимум — рекомендуется 8 GB</div>
+                </div>
+                <div class="clean-row">
+                    <div class="clean-label" data-i18n="req_disk">Место на диске</div>
+                    <div class="clean-value" data-i18n="req_disk_val">От 5 GB (лаунчер + игровые сборки)</div>
+                </div>
+                <div class="clean-row">
+                    <div class="clean-label" data-i18n="req_soft">Дополнительное ПО</div>
+                    <div class="clean-value" data-i18n="req_soft_val">Java 8 / Java 17 / Java 21</div>
+                </div>
             </div>
+        </div>
 
-            <div class="faq-list reveal reveal-d1">
-
+        <div class="modern-section" style="margin-bottom: 40px;">
+            <div class="section-header">
+                <h2 class="section-title" data-i18n="sec_faq">FAQ</h2>
+                <p class="section-subtitle" data-i18n="sec_faq_sub">Ответы на частые вопросы.</p>
+            </div>
+            <div class="faq-container">
                 <div class="faq-item">
                     <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
-                        <div class="faq-trigger-left">
-                            <span class="faq-num">01</span>
-                            <span class="faq-q">Не загружается капча</span>
-                        </div>
-                        <div class="faq-trigger-right">
-                            <span class="faq-cat">Сеть</span>
-                            <span class="faq-chevron">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M6 9l6 6 6-6" />
-                                </svg>
-                            </span>
-                        </div>
+                        <span class="faq-q" data-i18n="faq_1_q">Чит или визуалы не запускаются?</span>
+                        <span class="faq-chevron"><svg viewBox="0 0 24 24">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg></span>
                     </button>
                     <div class="faq-body">
                         <div class="faq-body-inner">
-                            <p>Сервер капчи недоступен из вашего региона. Решение — использовать VPN.</p>
-                            <div class="faq-steps">
-                                <div class="faq-step">
-                                    <span class="step-n">1</span>
-                                    <span>Скачайте и включите VPN — подойдёт AvoVpn, PureVpn, любой робочий в РФ.</span>
-                                </div>
-                                <div class="faq-step">
-                                    <span class="step-n">2</span>
-                                    <span>Обновите страницу после подключения</span>
-                                </div>
-                                <div class="faq-step">
-                                    <span class="step-n">3</span>
-                                    <span>Нажмите кнопку <code>↻</code> рядом с картинкой капчи</span>
-                                </div>
-                            </div>
-                            <div class="faq-tip">
-                                <span class="tip-label">Совет</span>
-                                Если VPN уже включён — попробуйте сменить сервер на другую страну.
-                            </div>
+                            <p data-i18n="faq_1_a">Большинство читов требуют конкретную версию Java. Убедитесь, что у
+                                вас установлены Java 8, 17 и 21, и выберите правильную версию в настройках профиля перед
+                                запуском программы.</p>
                         </div>
                     </div>
                 </div>
-
                 <div class="faq-item">
                     <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
-                        <div class="faq-trigger-left">
-                            <span class="faq-num">02</span>
-                            <span class="faq-q">Чит / визуалы не запускаются</span>
-                        </div>
-                        <div class="faq-trigger-right">
-                            <span class="faq-cat">Запуск</span>
-                            <span class="faq-chevron">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M6 9l6 6 6-6" />
-                                </svg>
-                            </span>
-                        </div>
+                        <span class="faq-q" data-i18n="faq_2_q">Лаунчер не запускается или выдает ошибку сети?</span>
+                        <span class="faq-chevron"><svg viewBox="0 0 24 24">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg></span>
                     </button>
                     <div class="faq-body">
                         <div class="faq-body-inner">
-                            <p>Большинство читов и визуалов требуют конкретную версию Java. Установите нужную и
-                                перезапустите лаунчер.</p>
-                            <div class="faq-java-grid">
-                                <div class="java-card">
-                                    <div class="java-ver">Java 8</div>
-                                    <div class="java-desc">Старые читы<br>1.8 – 1.12</div>
-                                    <a href="https://www.java.com/ru/download/" target="_blank"
-                                        class="java-link">Скачать ↗</a>
-                                </div>
-                                <div class="java-card">
-                                    <div class="java-ver">Java 17</div>
-                                    <div class="java-desc">Актуальные читы<br>1.17 – 1.20</div>
-                                    <a href="https://adoptium.net/temurin/releases/?version=17" target="_blank"
-                                        class="java-link">Скачать ↗</a>
-                                </div>
-                                <div class="java-card">
-                                    <div class="java-ver">Java 21</div>
-                                    <div class="java-desc">Новые читы<br>1.20+</div>
-                                    <a href="https://adoptium.net/temurin/releases/?version=21" target="_blank"
-                                        class="java-link">Скачать ↗</a>
-                                </div>
-                            </div>
-
+                            <p data-i18n="faq_2_a">В некоторых регионах провайдеры могут блокировать доступ к нашим
+                                серверам. Попробуйте использовать любой бесплатный VPN
+                                сервер (например, AvoVpn).</p>
                         </div>
                     </div>
                 </div>
-
-                <div class="faq-item">
-                    <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
-                        <div class="faq-trigger-left">
-                            <span class="faq-num">03</span>
-                            <span class="faq-q">Не нашёл ответ на свой вопрос</span>
-                        </div>
-                        <div class="faq-trigger-right">
-                            <span class="faq-cat">Поддержка</span>
-                            <span class="faq-chevron">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M6 9l6 6 6-6" />
-                                </svg>
-                            </span>
-                        </div>
-                    </button>
-                    <div class="faq-body">
-                        <div class="faq-body-inner">
-                            <p>Свяжитесь с поддержкой — обычно отвечаем в течение нескольких часов.</p>
-                            <div class="faq-contact-row">
-                                <a href="https://t.me/mxlauncher" target="_blank" class="faq-contact-btn">
-                                    <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none">
-                                        <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
-                                    </svg>
-                                    Telegram
-                                </a>
-                                <a href="support.html" class="faq-contact-btn">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                                    </svg>
-                                    Страница поддержки
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </section>
-
+        </div>
     </div>
 
-    <footer>
-        <div class="footer-inner">
-            <div class="footer-info">
-                <div class="footer-copy">MX Launcher © 2026 — All rights reserved</div>
-                <div class="footer-subtitle"><span id="footer-version-label">Ver. —</span> — Free Forever</div>
-            </div>
+    <footer class="site-footer">
+        <div class="footer-content">
             <div class="footer-links">
-                <a href="support.html">Поддержка</a>
-                <a href="https://t.me/mxlauncher" target="_blank">Telegram</a>
-                <a href="#" onclick="openAuthModal(event)">Войти</a>
+                <a href="#" data-i18n="footer_privacy">Политика конфиденциальности</a>
+                <a href="support.html" data-i18n="nav_support">Поддержка</a>
+                <a href="#" onclick="openAuthModal(event)" id="auth-btn-footer" data-i18n="nav_login">Войти</a>
+                <a href="https://t.me/mxlauncher" target="_blank" data-i18n="footer_tg">Официальный
+                    Telegram</a>
+            </div>
+            <div class="footer-copy">
+                <span data-i18n="footer_copy">MXlauncher © 2026 — Все права защищены</span>
             </div>
         </div>
     </footer>
@@ -1937,58 +1543,53 @@
 
     <div class="modal-overlay" id="authModal">
         <div class="auth-modal">
-            <div class="close-modal" onclick="closeAuthModal()">ESC</div>
-            <div class="auth-modal-title" id="auth-modal-title-text">Добро пожаловать</div>
-            <div class="auth-modal-sub" id="auth-modal-sub-text">Войдите в свой аккаунт</div>
+            <div class="close-modal" onclick="closeAuthModal()">ESC ✕</div>
+            <div class="auth-modal-title" id="auth-modal-title-text" data-i18n="auth_welcome">Добро пожаловать</div>
+            <div class="auth-modal-sub" id="auth-modal-sub-text" data-i18n="auth_login_desc">Войдите в свой аккаунт
+            </div>
 
             <div class="auth-tabs">
-                <div class="auth-tab active" id="tab-login" onclick="switchAuthMode('login')">Войти</div>
-                <div class="auth-tab" id="tab-register" onclick="switchAuthMode('register')">Регистрация</div>
+                <div class="auth-tab active" id="tab-login" onclick="switchAuthMode('login')"
+                    data-i18n="auth_tab_login">Войти</div>
+                <div class="auth-tab" id="tab-register" onclick="switchAuthMode('register')"
+                    data-i18n="auth_tab_register">Регистрация</div>
             </div>
 
             <form id="auth-form" onsubmit="handleAuthSubmit(event)">
                 <div class="form-group" id="auth-username-group">
-                    <label class="form-label"
-                        style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Никнейм</label>
-                    <input type="text" id="auth-username" class="form-control" placeholder="Логин"
-                        style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 13px; margin-bottom: 15px;">
+                    <label class="form-label" data-i18n="auth_username">Никнейм</label>
+                    <input type="text" id="auth-username" class="form-control" placeholder="Логин">
                 </div>
 
                 <div class="form-group" id="auth-pass-group">
-                    <label class="form-label"
-                        style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Пароль</label>
-                    <div
-                        style="display: flex; background: rgba(0,0,0,0.2); border: 1px solid var(--border); margin-bottom: 15px;">
+                    <label class="form-label" data-i18n="auth_password">Пароль</label>
+                    <div style="display: flex; position: relative;">
                         <input type="password" id="auth-password" class="form-control" placeholder="Пароль"
-                            minlength="5"
-                            style="border: none; background: transparent; flex: 1; padding: 11px 13px; color: var(--white); font-size: 13px;">
+                            minlength="5" style="padding-right: 40px;">
                         <button type="button" onclick="togglePasswordVisibility()"
-                            style="background: transparent; border: none; color: var(--gray-400); padding: 0 15px; cursor: pointer;">👁</button>
+                            style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 4px;">👁</button>
                     </div>
                 </div>
 
                 <div class="form-group" id="auth-captcha-group">
-                    <label class="form-label"
-                        style="display: block; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-600); margin-bottom: 7px;">Код
-                        с картинки</label>
+                    <label class="form-label" data-i18n="auth_captcha">Код с картинки</label>
                     <div style="display: flex; gap: 8px; margin-bottom: 10px;">
                         <img id="auth-captcha-image" src="" alt="Загрузка..."
-                            style="flex: 1; height: 42px; border: 1px solid var(--border); background: var(--white); object-fit: contain; border-radius: 2px;">
+                            style="flex: 1; height: 42px; border: 1px solid var(--border); background: var(--text); object-fit: contain; border-radius: 10px;">
                         <button type="button" onclick="loadCaptcha()"
-                            style="background: transparent; border: 1px solid var(--border); color: var(--gray-400); width: 42px; height: 42px; cursor: pointer; font-size: 16px; border-radius: 2px;">↻</button>
+                            style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-muted); width: 42px; height: 42px; cursor: pointer; font-size: 16px; border-radius: 10px; transition: all 0.2s;">↻</button>
                     </div>
-                    <input type="text" id="auth-captcha-text" class="form-control" autocomplete="off" placeholder="Код"
-                        style="width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border); padding: 11px 13px; color: var(--white); font-size: 13px;">
+                    <input type="text" id="auth-captcha-text" class="form-control" autocomplete="off" placeholder="Код">
                     <input type="hidden" id="auth-captcha-id">
                 </div>
 
                 <div class="form-group" id="auth-tg-group" style="display: none; margin-bottom: 15px;">
                     <a href="#" id="auth-tg-link" target="_blank" class="btn-auth"
-                        style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: var(--white); color: var(--black); text-decoration: none; padding: 13px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; transition: background 0.2s;">
+                        style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;">
                         <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor; stroke: none;">
                             <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
                         </svg>
-                        ОТКРЫТЬ ТЕЛЕГРАМ БОТА
+                        <span data-i18n="auth_tg_btn">ОТКРЫТЬ ТЕЛЕГРАМ БОТА</span>
                     </a>
                 </div>
 
@@ -1996,48 +1597,258 @@
                     style="color: var(--red); text-align: center; margin-bottom: 10px; font-size: 12px; min-height: 15px;">
                 </div>
 
-                <button type="submit" id="auth-submit-btn" class="btn-auth"
-                    style="width: 100%; background: var(--white); color: var(--black); border: none; padding: 13px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; cursor: pointer;">ВОЙТИ</button>
+                <button type="submit" id="auth-submit-btn" class="btn-auth" data-i18n="auth_btn_login">ВОЙТИ</button>
 
-                <button type="button" id="auth-forgot-btn"
-                    style="width: 100%; margin-top: 15px; background: transparent; border: none; color: var(--gray-400); cursor: pointer; font-size: 11px; font-family: 'DM Mono', monospace;"
-                    onclick="switchAuthMode('reset')">Забыли пароль?</button>
-                <button type="button" id="auth-switch-btn"
-                    style="width: 100%; margin-top: 10px; background: transparent; border: none; color: var(--gray-400); cursor: pointer; font-size: 11px; font-family: 'DM Mono', monospace;"
-                    onclick="switchAuthMode('register')">Нет аккаунта? Регистрация</button>
+                <button type="button" id="auth-forgot-btn" class="auth-text-btn" style="margin-top: 15px;"
+                    onclick="switchAuthMode('reset')" data-i18n="auth_forgot">Забыли пароль?</button>
+                <button type="button" id="auth-switch-btn" class="auth-text-btn" style="margin-top: 5px;"
+                    onclick="switchAuthMode('register')" data-i18n="auth_to_register">Нет аккаунта? Регистрация</button>
             </form>
         </div>
     </div>
 
-    <div class="mobile-nav-overlay" id="mobileNav">
-        <div class="mobile-nav-header">
-            <div class="mobile-nav-title">MX LAUNCHER</div>
-            <button class="mobile-nav-close" onclick="closeMobileNav()">✕ Закрыть</button>
-        </div>
-        <div class="mobile-nav-links">
-            <a class="mobile-nav-link highlight" href="#" onclick="closeMobileNav(); handleDownload(event)">
-                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-                </svg>
-                Скачать для Windows
-            </a>
-            <a class="mobile-nav-link" href="support.html">Поддержка</a>
-            <a class="mobile-nav-link" href="#" id="mobile-auth-link"
-                onclick="closeMobileNav(); openAuthModal(event)">Войти</a>
-            <a class="mobile-nav-link" href="https://t.me/mxlauncher" target="_blank">
-                <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;width:16px;height:16px">
-                    <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
-                </svg>
-                Telegram
-            </a>
-        </div>
-        <div class="mobile-nav-footer">MX Launcher © 2026 — Free Forever</div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-
     <script>
+        const swiper = new Swiper('.mySwiper', {
+            slidesPerView: 1.2,
+            centeredSlides: true,
+            spaceBetween: 20,
+            loop: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                768: { slidesPerView: 1.5, spaceBetween: 30 },
+                1024: { slidesPerView: 2, spaceBetween: 40 }
+            }
+        });
+
+        function toggleFaq(button) {
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            button.setAttribute('aria-expanded', !isExpanded);
+            const body = button.nextElementSibling;
+            if (!isExpanded) {
+                body.classList.add('open');
+            } else {
+                body.classList.remove('open');
+            }
+        }
+
+        const glassHeader = document.getElementById('glassHeader');
+        const heroActions = document.querySelector('.hero-actions');
+        const screensSection = document.getElementById('screens-section');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                glassHeader.classList.add('scrolled');
+            } else {
+                glassHeader.classList.remove('scrolled');
+            }
+        });
+
+        const animElements = document.querySelectorAll('.section-header, .swiper, .clean-list-container, .faq-container');
+        animElements.forEach(el => el.classList.add('scroll-anim'));
+
+        const scrollObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        animElements.forEach(el => {
+            scrollObserver.observe(el);
+        });
+
         const API_URL = "https://api.mxlauncher.fun";
+
+        function handleDownload(e) {
+            if (e) e.preventDefault();
+            fetch(`${API_URL}/increment_downloads`, { method: 'POST' }).catch(() => { });
+            window.location.href = "https://github.com/Kermi716/MXlauncher/releases/download/mxupdate/MXSetup.exe";
+        }
+
+        async function fetchStats() {
+            try {
+                const res = await fetch(`${API_URL}/online`);
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    const o = data.online || 0;
+                    const onlineCounter = document.getElementById('online-counter');
+                    if (onlineCounter) onlineCounter.innerText = o;
+                }
+            } catch (e) {
+                const onlineCounter = document.getElementById('online-counter');
+                if (onlineCounter) onlineCounter.innerText = "?";
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/get_downloads`);
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    const count = document.getElementById('download-counter');
+                    if (count) count.innerText = data.count.toLocaleString('ru');
+                }
+            } catch { }
+        }
+
+        fetchStats();
+        setInterval(fetchStats, 15000);
+
+        let currentLang = 'ru';
+        const translations = {
+            ru: {
+                logo_title: "MXlauncher",
+                nav_support: "Поддержка",
+                nav_login: "Войти",
+                nav_profile: "Профиль",
+                download_btn: "СКАЧАТЬ",
+                hero_badge: "Версия 1.0 — Бесплатно",
+                hero_desc: "Единая библиотека игровых модификаций. Наше приложение поможет тебе скачать моды, читы и визуалы совершенно бесплатно, без вирусов и скрытых подписок. Искал удобный лоадер? Считай, что тебе повезло!",
+                download_btn_full: "СКАЧАТЬ БЕСПЛАТНО",
+                hero_subtext: "Вы скачиваете официальный установщик. Поддерживаются Windows 10/11 (x64).",
+                sec_screens: "Интерфейс",
+                sec_screens_sub: "Взгляните на то, как выглядит лоадер изнутри.",
+                sec_stats: "Статистика",
+                sec_stats_sub: "Отражение нашего коммьюнити в цифрах.",
+                stat_online: "Игроков онлайн",
+                stat_online_sub: "Пользователей прямо сейчас",
+                sec_rating: "Оценка пользователей",
+                sec_rating_sub: "Нравится ли вам MX Launcher?",
+                stat_downloads: "Скачиваний",
+                stat_downloads_sub: "Успешных скачиваний лоадера",
+                sec_security: "Безопасность",
+                sec_security_sub: "Мы заботимся о вашей системе.",
+                sec_video: "Видео-проверка",
+                sec_video_value: "Обзор на YouTube",
+                sec_video_sub: "Независимая проверка на вирусы",
+                sec_vt: "Отчёт VirusTotal",
+                sec_vt_value: "Результат: 3 / 72",
+                sec_vt_sub: "Проверка пройдена успешно",
+                sec_req: "Требования",
+                sec_req_sub: "Убедитесь, что ваша система подходит.",
+                req_os: "Операционная система",
+                req_os_val: "Windows 10 / 11 (только 64-bit)",
+                req_cpu: "Процессор (CPU)",
+                req_cpu_val: "Intel Core i3 / AMD Ryzen 3 или лучше",
+                req_ram: "Память (RAM)",
+                req_ram_val: "4 GB минимум — рекомендуется 8 GB",
+                req_disk: "Место на диске",
+                req_disk_val: "От 5 GB (лаунчер + игровые сборки)",
+                req_soft: "Дополнительное ПО",
+                req_soft_val: "Java 8 / Java 17 / Java 21",
+                sec_faq: "FAQ",
+                sec_faq_sub: "Ответы на частые вопросы.",
+                faq_1_q: "Чит или визуалы не запускаются?",
+                faq_1_a: "Большинство читов требуют конкретную версию Java. Убедитесь, что у вас установлены Java 8, 17 и 21, и выберите правильную версию в настройках профиля перед запуском программы.",
+                faq_2_q: "Лаунчер не запускается или выдает ошибку сети?",
+                faq_2_a: "В некоторых регионах провайдеры могут блокировать доступ к нашим серверам. Попробуйте использовать любой бесплатный VPN сервер (например, AvoVpn).",
+                footer_privacy: "Политика конфиденциальности",
+                footer_tg: "Официальный Telegram",
+                footer_copy: "MXlauncher © 2026 — Все права защищены",
+                auth_welcome: "Добро пожаловать",
+                auth_login_desc: "Войдите в свой аккаунт",
+                auth_create: "Создать аккаунт",
+                auth_wait: "Регистрация займет минуту",
+                auth_reset: "Сброс пароля",
+                auth_reset_desc: "Восстановление доступа",
+                auth_link: "Привязка Telegram",
+                auth_link_desc: "Требование безопасности",
+                auth_tab_login: "Войти",
+                auth_tab_register: "Регистрация",
+                auth_username: "Никнейм",
+                auth_password: "Пароль",
+                auth_captcha: "Код с картинки",
+                auth_btn_login: "ВОЙТИ",
+                auth_btn_register: "ОТПРАВИТЬ ССЫЛКУ в ТГ БОТ",
+                auth_tg_btn: "ОТКРЫТЬ ТЕЛЕГРАМ БОТА",
+                auth_forgot: "Забыли пароль?",
+                auth_to_register: "Нет аккаунта? Регистрация",
+                auth_to_login: "Уже есть аккаунт? Войти",
+                notif_welcome: "Добро пожаловать",
+                notif_download: "Менеджер загрузок",
+                notif_download_sub: "Скачивание началось..."
+            },
+            en: {
+                logo_title: "MXlauncher",
+                nav_support: "Support",
+                nav_login: "Log in",
+                nav_profile: "Profile",
+                download_btn: "DOWNLOAD",
+                hero_badge: "Version 1.0 — Free",
+                hero_desc: "A unified library of game modifications. Our app helps you download mods, cheats, and visuals completely free, without viruses or hidden subscriptions. Looking for a convenient loader? Consider yourself lucky!",
+                download_btn_full: "DOWNLOAD FREE",
+                hero_subtext: "You are downloading the official installer. Supports Windows 10/11 (x64).",
+                sec_screens: "Interface",
+                sec_screens_sub: "Take a look at how the loader looks from the inside.",
+                sec_stats: "Statistics",
+                sec_stats_sub: "A reflection of our community in numbers.",
+                stat_online: "Players online",
+                stat_online_sub: "Users currently online",
+                stat_downloads: "Downloads",
+                stat_downloads_sub: "Successful loader downloads",
+                sec_rating: "User Rating",
+                sec_rating_sub: "Do you like MX Launcher?",
+                sec_security: "Security",
+                sec_security_sub: "We care about your system.",
+                sec_video: "Video Review",
+                sec_video_value: "Review on YouTube",
+                sec_video_sub: "Independent virus scan",
+                sec_vt: "VirusTotal Report",
+                sec_vt_value: "Result: 3 / 72",
+                sec_vt_sub: "Verification passed successfully",
+                sec_req: "Requirements",
+                sec_req_sub: "Make sure your system is appropriate.",
+                req_os: "Operating System",
+                req_os_val: "Windows 10 / 11 (64-bit only)",
+                req_cpu: "Processor (CPU)",
+                req_cpu_val: "Intel Core i3 / AMD Ryzen 3 or better",
+                req_ram: "Memory (RAM)",
+                req_ram_val: "4 GB minimum — 8 GB recommended",
+                req_disk: "Disk Space",
+                req_disk_val: "From 5 GB (loader + game builds)",
+                req_soft: "Additional Software",
+                req_soft_val: "Java 8 / Java 17 / Java 21",
+                sec_faq: "FAQ",
+                sec_faq_sub: "Answers to frequently asked questions.",
+                faq_1_q: "Cheat or visuals won't launch?",
+                faq_1_a: "Most cheats require a specific version of Java. Make sure you have Java 8, 17, and 21 installed, and select the correct version in the profile settings before launching.",
+                faq_2_q: "Loader won't start or gives a network error?",
+                faq_2_a: "In some regions, providers may block access to our servers. Try using any free VPN server.",
+                footer_privacy: "Privacy Policy",
+                footer_tg: "Official Telegram",
+                footer_copy: "MXlauncher © 2026 — All rights reserved",
+                auth_welcome: "Welcome",
+                auth_login_desc: "Log into your account",
+                auth_create: "Create Account",
+                auth_wait: "Registration takes a minute",
+                auth_reset: "Reset Password",
+                auth_reset_desc: "Access recovery",
+                auth_link: "Link Telegram",
+                auth_link_desc: "Security requirement",
+                auth_tab_login: "Log in",
+                auth_tab_register: "Register",
+                auth_username: "Username",
+                auth_password: "Password",
+                auth_captcha: "Captcha code",
+                auth_btn_login: "LOG IN",
+                auth_btn_register: "SEND LINK TO TG BOT",
+                auth_tg_btn: "OPEN TELEGRAM BOT",
+                auth_forgot: "Forgot your password?",
+                auth_to_register: "No account? Register",
+                auth_to_login: "Already have an account? Log in",
+                notif_welcome: "Welcome",
+                notif_download: "Download Manager",
+                notif_download_sub: "Download started..."
+            }
+        };
 
         async function getSha256Hash(message) {
             const msgBuffer = new TextEncoder().encode(message);
@@ -2103,28 +1914,7 @@
             }
         }).catch(() => { });
 
-        function openMobileNav() {
-            document.getElementById('mobileNav').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMobileNav() {
-            document.getElementById('mobileNav').classList.remove('open');
-            document.body.style.overflow = '';
-        }
-
-        function showNotification(title, text, isSuccess = false) {
-            const toast = document.getElementById('notificationToast');
-            document.getElementById('toastTitle').innerText = title;
-            document.getElementById('toastDesc').innerText = text;
-            toast.className = 'toast';
-            if (!isSuccess) toast.classList.add('toast-error');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 4000);
-        }
-
-        // --- НОВАЯ СИСТЕМА АВТОРИЗАЦИИ ---
-        let authMode = 'login'; // 'login', 'register', 'reset', 'link'
+        let authMode = 'login';
         let isCodeSent = false;
         let linkUsername = "";
 
@@ -2194,53 +1984,53 @@
 
             if (mode === 'login') {
                 document.getElementById('tab-login').classList.add('active');
-                title.innerText = "Добро пожаловать";
-                sub.innerText = "Войдите в свой аккаунт";
+                title.innerText = translations[currentLang].auth_welcome;
+                sub.innerText = translations[currentLang].auth_login_desc;
                 document.getElementById('auth-username-group').style.display = 'block';
                 document.getElementById('auth-pass-group').style.display = 'block';
                 document.getElementById('auth-forgot-btn').style.display = 'block';
                 document.getElementById('auth-username').placeholder = "Логин";
-                document.getElementById('auth-switch-btn').innerText = "Нет аккаунта? Регистрация";
+                document.getElementById('auth-switch-btn').innerText = translations[currentLang].auth_to_register;
                 document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('register');
-                btn.innerText = "ВОЙТИ";
+                btn.innerText = translations[currentLang].auth_btn_login;
                 btn.style.display = "block";
                 loadCaptcha();
             }
             else if (mode === 'register') {
                 document.getElementById('tab-register').classList.add('active');
-                title.innerText = "Создать аккаунт";
-                sub.innerText = "Регистрация займет минуту";
+                title.innerText = translations[currentLang].auth_create;
+                sub.innerText = translations[currentLang].auth_wait;
                 document.getElementById('auth-username-group').style.display = 'block';
                 document.getElementById('auth-pass-group').style.display = 'block';
                 document.getElementById('auth-username').placeholder = "Придумайте логин";
-                document.getElementById('auth-switch-btn').innerText = "Уже есть аккаунт? Войти";
+                document.getElementById('auth-switch-btn').innerText = translations[currentLang].auth_to_login;
                 document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
-                btn.innerText = "ОТПРАВИТЬ ССЫЛКУ в ТГ БОТ";
+                btn.innerText = translations[currentLang].auth_btn_register;
                 btn.style.display = "block";
                 loadCaptcha();
             }
             else if (mode === 'reset') {
-                title.innerText = "Сброс пароля";
-                sub.innerText = "Восстановление доступа";
+                title.innerText = translations[currentLang].auth_reset;
+                sub.innerText = translations[currentLang].auth_reset_desc;
                 document.getElementById('auth-username-group').style.display = 'block';
                 document.getElementById('auth-username').placeholder = "Логин";
                 document.getElementById('auth-pass-group').style.display = 'block';
-                document.getElementById('auth-switch-btn').innerText = "Вспомнили? Войти";
+                document.getElementById('auth-switch-btn').innerText = translations[currentLang].auth_to_login;
                 document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
-                btn.innerText = "ОТПРАВИТЬ ССЫЛКУ в ТГ БОТ";
+                btn.innerText = translations[currentLang].auth_btn_register;
                 btn.style.display = "block";
                 loadCaptcha();
             }
             else if (mode === 'link') {
-                title.innerText = "Привязка Telegram";
-                sub.innerText = "Требование безопасности";
+                title.innerText = translations[currentLang].auth_link;
+                sub.innerText = translations[currentLang].auth_link_desc;
                 document.getElementById('auth-username-group').style.display = 'block';
                 document.getElementById('auth-username').value = linkUsername;
                 document.getElementById('auth-username').disabled = true;
                 document.getElementById('auth-pass-group').style.display = 'block';
-                document.getElementById('auth-switch-btn').innerText = "Войти в другой аккаунт";
+                document.getElementById('auth-switch-btn').innerText = translations[currentLang].auth_to_login;
                 document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
-                btn.innerText = "ОТПРАВИТЬ ССЫЛКУ в ТГ БОТ";
+                btn.innerText = translations[currentLang].auth_btn_register;
                 btn.style.display = "block";
                 loadCaptcha();
             }
@@ -2272,7 +2062,7 @@
                     const data = await res.json();
                     if (res.ok) {
                         isCodeSent = true;
-                        status.style.color = 'var(--green)';
+                        status.style.color = 'var(--online)';
                         status.innerText = "Перейдите в Telegram по ссылке!";
 
                         document.getElementById('auth-captcha-group').style.display = 'none';
@@ -2320,13 +2110,13 @@
                 const data = await res.json();
 
                 if (res.ok) {
-                    status.style.color = 'var(--green)';
+                    status.style.color = 'var(--online)';
                     if (authMode === 'login') {
                         localStorage.setItem('mx_token', data.token);
                         localStorage.setItem('mx_username', data.username);
                         closeAuthModal();
-                        showNotification("Добро пожаловать", data.username, true);
-                        setTimeout(() => window.location.reload(), 1000);
+                        showNotification(translations[currentLang].notif_welcome, data.username, true);
+                        updateAuthUI();
                     } else {
                         status.innerText = data.message || "Успешно!";
                         setTimeout(() => switchAuthMode('login'), 2000);
@@ -2344,159 +2134,86 @@
             } catch (e) { status.innerText = "Ошибка сервера"; }
 
             btn.disabled = false;
-            if (authMode === 'login') btn.innerText = "ВОЙТИ";
-            else if (!isCodeSent) btn.innerText = "ОТПРАВИТЬ ССЫЛКУ в ТГ БОТ";
-        }
-        // --- КОНЕЦ НОВОЙ СИСТЕМЫ АВТОРИЗАЦИИ ---
-
-        async function fetchDownloadCount() {
-            try {
-                const res = await fetch(`${API_URL}/get_downloads`);
-                const data = await res.json();
-                if (data.status === 'ok') document.getElementById('download-counter').innerText = data.count.toLocaleString('ru');
-            } catch { }
+            if (authMode === 'login') btn.innerText = translations[currentLang].auth_btn_login;
+            else if (!isCodeSent) btn.innerText = translations[currentLang].auth_btn_register;
         }
 
-        async function handleDownload(e) {
-            e.preventDefault();
-            try { await fetch(`${API_URL}/increment_downloads`, { method: 'POST' }); fetchDownloadCount(); } catch { }
-            showNotification("Загрузка", "Скачивание началось...", true);
+        function showNotification(title, text, isSuccess = false) {
+            const toast = document.getElementById('notificationToast');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastDesc').innerText = text;
+            toast.className = 'toast';
+            if (!isSuccess) toast.classList.add('toast-error');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        function handleDownload(e) {
+            if (e) e.preventDefault();
+            fetch(`${API_URL}/increment_downloads`, { method: 'POST' }).catch(() => { });
+            showNotification(translations[currentLang].notif_download, translations[currentLang].notif_download_sub, true);
             window.location.href = "https://github.com/Kermi716/MXlauncher/releases/download/mxupdate/MXSetup.exe";
         }
 
-        async function fetchLauncherRating() {
-            try {
-                const res = await fetch(`${API_URL}/get_launcher_rating`);
-                const data = await res.json();
-                if (data.status === 'ok') {
-                    const likes = data.likes || 0, dislikes = data.dislikes || 0;
-                    const total = likes + dislikes;
-                    document.getElementById('like-count').innerText = likes;
-                    document.getElementById('dislike-count').innerText = dislikes;
-                    const lp = total > 0 ? (likes / total) * 100 : 50;
-                    document.getElementById('rating-bar-like').style.width = `${lp}%`;
-                    document.getElementById('rating-bar-dislike').style.width = `${100 - lp}%`;
-                }
-            } catch { }
-        }
+        function updateAuthUI() {
+            const savedUser = localStorage.getItem('mx_username');
+            const btns = [document.getElementById('auth-btn-base'), document.getElementById('auth-btn-island'), document.getElementById('auth-btn-footer')];
 
-        async function handleRate(action) {
-            const token = localStorage.getItem('mx_token');
-            const username = localStorage.getItem('mx_username');
-            if (!token || !username) {
-                showNotification("Требуется вход", "Оценки доступны только для зарегистрированных пользователей");
-                openAuthModal(); return;
-            }
-            try {
-                const res = await fetch(`${API_URL}/rate_launcher`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, token, action })
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.status === 'ok') { showNotification("Голос учтён", "", true); fetchLauncherRating(); }
-                    else if (data.error === "unauthorized") {
-                        showNotification("Сессия истекла", "Войдите снова");
-                        localStorage.removeItem('mx_token'); localStorage.removeItem('mx_username');
-                        openAuthModal();
-                    }
-                }
-            } catch { showNotification("Ошибка", "Сервер недоступен"); }
-        }
-
-        async function checkServerStatus() {
-            const dot = document.getElementById('server-dot');
-            const text = document.getElementById('server-text');
-            try {
-                const controller = new AbortController();
-                const t = setTimeout(() => controller.abort(), 5000);
-                const res = await fetch(`${API_URL}/get_downloads?t=${Date.now()}`, { signal: controller.signal });
-                clearTimeout(t);
-                if (res.ok) { dot.classList.add('online'); text.innerText = 'ONLINE'; } else throw new Error();
-            } catch { text.innerText = 'OFFLINE'; }
-        }
-
-        async function fetchOnlineCount() {
-            try {
-                const res = await fetch(`${API_URL}/online?t=${Date.now()}`);
-                const data = await res.json();
-                if (data.online !== undefined) document.getElementById('online-counter').innerText = data.online;
-            } catch { document.getElementById('online-counter').innerText = "—"; }
-        }
-
-        async function fetchVersion() {
-            try {
-                const res = await fetch(`${API_URL}/check_update`);
-                const data = await res.json();
-                const ver = data.latest_version || data.version;
-                if (ver) {
-                    const el = document.getElementById('version-label');
-                    if (el) el.textContent = `Ver. ${ver}`;
-                    const footerEl = document.getElementById('footer-version-label');
-                    if (footerEl) footerEl.textContent = `Ver. ${ver}`;
-                }
-            } catch { }
-        }
-
-        function initScrollReveal() {
-            const els = document.querySelectorAll('.reveal');
-            if (!els.length) return;
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
+            if (savedUser) {
+                btns.forEach(btn => {
+                    if (btn) {
+                        if (btn.tagName === 'BUTTON') {
+                            btn.innerHTML = `
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                <span>${savedUser}</span>
+                            `;
+                            btn.onclick = () => { window.location.href = "profile.html"; };
+                        } else {
+                            btn.innerHTML = `<span data-i18n="nav_profile">${translations[currentLang].nav_profile || "Профиль"}</span>`;
+                            btn.onclick = null;
+                            btn.href = "profile.html";
+                        }
                     }
                 });
-            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-            els.forEach(el => observer.observe(el));
-        }
-
-        function toggleFaq(btn) {
-            const item = btn.closest('.faq-item');
-            const body = item.querySelector('.faq-body');
-            const isOpen = btn.getAttribute('aria-expanded') === 'true';
-
-            document.querySelectorAll('.faq-trigger[aria-expanded="true"]').forEach(b => {
-                b.setAttribute('aria-expanded', 'false');
-                b.closest('.faq-item').querySelector('.faq-body').classList.remove('open');
-            });
-
-            if (!isOpen) {
-                btn.setAttribute('aria-expanded', 'true');
-                body.classList.add('open');
+            } else {
+                btns.forEach(btn => {
+                    if (btn && btn.tagName === 'BUTTON') {
+                        btn.onclick = openAuthModal;
+                    }
+                });
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            fetchDownloadCount();
-            fetchLauncherRating();
-            checkServerStatus();
-            fetchOnlineCount();
-            fetchVersion();
-            initScrollReveal();
-
-            const savedUser = localStorage.getItem('mx_username');
-            if (savedUser) {
-                const btn = document.getElementById('auth-btn-footer');
-                if (btn) { btn.textContent = 'Личный кабинет'; btn.onclick = null; btn.href = "profile.html"; }
-                const mobileBtn = document.getElementById('mobile-auth-link');
-                if (mobileBtn) { mobileBtn.textContent = 'Личный кабинет'; mobileBtn.onclick = null; mobileBtn.href = "profile.html"; }
-            }
-
-            new Swiper('.mySwiper', {
-                effect: 'coverflow',
-                grabCursor: true,
-                centeredSlides: true,
-                slidesPerView: 'auto',
-                loop: true,
-                autoplay: { delay: 3500, disableOnInteraction: false },
-                coverflowEffect: { rotate: 15, stretch: 0, depth: 120, modifier: 1, slideShadows: false },
-                pagination: { el: '.swiper-pagination', clickable: true, dynamicBullets: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-            });
+            updateAuthUI();
         });
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            document.body.classList.add('lang-switching');
+
+            setTimeout(() => {
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (translations[currentLang][key]) {
+                        el.innerText = translations[currentLang][key];
+                    }
+                });
+
+                document.querySelectorAll('.lang-indicator').forEach(el => {
+                    el.innerText = currentLang.toUpperCase();
+                });
+
+                document.body.classList.remove('lang-switching');
+            }, 300);
+        }
+
     </script>
 </body>
 
