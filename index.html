@@ -1677,12 +1677,11 @@
 
         async function fetchStats() {
             try {
-                const res = await fetch(`${API_URL}/online`);
+                const res = await fetch(`${API_URL}/online?t=${Date.now()}`);
                 const data = await res.json();
-                if (data.status === 'ok') {
-                    const o = data.online || 0;
+                if (data.online !== undefined) {
                     const onlineCounter = document.getElementById('online-counter');
-                    if (onlineCounter) onlineCounter.innerText = o;
+                    if (onlineCounter) onlineCounter.innerText = data.online;
                 }
             } catch (e) {
                 const onlineCounter = document.getElementById('online-counter');
@@ -1701,6 +1700,67 @@
 
         fetchStats();
         setInterval(fetchStats, 15000);
+
+        async function fetchLauncherRating() {
+            try {
+                const res = await fetch(`${API_URL}/get_launcher_rating`);
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    const likes = data.likes || 0;
+                    const dislikes = data.dislikes || 0;
+                    const total = likes + dislikes;
+
+                    const likeCountEl = document.getElementById('like-count');
+                    const dislikeCountEl = document.getElementById('dislike-count');
+
+                    if (likeCountEl) likeCountEl.innerText = likes;
+                    if (dislikeCountEl) dislikeCountEl.innerText = dislikes;
+
+                    const lp = total > 0 ? (likes / total) * 100 : 50;
+                    const barLike = document.getElementById('rating-bar-like');
+                    const barDislike = document.getElementById('rating-bar-dislike');
+
+                    if (barLike) barLike.style.width = `${lp}%`;
+                    if (barDislike) barDislike.style.width = `${100 - lp}%`;
+                }
+            } catch (e) { 
+                console.error("Ошибка при загрузке оценок", e); 
+            }
+        }
+
+        async function handleRate(action) {
+            const token = localStorage.getItem('mx_token');
+            const username = localStorage.getItem('mx_username');
+            
+            if (!token || !username) {
+                showNotification("Требуется вход", "Оценки доступны только для авторизованных пользователей");
+                openAuthModal(); 
+                return;
+            }
+            
+            try {
+                const res = await fetch(`${API_URL}/rate_launcher`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, token, action })
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.status === 'ok') { 
+                        showNotification("Голос учтён", "Спасибо за вашу оценку", true); 
+                        fetchLauncherRating();
+                    } else if (data.error === "unauthorized") {
+                        showNotification("Сессия истекла", "Войдите снова");
+                        localStorage.removeItem('mx_token'); 
+                        localStorage.removeItem('mx_username');
+                        openAuthModal();
+                    }
+                }
+            } catch { 
+                showNotification("Ошибка", "Сервер недоступен"); 
+            }
+        }
 
         let currentLang = 'ru';
         const translations = {
