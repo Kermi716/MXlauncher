@@ -1390,11 +1390,11 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="rating-track" style="border-radius: 4px; height: 4px; background: var(--border);">
+                        <div class="rating-track" style="border-radius: 4px; height: 4px; background: var(--border); display: flex; overflow: hidden;">
                             <div class="rating-like-fill" id="rating-bar-like"
-                                style="width: 50%; background: var(--green);"></div>
+                                style="width: 50%; background: var(--online); transition: width 0.5s ease;"></div>
                             <div class="rating-dislike-fill" id="rating-bar-dislike"
-                                style="width: 50%; background: var(--red);"></div>
+                                style="width: 50%; background: var(--red); transition: width 0.5s ease;"></div>
                         </div>
                     </div>
                 </div>
@@ -1700,6 +1700,21 @@
 
         fetchStats();
         setInterval(fetchStats, 15000);
+
+        async function fetchVersion() {
+            try {
+                const res = await fetch(`${API_URL}/check_update`);
+                const data = await res.json();
+                const ver = data.latest_version || data.version;
+                if (ver) {
+                    translations.ru.hero_badge = `Версия ${ver} — Бесплатно`;
+                    translations.en.hero_badge = `Version ${ver} — Free`;
+                    
+                    const badge = document.querySelector('.hero-badge');
+                    if (badge) badge.innerText = translations[currentLang].hero_badge;
+                }
+            } catch { }
+        }
 
         async function fetchLauncherRating() {
             try {
@@ -2250,6 +2265,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             updateAuthUI();
             fetchLauncherRating();
+            fetchVersion();
         });
 
         function toggleLanguage() {
