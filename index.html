@@ -1061,33 +1061,57 @@
             }
         }
 
-        @media (max-width: 768px) {
+       @media (max-width: 768px) {
             .hero-title {
-                font-size: clamp(50px, 12vw, 80px);
+                font-size: clamp(36px, 10vw, 60px);
+                letter-spacing: 1px;
             }
 
             .hero-actions {
                 flex-direction: column;
+                width: 100%;
             }
 
             .hero-actions .btn-primary {
                 width: 100%;
-                max-width: 300px;
+                max-width: 100%;
             }
 
             .hero {
-                padding: 120px 20px 60px;
+                padding: 100px 16px 40px;
             }
 
             .content-wrap {
-                padding: 0 20px;
+                padding: 0 16px;
                 gap: 40px;
             }
 
             .base-header {
-                padding: 20px;
+                padding: 16px;
                 flex-direction: column;
-                gap: 20px;
+                gap: 12px;
+                border-radius: 16px;
+            }
+            
+            .base-header-nav {
+                flex-wrap: wrap; 
+                justify-content: center;
+                gap: 8px !important;
+            }
+
+            .glass-header {
+                width: 92%;
+                left: 50%;
+                padding: 8px 12px;
+            }
+
+            .desktop-only {
+                display: none !important;
+            }
+
+            .section-title {
+                font-size: 24px;
+                margin-bottom: 8px;
             }
 
             .clean-row {
@@ -1098,33 +1122,72 @@
                 max-width: 100%;
                 border-right: none;
                 border-bottom: 1px solid var(--border);
-                padding: 16px 20px;
+                padding: 16px;
             }
 
             .clean-value {
-                padding: 16px 20px;
+                padding: 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
             }
 
-            .glass-header {
-                width: 95%;
-                left: 50%;
-                padding: 6px 6px 6px 20px;
+            .clean-arrow {
+                align-self: flex-end;
             }
 
-            .desktop-only {
-                display: none;
+            .faq-trigger {
+                padding: 20px 0;
             }
 
-            .section-title {
-                font-size: 26px;
+            .faq-q {
+                font-size: 16px;
+                padding-right: 16px;
+            }
+
+            .faq-body-inner {
+                padding: 0 16px 0 0; 
             }
 
             .footer-content {
-                padding: 0 20px;
+                padding: 0 16px;
+                flex-direction: column;
+                gap: 24px;
             }
 
-            .glass-header .btn-icon {
-                display: none;
+            .footer-links {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .auth-modal {
+                margin: 0 16px; 
+                padding: 24px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: clamp(30px, 11vw, 40px);
+                letter-spacing: 0px;
+            }
+            
+            .header-title {
+                font-size: 18px;
+            }
+
+            .clean-value[style*="flex-direction: column"] {
+                padding-top: 12px !important;
+                padding-bottom: 12px !important;
+            }
+
+            .rating-btns {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-rate {
+                width: 100%;
             }
         }
     </style>
