@@ -710,6 +710,37 @@
             </div>
         </section>
 
+        <section class="section reveal">
+            <div class="section-header">
+                <span class="section-label">04</span>
+                <span class="section-title" data-i18n="adm_sec4_title">Генерация ключей</span>
+                <div class="section-rule"></div>
+            </div>
+
+            <div class="ticket-item" style="padding: 24px;">
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+                    <div>
+                        <div class="ticket-q-label" style="margin-bottom: 8px;" data-i18n="adm_key_count">Количество</div>
+                        <input type="number" id="key-count" class="reply-input" value="1" min="1" max="50" style="min-height: auto; padding: 11px 16px; margin-bottom: 0; width: 100px;">
+                    </div>
+                    <div>
+                        <div class="ticket-q-label" style="margin-bottom: 8px;" data-i18n="adm_key_duration">Длительность</div>
+                        <select class="sort-select" id="key-duration" style="padding: 11px 16px;">
+                            <option value="30" data-i18n="adm_prem_30">На 1 Месяц</option>
+                            <option value="180" data-i18n="adm_prem_60">На 6 Месяцев</option>
+                            <option value="forever" data-i18n="adm_prem_forever">Навсегда</option>
+                        </select>
+                    </div>
+                    <button class="btn-auth" onclick="createKeys()" data-i18n="adm_key_gen">Сгенерировать</button>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <div class="ticket-q-label" data-i18n="adm_key_result">Сгенерированные ключи:</div>
+                    <textarea id="generated-keys-output" class="reply-input" readonly style="font-family: 'DM Mono', monospace; min-height: 120px;" placeholder="..."></textarea>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <footer>
@@ -743,6 +774,11 @@
                 adm_sec3_title: "Управление игроками",
                 adm_target_user: "Никнейм игрока",
                 adm_target_ph: "Введите точный никнейм...",
+                adm_sec4_title: "Генерация ключей",
+                adm_key_count: "Количество",
+                adm_key_duration: "Длительность",
+                adm_key_gen: "Сгенерировать",
+                adm_key_result: "Сгенерированные ключи:",
                 adm_ban: "Забанить",
                 adm_unban: "Разбанить",
                 adm_prem_7: "На 1 Неделю",
@@ -792,6 +828,11 @@
                 adm_sec2_title: "Resource Pack Moderation",
                 adm_sec3_title: "Player Management",
                 adm_target_user: "Player Username",
+                adm_sec4_title: "Key Generation",
+                adm_key_count: "Amount",
+                adm_key_duration: "Duration",
+                adm_key_gen: "Generate",
+                adm_key_result: "Generated Keys:",
                 adm_target_ph: "Enter exact username...",
                 adm_ban: "Ban",
                 adm_unban: "Unban",
@@ -1244,6 +1285,33 @@
                     alert(data.error || "Ошибка.");
                 }
             } catch (e) { alert("Ошибка соединения."); }
+        }
+
+        async function createKeys() {
+            const count = document.getElementById('key-count').value;
+            const duration = document.getElementById('key-duration').value;
+            const output = document.getElementById('generated-keys-output');
+
+            output.value = "Генерация...";
+
+            try {
+                const res = await fetch(`${API_URL}/admin_create_keys`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken, duration: duration, count: parseInt(count) })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    showToast("Успешно создано!");
+                    output.value = data.keys.join('\n');
+                } else {
+                    showToast(data.error || "Ошибка сервера");
+                    output.value = data.error;
+                }
+            } catch (e) {
+                showToast("Ошибка сети");
+                output.value = "Ошибка сети";
+            }
         }
 
         window.onload = initAdmin;
