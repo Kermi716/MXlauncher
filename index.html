@@ -455,43 +455,63 @@
 
         .swiper {
             width: 100%;
-            border-radius: 12px;
+            padding-top: 40px;
+            padding-bottom: 80px !important;
             overflow: visible;
-            padding-bottom: 60px !important;
-        }
-
-        .swiper-wrapper {
-            align-items: center;
         }
 
         .swiper-slide {
-            opacity: 0.4;
+            width: 80%;
+            max-width: 700px;
+            border-radius: 16px;
+            background: #09090b;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            transform: scale(0.9);
-            filter: grayscale(100%);
+            filter: brightness(0.5) grayscale(50%);
         }
 
         .swiper-slide-active {
-            opacity: 1;
-            transform: scale(1);
-            filter: grayscale(0%);
-            z-index: 2;
+            filter: brightness(1) grayscale(0%);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 255, 255, 0.05);
         }
+
+        .screen-top-bar {
+            height: 32px;
+            background: #111113;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 8px;
+        }
+
+        .mac-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        .mac-dot.close { background: #ed6a5e; }
+        .mac-dot.min { background: #f4bf4f; }
+        .mac-dot.max { background: #61c554; }
 
         .swiper-slide img {
             width: 100%;
             display: block;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            background: #18181b;
             min-height: 200px;
+            object-fit: cover;
         }
 
         .swiper-pagination-bullet {
             background: #fff !important;
-            opacity: 0.2 !important;
-            transition: all 0.3s;
+            opacity: 0.15 !important;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 8px !important;
+            height: 8px !important;
         }
 
         .swiper-pagination-bullet-active {
@@ -499,6 +519,7 @@
             width: 32px !important;
             border-radius: 4px !important;
             background: #fff !important;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         .clean-list-container {
@@ -1355,23 +1376,79 @@
             </div>
             <div class="swiper mySwiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="screen/1.jpg" alt="Screen 1"
-                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+1'"></div>
-                    <div class="swiper-slide"><img src="screen/2.jpg" alt="Screen 2"
-                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+2'"></div>
-                    <div class="swiper-slide"><img src="screen/3.jpg" alt="Screen 3"
-                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+3'"></div>
-                    <div class="swiper-slide"><img src="screen/4.jpg" alt="Screen 4"
-                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+4'"></div>
-                    <div class="swiper-slide"><img src="screen/5.jpg" alt="Screen 5"
-                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+5'"></div>
-                    <div class="swiper-slide"><img src="screen/6.jpg" alt="Screen 6"
-                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+6'"></div>
-                    <div class="swiper-slide"><img src="screen/7.jpg" alt="Screen 7"
-                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+7'"></div>
-                    <div class="swiper-slide"><img src="screen/8.jpg" alt="Screen 8"
-                            onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+8'"></div>
+                    <div class="swiper-slide">
+                        <div class="screen-top-bar">
+                            <div class="mac-dot close"></div>
+                            <div class="mac-dot min"></div>
+                            <div class="mac-dot max"></div>
+                        </div>
+                        <img src="screen/1.jpg" alt="Screen 1" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+1'">
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="screen-top-bar">
+                            <div class="mac-dot close"></div>
+                            <div class="mac-dot min"></div>
+                            <div class="mac-dot max"></div>
+                        </div>
+                        <img src="screen/2.jpg" alt="Screen 2" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+2'">
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="screen-top-bar">
+                            <div class="mac-dot close"></div>
+                            <div class="mac-dot min"></div>
+                            <div class="mac-dot max"></div>
+                        </div>
+                        <img src="screen/3.jpg" alt="Screen 3" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+3'">
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="screen-top-bar">
+                            <div class="mac-dot close"></div>
+                            <div class="mac-dot min"></div>
+                            <div class="mac-dot max"></div>
+                        </div>
+                        <img src="screen/4.jpg" alt="Screen 4" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+4'">
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="screen-top-bar">
+                            <div class="mac-dot close"></div>
+                            <div class="mac-dot min"></div>
+                            <div class="mac-dot max"></div>
+                        </div>
+                        <img src="screen/5.jpg" alt="Screen 5" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+5'">
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="screen-top-bar">
+                            <div class="mac-dot close"></div>
+                            <div class="mac-dot min"></div>
+                            <div class="mac-dot max"></div>
+                        </div>
+                        <img src="screen/6.jpg" alt="Screen 6" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+6'">
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="screen-top-bar">
+                            <div class="mac-dot close"></div>
+                            <div class="mac-dot min"></div>
+                            <div class="mac-dot max"></div>
+                        </div>
+                        <img src="screen/7.jpg" alt="Screen 7" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+7'">
+                    </div>
+                    
+                    <div class="swiper-slide">
+                        <div class="screen-top-bar">
+                            <div class="mac-dot close"></div>
+                            <div class="mac-dot min"></div>
+                            <div class="mac-dot max"></div>
+                        </div>
+                        <img src="screen/8.jpg" alt="Screen 8" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+8'">
+                    </div>
                 </div>
+                
                 <div class="swiper-pagination"></div>
             </div>
         </div>
@@ -1673,21 +1750,26 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
         const swiper = new Swiper('.mySwiper', {
-            slidesPerView: 1.2,
+            effect: 'coverflow',
+            grabCursor: true,
             centeredSlides: true,
-            spaceBetween: 20,
+            slidesPerView: 'auto',
             loop: true,
+            coverflowEffect: {
+                rotate: 15,        
+                stretch: 0,
+                depth: 250,
+                modifier: 1,
+                slideShadows: true
+            },
             autoplay: {
-                delay: 2500,
+                delay: 3000,
                 disableOnInteraction: false,
             },
             pagination: {
                 el: '.swiper-pagination',
                 clickable: true,
-            },
-            breakpoints: {
-                768: { slidesPerView: 1.5, spaceBetween: 30 },
-                1024: { slidesPerView: 2, spaceBetween: 40 }
+                dynamicBullets: true,
             }
         });
 
