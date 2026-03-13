@@ -379,6 +379,34 @@
             color: var(--text-muted);
         }
 
+        .modern-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            padding: 13px 16px;
+            outline: none;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .modern-input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.5;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .modern-input:focus {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--text-muted);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+        }
+
         .feature-icon {
             width: 14px;
             height: 14px;
@@ -892,6 +920,7 @@
             </div>
         </section>
 
+
         <section class="section reveal" id="premium-panel">
             <div class="section-header">
                 <span class="section-label">02</span>
@@ -900,6 +929,14 @@
                 <button class="btn-outline" id="btn-trial" onclick="activateTrial()"
                     style="display: none; border-color: var(--white); color: var(--white);"
                     data-i18n="prof_trial_btn">Получить тест на 10ч</button>
+            </div>
+
+            <div class="ticket-item" style="padding: 24px; margin-bottom: 32px; display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 250px;">
+                    <div class="ticket-q-label" style="margin-bottom: 12px;" data-i18n="prof_activate_title">Активация ключа</div>
+                    <input type="text" id="activation-key-input" class="modern-input" data-i18n="prof_activate_ph" placeholder="Введите ключ MX-...">
+                </div>
+                <button class="btn-auth" style="height: 45px; padding: 0 28px; display: flex; align-items: center; justify-content: center;" onclick="activateKey()" data-i18n="prof_activate_btn">АКТИВИРОВАТЬ</button>
             </div>
 
             <div class="pricing-grid">
@@ -1011,9 +1048,10 @@
             <div class="auth-modal-title" id="pay-title" data-i18n="prof_pay_title">Оплата</div>
             <div class="auth-modal-sub" data-i18n="prof_pay_sub">Выберите криптовалюту (CryptoBot)</div>
 
-            <div class="coin-buttons">
+            <div class="coin-buttons" style="flex-wrap: wrap;">
                 <div class="coin-btn" id="btn-usdt" onclick="selectCoin('USDT')">USDT</div>
                 <div class="coin-btn" id="btn-ton" onclick="selectCoin('TON')">TON</div>
+                <div class="coin-btn" id="btn-funpay" onclick="selectCoin('FUNPAY')" style="flex-basis: 100%;">Funpay (+ комиссия)</div>
             </div>
 
             <button class="btn-auth" id="btn-confirm-pay" style="width: 100%;" disabled onclick="startPayment()"
@@ -1052,7 +1090,10 @@
                 prof_pay_title: "Оплата",
                 prof_pay_sub: "Выберите криптовалюту (CryptoBot)",
                 prof_pay_select_coin: "Выберите валюту",
-
+                prof_activate_title: "Активация ключа",
+                prof_activate_ph: "Введите ключ MX-...",
+                prof_activate_btn: "АКТИВИРОВАТЬ",
+                prof_funpay_btn: "Перейти на Funpay",
                 prof_t_wait: "Ожидает ответа",
                 prof_t_answered: "Отвечен поддержкой",
                 prof_t_rejected: "Отклонено",
@@ -1096,7 +1137,10 @@
                 prof_pay_title: "Payment",
                 prof_pay_sub: "Select Cryptocurrency (CryptoBot)",
                 prof_pay_select_coin: "Select Currency",
-
+                prof_activate_title: "Key Activation",
+                prof_activate_ph: "Enter key MX-...",
+                prof_activate_btn: "ACTIVATE",
+                prof_funpay_btn: "Pay via Funpay",
                 prof_t_wait: "Awaiting Response",
                 prof_t_answered: "Answered by Support",
                 prof_t_rejected: "Rejected",
@@ -1425,6 +1469,30 @@
             }
         }
 
+        async function activateKey() {
+            const keyInput = document.getElementById('activation-key-input');
+            const key = keyInput.value.trim();
+            if (!key) return;
+
+            try {
+                const res = await fetch(`${API_URL}/activate_key`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: savedUser, token: savedToken, key: key })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    showNotification("Успешно", data.message, true);
+                    keyInput.value = '';
+                    checkRole();
+                } else {
+                    showNotification("Ошибка", data.error || "Ошибка активации");
+                }
+            } catch (e) {
+                showNotification("Ошибка", "Ошибка соединения с сервером");
+            }
+        }
+
         function openPaymentModal(plan) {
             selectedPlan = plan;
             selectedCoin = "";
@@ -1456,17 +1524,37 @@
             selectedCoin = coin;
             document.getElementById('btn-usdt').classList.toggle('active', coin === 'USDT');
             document.getElementById('btn-ton').classList.toggle('active', coin === 'TON');
+            document.getElementById('btn-funpay').classList.toggle('active', coin === 'FUNPAY');
+            
             const btnPay = document.getElementById('btn-confirm-pay');
-            btnPay.innerText = `${t('prof_pay_pay_via')} ${coin}`;
+            
+            if (coin === 'FUNPAY') {
+                btnPay.innerText = t('prof_funpay_btn');
+            } else {
+                btnPay.innerText = `${t('prof_pay_pay_via')} ${coin}`;
+            }
+            
             btnPay.disabled = false;
             btnPay.className = 'btn-auth';
             btnPay.style.width = '100%';
         }
-
         async function startPayment() {
             const btnPay = document.getElementById('btn-confirm-pay');
             btnPay.innerText = t('prof_pay_create_link');
             btnPay.disabled = true;
+            if (selectedCoin === 'FUNPAY') {
+                const funpayLinks = {
+                    "START": "https://funpay.com/lots/offer?id=65778035",
+                    "MEDIUM": "https://funpay.com/lots/offer?id=65778192",
+                    "ULTIMATE": "https://funpay.com/lots/offer?id=65778288"
+                };
+                
+                const url = funpayLinks[selectedPlan];
+                if (url) window.open(url, '_blank');
+                
+                closePaymentModal();
+                return;
+            }
             try {
                 const res = await fetch(`${API_URL}/create_payment`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
