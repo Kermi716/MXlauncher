@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MXlauncher</title>
+    <title>MXlauncher - Проект закрыт</title>
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -13,18 +13,13 @@
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <style>
         :root {
             --bg: #09090b;
-            --bg-accent: #111113;
             --text: #ffffff;
             --text-muted: #a1a1aa;
-            --border: rgba(255, 255, 255, 0.06);
-            --border-hover: rgba(255, 255, 255, 0.12);
-            --accent: #fff;
-            --online: #10b981;
-            --red: #ef4444;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
         }
 
         * {
@@ -40,180 +35,185 @@
             font-family: 'DM Mono', monospace;
             overflow-x: hidden;
             background-image:
-                radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.03), transparent 30%),
-                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.02), transparent 30%);
+                radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.03), transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(255, 255, 255, 0.02), transparent 40%);
             min-height: 100vh;
-            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
-        body.lang-switching {
-            opacity: 0;
-        }
-
-        .base-header-container {
+        .ambient-glow {
             position: absolute;
-            top: 20px;
+            top: 20vh;
             left: 50%;
             transform: translateX(-50%);
-            width: 90%;
-            max-width: 1200px;
-            z-index: 50;
-        }
-
-        .base-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 32px;
-            background: rgba(15, 15, 17, 0.5);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-        }
-
-        .base-header-nav {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .lang-switch {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-family: 'DM Mono', monospace;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .lang-switch:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--border-hover);
-        }
-
-        .glass-header {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translate(-50%, -150%);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 8px 8px 24px;
-            background: rgba(15, 15, 17, 0.5);
-            backdrop-filter: blur(32px);
-            -webkit-backdrop-filter: blur(32px);
-            border: 1px solid var(--border);
-            border-radius: 40px;
-            z-index: 1000;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            width: 90%;
-            max-width: 700px;
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
-        }
-
-        .glass-header.scrolled {
-            transform: translate(-50%, 0);
+            width: 60vw;
+            height: 60vh;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
         }
 
         .header-logo {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             align-items: center;
             gap: 12px;
             text-decoration: none;
             color: var(--text);
+            z-index: 10;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .header-logo:hover {
+            opacity: 1;
         }
 
         .header-logo img {
             height: 32px;
             width: auto;
             border-radius: 50%;
+            filter: grayscale(100%);
         }
 
         .header-title {
             font-family: 'Bebas Neue', cursive;
             font-size: 20px;
             letter-spacing: 2px;
-            text-transform: none;
         }
 
-        .header-actions {
+        .shutdown-container {
+            flex: 1;
             display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-icon {
-            display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            width: 42px;
-            height: 42px;
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            background: transparent;
-            border: none;
-        }
-
-        .btn-icon:hover {
-            color: #fff;
-        }
-
-        .tg-img {
-            width: 20px;
-            height: 20px;
-            object-fit: contain;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            filter: grayscale(100%) brightness(0.8);
-            opacity: 0.8;
-        }
-
-        .btn-icon:hover .tg-img {
-            filter: grayscale(0%) brightness(1);
-            opacity: 1;
-        }
-
-        .island-lang {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text);
-            font-family: 'DM Mono', monospace;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            padding: 8px 16px;
-            display: flex;
             align-items: center;
-            gap: 8px;
+            padding: 40px 20px;
+            z-index: 10;
+            text-align: center;
+            animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .island-lang:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .custom-emoji {
+            margin-bottom: 24px;
+            animation: bounceIn 1.2s cubic-bezier(0.28, 0.84, 0.42, 1) forwards;
+            opacity: 0;
+            transform: scale(0.3) translateY(40px);
+            transform-origin: bottom center;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .custom-emoji svg {
+            width: 96px;
+            height: 96px;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .custom-emoji:hover svg {
+            transform: scale(1.15) rotate(10deg);
+        }
+
+        .custom-emoji:active svg {
+            transform: scale(0.95) rotate(-5deg);
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) translateY(40px) rotate(-15deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1) translateY(-10px) rotate(5deg);
+            }
+            70% {
+                transform: scale(0.95) translateY(5px) rotate(-2deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0) rotate(0deg);
+            }
+        }
+
+        .shutdown-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(30px, 6vw, 65px);
+            line-height: 1.1;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff 0%, #71717a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            max-width: 900px;
+        }
+
+        .shutdown-desc {
+            font-family: 'DM Sans', sans-serif;
+            font-size: clamp(15px, 2vw, 18px);
+            color: #71717a;
+            margin-bottom: 60px;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        .stats-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px 40px;
+            min-width: 240px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.04);
             border-color: var(--border-hover);
         }
 
-        .glass-header .island-lang {
-            border-radius: 12px;
-            background: transparent;
-            border-color: transparent;
+        .stat-value {
+            font-family: 'Inter', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .stat-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 14px;
             color: var(--text-muted);
-            padding: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .glass-header .island-lang:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--border-hover);
+        .site-footer {
+            padding: 40px;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-family: 'DM Sans', sans-serif;
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
         }
 
         .btn-primary {
@@ -251,2192 +251,77 @@
         .btn-primary svg {
             width: 18px;
             height: 18px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .glass-header .btn-primary {
-            border-radius: 30px;
-        }
-
-        .ambient-glow {
-            position: absolute;
-            top: -20vh;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80vw;
-            height: 60vh;
-            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
-            filter: blur(60px);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .hero {
-            position: relative;
-            padding: 160px 40px 100px;
-            max-width: 1300px;
-            margin: 0 auto;
-            z-index: 10;
-        }
-
-        .hero-content-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 60px;
-            margin-top: 40px;
-        }
-
-        .hero-text-block {
-            flex: 1.1;
-            text-align: left;
-        }
-
-        .hero-image-block {
-            flex: 1;
-            perspective: 1200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .tilted-app-animator {
-            animation: floatApp 8s ease-in-out infinite;
-        }
-
-        .tilted-app {
-            width: 110%;
-            max-width: 700px;
-            border-radius: 12px;
-            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--border);
-            display: block;
-            transform: rotateY(-18deg) rotateX(8deg) rotateZ(-2deg) scale(1.05);
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .tilted-app-animator:hover .tilted-app {
-            transform: rotateY(-5deg) rotateX(2deg) rotateZ(0deg) scale(1.1);
-        }
-
-        @keyframes floatApp {
-            0% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-15px);
-            }
-
-            100% {
-                transform: translateY(0px);
-            }
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 6px 14px;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            font-size: 11px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 24px;
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(10px);
-            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-        }
-
-        .hero-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(60px, 8vw, 130px);
-            line-height: 0.9;
-            letter-spacing: 3px;
-            margin-bottom: 30px;
-            text-transform: none;
-        }
-
-        .mx-part {
-            background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-        }
-
-        .launcher-part {
-            background: linear-gradient(135deg, #e4e4e7 0%, #52525b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-        }
-
-        .char {
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(20px) scale(0.9);
-            filter: blur(10px);
-            animation: charReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes charReveal {
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                filter: blur(0);
-            }
-        }
-
-        .hero-desc {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 16px;
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 40px;
-            max-width: 480px;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards 0.3s;
-        }
-
-        .hero-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards 0.5s;
-            margin-bottom: 16px;
-        }
-
-        .hero-subtext {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.3);
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards 0.7s;
-        }
-
-        .content-wrap {
-            max-width: 1100px;
-            margin: 0 auto 80px;
-            padding: 0 40px;
-            z-index: 10;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 60px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .modern-section {
-            border-top: 1px solid var(--border);
-            padding-top: 40px;
-        }
-
-        .section-header {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 40px;
-        }
-
-        .section-title {
-            font-size: 32px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            color: var(--text);
-            margin-bottom: 12px;
-        }
-
-        .section-subtitle {
-            font-size: 16px;
-            color: var(--text-muted);
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        .swiper {
-            width: 100%;
-            padding-top: 40px;
-            padding-bottom: 80px !important;
-            overflow: visible;
-        }
-
-        .swiper-slide {
-            width: 80%;
-            max-width: 700px;
-            border-radius: 16px;
-            background: #09090b;
-            border: 1px solid var(--border);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            filter: brightness(0.5) grayscale(50%);
-        }
-
-        .swiper-slide-active {
-            filter: brightness(1) grayscale(0%);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 255, 255, 0.05);
-        }
-
-        .screen-top-bar {
-            height: 32px;
-            background: #111113;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            gap: 8px;
-        }
-
-        .mac-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            opacity: 0.8;
-        }
-
-        .mac-dot.close { background: #ed6a5e; }
-        .mac-dot.min { background: #f4bf4f; }
-        .mac-dot.max { background: #61c554; }
-
-        .swiper-slide img {
-            width: 100%;
-            display: block;
-            min-height: 200px;
-            object-fit: cover;
-        }
-
-        .swiper-pagination-bullet {
-            background: #fff !important;
-            opacity: 0.15 !important;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            width: 8px !important;
-            height: 8px !important;
-        }
-
-        .swiper-pagination-bullet-active {
-            opacity: 1 !important;
-            width: 32px !important;
-            border-radius: 4px !important;
-            background: #fff !important;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
-        .clean-list-container {
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.015);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .clean-row {
-            display: flex;
-            border-bottom: 1px solid var(--border);
-            text-decoration: none;
-            color: var(--text);
-            transition: background 0.3s;
-        }
-
-        .clean-row:last-child {
-            border-bottom: none;
-        }
-
-        a.clean-row:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .clean-label {
-            flex: 1;
-            padding: 24px 32px;
-            font-size: 14px;
-            color: var(--text-muted);
-            border-right: 1px solid var(--border);
-            max-width: 280px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .clean-value {
-            flex: 2;
-            padding: 24px 32px;
-            font-size: 16px;
-            font-weight: 500;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .clean-value-text {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .clean-subtext {
-            font-size: 13px;
-            color: var(--text-muted);
-            font-weight: 400;
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        .clean-icon {
-            width: 32px;
-            height: 32px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .clean-icon svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .clean-arrow {
-            opacity: 0.3;
-            transition: all 0.3s;
-        }
-
-        a.clean-row:hover .clean-arrow {
-            opacity: 1;
-            transform: translateX(5px) scale(1.1);
-        }
-
-        .faq-item {
-            border-bottom: 1px solid var(--border);
-        }
-
-        .faq-item:first-child {
-            border-top: 1px solid var(--border);
-        }
-
-        .faq-trigger {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 28px 0;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            text-align: left;
-            color: var(--text);
-        }
-
-        .faq-q {
-            font-size: 18px;
-            font-weight: 500;
-        }
-
-        .faq-chevron {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .faq-chevron svg {
-            width: 16px;
-            height: 16px;
-            stroke: var(--text);
-            fill: none;
-            stroke-width: 2;
-            transition: transform 0.3s ease;
-        }
-
-        .faq-trigger[aria-expanded="true"] .faq-chevron {
-            background: var(--text);
-        }
-
-        .faq-trigger[aria-expanded="true"] .faq-chevron svg {
-            transform: rotate(180deg);
-            stroke: var(--bg);
-        }
-
-        .faq-body {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.3s ease;
-        }
-
-        .faq-body.open {
-            grid-template-rows: 1fr;
-        }
-
-        .faq-body-inner {
-            overflow: hidden;
-            padding: 0 40px 0 0;
-        }
-
-        .faq-body.open .faq-body-inner {
-            padding-bottom: 32px;
-        }
-
-        .faq-body-inner p {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 15px;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        .site-footer {
-            border-top: 1px solid var(--border);
-            padding: 40px;
-            font-size: 13px;
-            color: var(--text-muted);
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        .footer-content {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-        }
-
-        .footer-links {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: var(--text);
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .scroll-anim {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform;
-        }
-
-        .scroll-anim.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #fff;
-            color: #09090b;
-            padding: 16px 24px;
-            z-index: 99999;
-            transform: translateY(120%);
-            opacity: 0;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
-            border-left: 3px solid #09090b;
-            max-width: 320px;
-            border-radius: 8px;
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .toast-title {
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        .toast-desc {
-            font-size: 12px;
-            color: #52525b;
-            font-family: 'DM Mono', monospace;
-        }
-
-        .toast.toast-error {
-            background: #09090b;
-            color: #fff;
-            border: 1px solid var(--border);
-            border-left-color: #ef4444;
-        }
-
-        .toast.toast-error .toast-desc {
-            color: #a1a1aa;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(9, 9, 11, 0.88);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.25s;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .auth-modal {
-            background: var(--bg-accent);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 380px;
-            padding: 32px 30px 28px;
-            transform: translateY(10px) scale(0.985);
-            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-overlay.active .auth-modal {
-            transform: translateY(0) scale(1);
-        }
-
-        .auth-modal-title {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .auth-modal-sub {
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 24px;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 1px;
-            padding: 6px 10px;
-            border: 1px solid transparent;
-            border-radius: 8px;
-            transition: all 0.2s;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .close-modal:hover {
-            color: var(--text);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--border-hover);
-        }
-
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 22px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .auth-tab {
-            padding: 8px 12px;
-            margin-right: 12px;
-            font-family: 'DM Mono', monospace;
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .auth-tab.active {
-            color: var(--text);
-            border-bottom-color: var(--text);
-        }
-
-        .auth-tab:hover:not(.active) {
-            color: #d4d4d8;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-label {
-            display: block;
-            font-family: 'DM Mono', monospace;
-            font-size: 10px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            padding: 12px 14px;
-            color: var(--text);
-            font-family: 'DM Mono', monospace;
-            font-size: 13px;
-            border-radius: 10px;
-            transition: background 0.2s, border-color 0.2s;
-        }
-
-        .form-control:focus {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--text-muted);
-            outline: none;
-        }
-
-        .btn-rate {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 10px 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--gray-200);
-            font-family: 'DM Mono', monospace;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .btn-rate svg {
-            width: 15px;
-            height: 15px;
             fill: currentColor;
-            transition: transform 0.2s;
+            stroke: none;
         }
 
-        .btn-rate:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-rate:active {
-            transform: scale(0.96);
-        }
-
-        .btn-rate.like:hover {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: var(--online);
-            color: var(--online);
-        }
-
-        .btn-rate.like:hover svg {
-            transform: translateY(-2px) scale(1.1);
-        }
-
-        .btn-rate.dislike:hover {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: var(--red);
-            color: var(--red);
-        }
-
-        .btn-rate.dislike:hover svg {
-            transform: translateY(2px) scale(1.1);
-        }
-
-        .btn-auth {
-            width: 100%;
-            background: linear-gradient(180deg, #e4e4e7 0%, #a1a1aa 100%);
-            color: #09090b;
-            border: 1px solid #a1a1aa;
-            padding: 14px;
-            font-family: 'DM Mono', monospace;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 8px;
-            box-shadow: inset 0 2px 2px rgba(255, 255, 255, 1), 0 4px 15px rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-auth:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(180deg, #f4f4f5 0%, #b4b4b8 100%);
-        }
-
-        .btn-auth:active {
-            transform: scale(0.98);
-        }
-
-        .btn-auth:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .auth-text-btn {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 11px;
-            font-family: 'DM Mono', monospace;
-            padding: 8px;
-            transition: color 0.2s;
-        }
-
-        .auth-text-btn:hover {
-            color: var(--text);
-        }
-
-        @media (max-width: 992px) {
-            .hero-content-wrap {
-                flex-direction: column;
-                text-align: center;
-                gap: 50px;
-                margin-top: 20px;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-
-            .hero-text-block {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
+        }
 
-            .hero-desc {
-                text-align: center;
-            }
-
-            .tilted-app-animator {
-                animation: none;
-            }
-
-            .tilted-app {
-                transform: none;
+        @media (max-width: 600px) {
+            .stat-card {
                 width: 100%;
-                max-width: 100%;
+                padding: 24px;
             }
-
-            .tilted-app-animator:hover .tilted-app {
-                transform: translateY(-5px);
-            }
-
-            .footer-content {
-                flex-direction: column;
-                gap: 20px;
-                text-align: center;
-            }
-        }
-
-       @media (max-width: 768px) {
-            .hero-title {
-                font-size: clamp(36px, 10vw, 60px);
-                letter-spacing: 1px;
-            }
-
-            .hero-actions {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .hero-actions .btn-primary {
-                width: 100%;
-                max-width: 100%;
-            }
-
-            .hero {
-                padding: 100px 16px 40px;
-            }
-
-            .content-wrap {
-                padding: 0 16px;
-                gap: 40px;
-            }
-
-            .base-header {
-                padding: 16px;
-                flex-direction: column;
-                gap: 12px;
-                border-radius: 16px;
-            }
-            
-            .base-header-nav {
-                flex-wrap: wrap; 
-                justify-content: center;
-                gap: 8px !important;
-            }
-
-            .glass-header {
-                width: 92%;
-                left: 50%;
-                padding: 8px 12px;
-            }
-
-            .desktop-only {
-                display: none !important;
-            }
-
-            .section-title {
-                font-size: 24px;
-                margin-bottom: 8px;
-            }
-
-            .clean-row {
-                flex-direction: column;
-            }
-
-            .clean-label {
-                max-width: 100%;
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-                padding: 16px;
-            }
-
-            .clean-value {
-                padding: 16px;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-
-            .clean-arrow {
-                align-self: flex-end;
-            }
-
-            .faq-trigger {
-                padding: 20px 0;
-            }
-
-            .faq-q {
-                font-size: 16px;
-                padding-right: 16px;
-            }
-
-            .faq-body-inner {
-                padding: 0 16px 0 0; 
-            }
-
-            .footer-content {
-                padding: 0 16px;
-                flex-direction: column;
-                gap: 24px;
-            }
-
-            .footer-links {
-                flex-direction: column;
-                gap: 16px;
-            }
-            
-            .auth-modal {
-                margin: 0 16px; 
-                padding: 24px 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-title {
-                font-size: clamp(30px, 11vw, 40px);
-                letter-spacing: 0px;
-            }
-            
-            .header-title {
-                font-size: 18px;
-            }
-
-            .clean-value[style*="flex-direction: column"] {
-                padding-top: 12px !important;
-                padding-bottom: 12px !important;
-            }
-
-            .rating-btns {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .btn-rate {
-                width: 100%;
+            .stat-value {
+                font-size: 32px;
             }
         }
     </style>
 </head>
 
 <body>
-
     <div class="ambient-glow"></div>
 
-    <div class="base-header-container">
-        <header class="base-header">
-            <a href="#" class="header-logo">
-                <img src="logo.png" alt="MX Logo"
-                    onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSI1MCIgZm9udC1zaXplPSI0MCIgZmlsbD0id2hpdGUiPk1YPC90ZXh0Pjwvc3ZnPg=='" />
-                <span class="header-title" data-i18n="logo_title">MXlauncher</span>
-            </a>
-            <div class="base-header-nav" style="gap: 4px;">
-                <a href="support.html" class="btn-icon desktop-only" title="Поддержка"
-                    style="width: 36px; height: 36px; color: #a1a1aa; transition: color 0.2s;"
-                    onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-                        <path
-                            d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
-                        </path>
-                    </svg>
-                </a>
+    <a href="#" class="header-logo">
+        <img src="logo.png" alt="MX Logo"
+            onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0iIzMzMyIvPjx0ZXh0IHg9IjUwIiB5PSI2NCIgZm9udC1zaXplPSI0MCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk1YPC90ZXh0Pjwvc3ZnPg=='" />
+        <span class="header-title">MXlauncher</span>
+    </a>
 
-                <a href="https://t.me/mxlauncher" target="_blank" class="btn-icon" title="Telegram">
-                    <img src="telegram.png" alt="Telegram" class="tg-img"
-                        onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEgMTJsMjIgMTAtNC4yNS0yMUwxIDEyeiIgZmlsbD0id2hpdGUiLz48L3N2Zz4='">
-                </a>
-
-                <button class="btn-primary" onclick="openAuthModal(event)" id="auth-btn-base"
-                    style="padding: 0 16px; height: 36px; font-size: 12px; border-radius: 12px;">
-                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    <span data-i18n="nav_login">Войти</span>
-                </button>
-
-                <button class="btn-primary" onclick="toggleLanguage()"
-                    style="padding: 0 14px; height: 36px; font-size: 12px; border-radius: 12px; gap: 6px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path
-                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                        </path>
-                        <path d="M2 12h20"></path>
-                    </svg>
-                    <span class="lang-indicator">RU</span>
-                </button>
-            </div>
-        </header>
-    </div>
-
-    <header class="glass-header" id="glassHeader">
-        <a href="#" class="header-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-            <img src="logo.png" alt="MX"
-                onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSI1MCIgZm9udC1zaXplPSI0MCIgZmlsbD0id2hpdGUiPk1YPC90ZXh0Pjwvc3ZnPg=='" />
-            <span class="header-title desktop-only" data-i18n="logo_title">MXlauncher</span>
-        </a>
-        <div class="header-actions" style="gap: 4px;">
-            <a href="support.html" class="btn-icon desktop-only" title="Поддержка"
-                style="width: 36px; height: 36px; color: #a1a1aa; transition: color 0.2s;"
-                onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-                    <path
-                        d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z">
-                    </path>
-                </svg>
-            </a>
-
-            <a href="https://t.me/mxlauncher" target="_blank" class="btn-icon" title="Telegram">
-                <img src="telegram.png" alt="Telegram" class="tg-img"
-                    onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEgMTJsMjIgMTAtNC4yNS0yMUwxIDEyeiIgZmlsbD0id2hpdGUiLz48L3N2Zz4='">
-            </a>
-
-            <button class="island-lang desktop-only" onclick="openAuthModal(event)" id="auth-btn-island">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                <span data-i18n="nav_login">Войти</span>
-            </button>
-
-            <button class="island-lang" onclick="toggleLanguage()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path
-                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                    </path>
-                    <path d="M2 12h20"></path>
-                </svg>
-                <span class="lang-indicator">RU</span>
-            </button>
-            <a href="#" class="btn-primary" onclick="handleDownload(event)"
-                style="padding: 0 14px; height: 34px; font-size: 11px; border-radius: 10px; gap: 6px; margin-right: 4px;">
-                <svg viewBox="0 0 24 24" style="width:14px;height:14px;">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                <span class="desktop-only" data-i18n="download_btn">СКАЧАТЬ</span>
-            </a>
-        </div>
-    </header>
-
-    <div class="hero">
-        <div class="hero-content-wrap">
-            <div class="hero-text-block">
-                <div class="hero-badge" data-i18n="hero_badge">Версия 1.0 — Бесплатно</div>
-
-                <h1 class="hero-title">
-                    <span class="char mx-part" style="animation-delay: 0.0s">M</span><span class="char mx-part"
-                        style="animation-delay: 0.05s">X</span><span class="char launcher-part"
-                        style="animation-delay: 0.1s">l</span><span class="char launcher-part"
-                        style="animation-delay: 0.15s">a</span><span class="char launcher-part"
-                        style="animation-delay: 0.2s">u</span><span class="char launcher-part"
-                        style="animation-delay: 0.25s">n</span><span class="char launcher-part"
-                        style="animation-delay: 0.3s">c</span><span class="char launcher-part"
-                        style="animation-delay: 0.35s">h</span><span class="char launcher-part"
-                        style="animation-delay: 0.4s">e</span><span class="char launcher-part"
-                        style="animation-delay: 0.45s">r</span>
-                </h1>
-
-                <p class="hero-desc" data-i18n="hero_desc">Единая библиотека игровых модификаций. Наше приложение
-                    поможет тебе скачать моды, читы и визуалы совершенно бесплатно, без вирусов и скрытых подписок.
-                    Искал удобный лоадер? Считай, что тебе повезло!</p>
-
-                <div class="hero-actions">
-                    <a href="#" class="btn-primary" onclick="handleDownload(event)">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
-                        </svg>
-                        <span data-i18n="download_btn_full">СКАЧАТЬ БЕСПЛАТНО</span>
-                    </a>
-                </div>
-                <p class="hero-subtext" data-i18n="hero_subtext">Вы скачиваете официальный установщик. Поддерживаются
-                    Windows 10/11 (x64).</p>
-            </div>
-
-            <div class="hero-image-block">
-                <div class="tilted-app-animator">
-                    <img src="screen/1.jpg" alt="MX Interface" class="tilted-app"
-                        onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface'" />
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="content-wrap">
-
-        <div class="modern-section" id="screens-section">
-            <div class="section-header">
-                <h2 class="section-title" data-i18n="sec_screens">Интерфейс</h2>
-                <p class="section-subtitle" data-i18n="sec_screens_sub">Взгляните на то, как выглядит лоадер изнутри.
-                </p>
-            </div>
-            <div class="swiper mySwiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="screen-top-bar">
-                            <div class="mac-dot close"></div>
-                            <div class="mac-dot min"></div>
-                            <div class="mac-dot max"></div>
-                        </div>
-                        <img src="screen/1.jpg" alt="Screen 1" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+1'">
-                    </div>
-                    
-                    <div class="swiper-slide">
-                        <div class="screen-top-bar">
-                            <div class="mac-dot close"></div>
-                            <div class="mac-dot min"></div>
-                            <div class="mac-dot max"></div>
-                        </div>
-                        <img src="screen/2.jpg" alt="Screen 2" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+2'">
-                    </div>
-                    
-                    <div class="swiper-slide">
-                        <div class="screen-top-bar">
-                            <div class="mac-dot close"></div>
-                            <div class="mac-dot min"></div>
-                            <div class="mac-dot max"></div>
-                        </div>
-                        <img src="screen/3.jpg" alt="Screen 3" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+3'">
-                    </div>
-                    
-                    <div class="swiper-slide">
-                        <div class="screen-top-bar">
-                            <div class="mac-dot close"></div>
-                            <div class="mac-dot min"></div>
-                            <div class="mac-dot max"></div>
-                        </div>
-                        <img src="screen/4.jpg" alt="Screen 4" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+4'">
-                    </div>
-                    
-                    <div class="swiper-slide">
-                        <div class="screen-top-bar">
-                            <div class="mac-dot close"></div>
-                            <div class="mac-dot min"></div>
-                            <div class="mac-dot max"></div>
-                        </div>
-                        <img src="screen/5.jpg" alt="Screen 5" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+5'">
-                    </div>
-                    
-                    <div class="swiper-slide">
-                        <div class="screen-top-bar">
-                            <div class="mac-dot close"></div>
-                            <div class="mac-dot min"></div>
-                            <div class="mac-dot max"></div>
-                        </div>
-                        <img src="screen/6.jpg" alt="Screen 6" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+6'">
-                    </div>
-                    
-                    <div class="swiper-slide">
-                        <div class="screen-top-bar">
-                            <div class="mac-dot close"></div>
-                            <div class="mac-dot min"></div>
-                            <div class="mac-dot max"></div>
-                        </div>
-                        <img src="screen/7.jpg" alt="Screen 7" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+7'">
-                    </div>
-                    
-                    <div class="swiper-slide">
-                        <div class="screen-top-bar">
-                            <div class="mac-dot close"></div>
-                            <div class="mac-dot min"></div>
-                            <div class="mac-dot max"></div>
-                        </div>
-                        <img src="screen/8.jpg" alt="Screen 8" onerror="this.src='https://placehold.co/800x500/18181b/fafafa?text=App+Interface+8'">
-                    </div>
-                </div>
-                
-                <div class="swiper-pagination"></div>
-            </div>
+    <div class="shutdown-container">
+        <div class="custom-emoji">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="46" fill="rgba(255,255,255,0.03)" stroke="#52525b" stroke-width="4"/>
+                <path d="M 28 42 Q 35 34 42 42" fill="none" stroke="#a1a1aa" stroke-width="5" stroke-linecap="round"/>
+                <path d="M 58 42 Q 65 34 72 42" fill="none" stroke="#a1a1aa" stroke-width="5" stroke-linecap="round"/>
+                <path d="M 38 65 Q 50 55 62 65" fill="none" stroke="#a1a1aa" stroke-width="5" stroke-linecap="round"/>
+            </svg>
         </div>
 
-        <div class="modern-section">
-            <div class="section-header">
-                <h2 class="section-title" data-i18n="sec_stats">Статистика</h2>
-                <p class="section-subtitle" data-i18n="sec_stats_sub">Отражение нашего коммьюнити в цифрах.</p>
-            </div>
-            <div class="clean-list-container">
-                <div class="clean-row">
-                    <div class="clean-label">
-                        <div class="clean-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg></div>
-                        <span data-i18n="stat_online">Игроков онлайн</span>
-                    </div>
-                    <div class="clean-value">
-                        <span class="clean-value-text">
-                            <span id="online-counter"
-                                style="font-size: 24px; font-weight: 600; letter-spacing: -0.5px;">—</span>
-                            <span class="clean-subtext" data-i18n="stat_online_sub">Пользователей прямо сейчас</span>
-                        </span>
-                    </div>
-                </div>
+        <h1 class="shutdown-title">Это была увлекательная история</h1>
+        <p class="shutdown-desc">Лаунчер прекратил свое существование. Спасибо, что были с нами на протяжении всего этого пути.</p>
 
-                <div class="clean-row">
-                    <div class="clean-label">
-                        <div class="clean-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg></div>
-                        <span data-i18n="stat_downloads">Скачиваний</span>
-                    </div>
-                    <div class="clean-value">
-                        <span class="clean-value-text">
-                            <span id="download-counter"
-                                style="font-size: 24px; font-weight: 600; letter-spacing: -0.5px;">—</span>
-                            <span class="clean-subtext" data-i18n="stat_downloads_sub">Успешных скачиваний
-                                лоадера</span>
-                        </span>
-                    </div>
-                </div>
-
-                <div class="clean-row">
-                    <div class="clean-label">
-                        <div class="clean-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polygon
-                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                                </polygon>
-                            </svg></div>
-                        <span data-i18n="sec_rating">Оценка пользователей</span>
-                    </div>
-                    <div class="clean-value"
-                        style="flex-direction: column; align-items: stretch; justify-content: center; gap: 12px; padding-top: 16px; padding-bottom: 16px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                            <span class="clean-subtext" data-i18n="sec_rating_sub">Нравится ли вам MX Launcher?</span>
-                            <div class="rating-btns" style="display: flex; gap: 10px;">
-                                <button class="btn-rate like" onclick="handleRate('like')">
-                                    <svg viewBox="0 0 24 24">
-                                        <path
-                                            d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
-                                    </svg>
-                                    <span id="like-count">0</span>
-                                </button>
-                                <button class="btn-rate dislike" onclick="handleRate('dislike')">
-                                    <svg viewBox="0 0 24 24">
-                                        <path
-                                            d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z" />
-                                    </svg>
-                                    <span id="dislike-count">0</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="rating-track" style="border-radius: 4px; height: 4px; background: var(--border); display: flex; overflow: hidden;">
-                            <div class="rating-like-fill" id="rating-bar-like"
-                                style="width: 50%; background: var(--online); transition: width 0.5s ease;"></div>
-                            <div class="rating-dislike-fill" id="rating-bar-dislike"
-                                style="width: 50%; background: var(--red); transition: width 0.5s ease;"></div>
-                        </div>
-                    </div>
-                </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">3000+</div>
+                <div class="stat-label">Скачиваний</div>
             </div>
-        </div>
-
-        <div class="modern-section">
-            <div class="section-header">
-                <h2 class="section-title" data-i18n="sec_security">Безопасность</h2>
-                <p class="section-subtitle" data-i18n="sec_security_sub">Мы заботимся о вашей системе.</p>
-            </div>
-            <div class="clean-list-container">
-                <a href="https://www.youtube.com/watch?v=1maKKxoljtU" target="_blank" class="clean-row">
-                    <div class="clean-label">
-                        <div class="clean-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polygon points="10 8 16 12 10 16 10 8"></polygon>
-                            </svg></div>
-                        <span data-i18n="sec_video">Видео-проверка</span>
-                    </div>
-                    <div class="clean-value">
-                        <span class="clean-value-text">
-                            <span data-i18n="sec_video_value">Обзор на YouTube</span>
-                            <span class="clean-subtext" data-i18n="sec_video_sub">Независимая проверка на вирусы</span>
-                        </span>
-                        <div class="clean-arrow"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"
-                                stroke="currentColor" stroke-width="2">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg></div>
-                    </div>
-                </a>
-                <a href="https://www.virustotal.com/gui/file/3053b4b2e5d38061ddddcad2925bb94dc472215729ba81977c738f6613548380?nocache=1"
-                    target="_blank" class="clean-row">
-                    <div class="clean-label">
-                        <div class="clean-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            </svg></div>
-                        <span data-i18n="sec_vt">Отчёт VirusTotal</span>
-                    </div>
-                    <div class="clean-value">
-                        <span class="clean-value-text">
-                            <span data-i18n="sec_vt_value">Результат: 3 / 53</span>
-                            <span class="clean-subtext" data-i18n="sec_vt_sub">Проверка пройдена успешно</span>
-                        </span>
-                        <div class="clean-arrow"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"
-                                stroke="currentColor" stroke-width="2">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg></div>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <div class="modern-section">
-            <div class="section-header">
-                <h2 class="section-title" data-i18n="sec_req">Требования</h2>
-                <p class="section-subtitle" data-i18n="sec_req_sub">Убедитесь, что ваша система подходит.</p>
-            </div>
-            <div class="clean-list-container">
-                <div class="clean-row">
-                    <div class="clean-label" data-i18n="req_os">Операционная система</div>
-                    <div class="clean-value" data-i18n="req_os_val">Windows 10 / 11 (только 64-bit)</div>
-                </div>
-                <div class="clean-row">
-                    <div class="clean-label" data-i18n="req_cpu">Процессор (CPU)</div>
-                    <div class="clean-value" data-i18n="req_cpu_val">Intel Core i3 / AMD Ryzen 3 или лучше</div>
-                </div>
-                <div class="clean-row">
-                    <div class="clean-label" data-i18n="req_ram">Память (RAM)</div>
-                    <div class="clean-value" data-i18n="req_ram_val">4 GB минимум — рекомендуется 8 GB</div>
-                </div>
-                <div class="clean-row">
-                    <div class="clean-label" data-i18n="req_disk">Место на диске</div>
-                    <div class="clean-value" data-i18n="req_disk_val">От 5 GB (лаунчер + игровые сборки)</div>
-                </div>
-                <div class="clean-row">
-                    <div class="clean-label" data-i18n="req_soft">Дополнительное ПО</div>
-                    <div class="clean-value" data-i18n="req_soft_val">Java 8 / Java 17 / Java 21</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modern-section" style="margin-bottom: 40px;">
-            <div class="section-header">
-                <h2 class="section-title" data-i18n="sec_faq">FAQ</h2>
-                <p class="section-subtitle" data-i18n="sec_faq_sub">Ответы на частые вопросы.</p>
-            </div>
-            <div class="faq-container">
-                <div class="faq-item">
-                    <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
-                        <span class="faq-q" data-i18n="faq_1_q">Чит или визуалы не запускаются?</span>
-                        <span class="faq-chevron"><svg viewBox="0 0 24 24">
-                                <path d="M6 9l6 6 6-6" />
-                            </svg></span>
-                    </button>
-                    <div class="faq-body">
-                        <div class="faq-body-inner">
-                            <p data-i18n="faq_1_a">Большинство читов требуют конкретную версию Java. Убедитесь, что у
-                                вас установлены Java 8, 17 и 21, и выберите правильную версию в настройках профиля перед
-                                запуском программы.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
-                        <span class="faq-q" data-i18n="faq_2_q">Лаунчер не запускается или выдает ошибку сети?</span>
-                        <span class="faq-chevron"><svg viewBox="0 0 24 24">
-                                <path d="M6 9l6 6 6-6" />
-                            </svg></span>
-                    </button>
-                    <div class="faq-body">
-                        <div class="faq-body-inner">
-                            <p data-i18n="faq_2_a">В некоторых регионах провайдеры могут блокировать доступ к нашим
-                                серверам. Попробуйте использовать любой бесплатный VPN
-                                сервер (например, AvoVpn).</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="stat-card">
+                <div class="stat-value">2347</div>
+                <div class="stat-label">Пользователей</div>
             </div>
         </div>
     </div>
 
     <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#" data-i18n="footer_privacy">Политика конфиденциальности</a>
-                <a href="support.html" data-i18n="nav_support">Поддержка</a>
-                <a href="#" onclick="openAuthModal(event)" id="auth-btn-footer" data-i18n="nav_login">Войти</a>
-                <a href="https://t.me/mxlauncher" target="_blank" data-i18n="footer_tg">Официальный
-                    Telegram</a>
-            </div>
-            <div class="footer-copy">
-                <span data-i18n="footer_copy">MXlauncher © 2026 — Все права защищены</span>
-            </div>
+        <a href="https://t.me/mxlauncher" target="_blank" class="btn-primary">
+            <svg viewBox="0 0 24 24">
+                <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
+            </svg>
+            <span>Телеграм канал</span>
+        </a>
+        <div class="footer-copy">
+            MXlauncher © 2026 - Все права защищены
         </div>
     </footer>
-
-    <div id="notificationToast" class="toast">
-        <div class="toast-title" id="toastTitle">Уведомление</div>
-        <div class="toast-desc" id="toastDesc">—</div>
-    </div>
-
-    <div class="modal-overlay" id="authModal">
-        <div class="auth-modal">
-            <div class="close-modal" onclick="closeAuthModal()">ESC ✕</div>
-            <div class="auth-modal-title" id="auth-modal-title-text" data-i18n="auth_welcome">Добро пожаловать</div>
-            <div class="auth-modal-sub" id="auth-modal-sub-text" data-i18n="auth_login_desc">Войдите в свой аккаунт
-            </div>
-
-            <div class="auth-tabs">
-                <div class="auth-tab active" id="tab-login" onclick="switchAuthMode('login')"
-                    data-i18n="auth_tab_login">Войти</div>
-                <div class="auth-tab" id="tab-register" onclick="switchAuthMode('register')"
-                    data-i18n="auth_tab_register">Регистрация</div>
-            </div>
-
-            <form id="auth-form" onsubmit="handleAuthSubmit(event)">
-                <div class="form-group" id="auth-username-group">
-                    <label class="form-label" data-i18n="auth_username">Никнейм</label>
-                    <input type="text" id="auth-username" class="form-control" placeholder="Логин">
-                </div>
-
-                <div class="form-group" id="auth-pass-group">
-                    <label class="form-label" data-i18n="auth_password">Пароль</label>
-                    <div style="display: flex; position: relative;">
-                        <input type="password" id="auth-password" class="form-control" placeholder="Пароль"
-                            minlength="5" style="padding-right: 40px;">
-                        <button type="button" onclick="togglePasswordVisibility()"
-                            style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 4px;">👁</button>
-                    </div>
-                </div>
-
-                <div class="form-group" id="auth-captcha-group">
-                    <label class="form-label" data-i18n="auth_captcha">Код с картинки</label>
-                    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-                        <img id="auth-captcha-image" src="" alt="Загрузка..."
-                            style="flex: 1; height: 42px; border: 1px solid var(--border); background: var(--text); object-fit: contain; border-radius: 10px;">
-                        <button type="button" onclick="loadCaptcha()"
-                            style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-muted); width: 42px; height: 42px; cursor: pointer; font-size: 16px; border-radius: 10px; transition: all 0.2s;">↻</button>
-                    </div>
-                    <input type="text" id="auth-captcha-text" class="form-control" autocomplete="off" placeholder="Код">
-                    <input type="hidden" id="auth-captcha-id">
-                </div>
-
-                <div class="form-group" id="auth-tg-group" style="display: none; margin-bottom: 15px;">
-                    <a href="#" id="auth-tg-link" target="_blank" class="btn-auth"
-                        style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;">
-                        <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor; stroke: none;">
-                            <path d="M21.5 2L2 9.5L9 12.5L19.5 4L11 14.5L17.5 20.5L21.5 2Z" />
-                        </svg>
-                        <span data-i18n="auth_tg_btn">ОТКРЫТЬ ТЕЛЕГРАМ БОТА</span>
-                    </a>
-                </div>
-
-                <div id="auth-status"
-                    style="color: var(--red); text-align: center; margin-bottom: 10px; font-size: 12px; min-height: 15px;">
-                </div>
-
-                <button type="submit" id="auth-submit-btn" class="btn-auth" data-i18n="auth_btn_login">ВОЙТИ</button>
-
-                <button type="button" id="auth-forgot-btn" class="auth-text-btn" style="margin-top: 15px;"
-                    onclick="switchAuthMode('reset')" data-i18n="auth_forgot">Забыли пароль?</button>
-                <button type="button" id="auth-switch-btn" class="auth-text-btn" style="margin-top: 5px;"
-                    onclick="switchAuthMode('register')" data-i18n="auth_to_register">Нет аккаунта? Регистрация</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script>
-        const swiper = new Swiper('.mySwiper', {
-            effect: 'coverflow',
-            grabCursor: true,
-            centeredSlides: true,
-            slidesPerView: 'auto',
-            loop: true,
-            coverflowEffect: {
-                rotate: 15,        
-                stretch: 0,
-                depth: 250,
-                modifier: 1,
-                slideShadows: true
-            },
-            autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-                dynamicBullets: true,
-            }
-        });
-
-        function toggleFaq(button) {
-            const isExpanded = button.getAttribute('aria-expanded') === 'true';
-            button.setAttribute('aria-expanded', !isExpanded);
-            const body = button.nextElementSibling;
-            if (!isExpanded) {
-                body.classList.add('open');
-            } else {
-                body.classList.remove('open');
-            }
-        }
-
-        const glassHeader = document.getElementById('glassHeader');
-        const heroActions = document.querySelector('.hero-actions');
-        const screensSection = document.getElementById('screens-section');
-
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                glassHeader.classList.add('scrolled');
-            } else {
-                glassHeader.classList.remove('scrolled');
-            }
-        });
-
-        const animElements = document.querySelectorAll('.section-header, .swiper, .clean-list-container, .faq-container');
-        animElements.forEach(el => el.classList.add('scroll-anim'));
-
-        const scrollObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        animElements.forEach(el => {
-            scrollObserver.observe(el);
-        });
-
-        const API_URL = "https://api.mxlauncher.fun";
-
-        function handleDownload(e) {
-            if (e) e.preventDefault();
-            fetch(`${API_URL}/increment_downloads`, { method: 'POST' }).catch(() => { });
-            window.location.href = "https://github.com/Kermi716/MXlauncher/releases/download/mxupdate/MXSetup.exe";
-        }
-
-        async function fetchStats() {
-            try {
-                const res = await fetch(`${API_URL}/online?t=${Date.now()}`);
-                const data = await res.json();
-                if (data.online !== undefined) {
-                    const onlineCounter = document.getElementById('online-counter');
-                    if (onlineCounter) onlineCounter.innerText = data.online;
-                }
-            } catch (e) {
-                const onlineCounter = document.getElementById('online-counter');
-                if (onlineCounter) onlineCounter.innerText = "?";
-            }
-
-            try {
-                const res = await fetch(`${API_URL}/get_downloads`);
-                const data = await res.json();
-                if (data.status === 'ok') {
-                    const count = document.getElementById('download-counter');
-                    if (count) count.innerText = data.count.toLocaleString('ru');
-                }
-            } catch { }
-        }
-
-        fetchStats();
-        setInterval(fetchStats, 15000);
-
-        async function fetchVersion() {
-            try {
-                const res = await fetch(`${API_URL}/check_update`);
-                const data = await res.json();
-                const ver = data.latest_version || data.version;
-                if (ver) {
-                    translations.ru.hero_badge = `Версия ${ver} — Бесплатно`;
-                    translations.en.hero_badge = `Version ${ver} — Free`;
-                    
-                    const badge = document.querySelector('.hero-badge');
-                    if (badge) badge.innerText = translations[currentLang].hero_badge;
-                }
-            } catch { }
-        }
-
-        async function fetchLauncherRating() {
-            try {
-                const res = await fetch(`${API_URL}/get_launcher_rating`);
-                const data = await res.json();
-                if (data.status === 'ok') {
-                    const likes = data.likes || 0;
-                    const dislikes = data.dislikes || 0;
-                    const total = likes + dislikes;
-
-                    const likeCountEl = document.getElementById('like-count');
-                    const dislikeCountEl = document.getElementById('dislike-count');
-
-                    if (likeCountEl) likeCountEl.innerText = likes;
-                    if (dislikeCountEl) dislikeCountEl.innerText = dislikes;
-
-                    const lp = total > 0 ? (likes / total) * 100 : 50;
-                    const barLike = document.getElementById('rating-bar-like');
-                    const barDislike = document.getElementById('rating-bar-dislike');
-
-                    if (barLike) barLike.style.width = `${lp}%`;
-                    if (barDislike) barDislike.style.width = `${100 - lp}%`;
-                }
-            } catch (e) { 
-                console.error("Ошибка при загрузке оценок", e); 
-            }
-        }
-
-        async function handleRate(action) {
-            const token = localStorage.getItem('mx_token');
-            const username = localStorage.getItem('mx_username');
-            
-            if (!token || !username) {
-                showNotification("Требуется вход", "Оценки доступны только для авторизованных пользователей");
-                openAuthModal(); 
-                return;
-            }
-            
-            try {
-                const res = await fetch(`${API_URL}/rate_launcher`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, token, action })
-                });
-                
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.status === 'ok') { 
-                        showNotification("Голос учтён", "Спасибо за вашу оценку", true); 
-                        fetchLauncherRating();
-                    } else if (data.error === "unauthorized") {
-                        showNotification("Сессия истекла", "Войдите снова");
-                        localStorage.removeItem('mx_token'); 
-                        localStorage.removeItem('mx_username');
-                        openAuthModal();
-                    }
-                }
-            } catch { 
-                showNotification("Ошибка", "Сервер недоступен"); 
-            }
-        }
-
-        let currentLang = 'ru';
-        const translations = {
-            ru: {
-                logo_title: "MXlauncher",
-                nav_support: "Поддержка",
-                nav_login: "Войти",
-                nav_profile: "Профиль",
-                download_btn: "СКАЧАТЬ",
-                hero_badge: "Версия 1.0 — Бесплатно",
-                hero_desc: "Единая библиотека игровых модификаций. Наше приложение поможет тебе скачать моды, читы и визуалы совершенно бесплатно, без вирусов и скрытых подписок. Искал удобный лоадер? Считай, что тебе повезло!",
-                download_btn_full: "СКАЧАТЬ БЕСПЛАТНО",
-                hero_subtext: "Вы скачиваете официальный установщик. Поддерживаются Windows 10/11 (x64).",
-                sec_screens: "Интерфейс",
-                sec_screens_sub: "Взгляните на то, как выглядит лоадер изнутри.",
-                sec_stats: "Статистика",
-                sec_stats_sub: "Отражение нашего коммьюнити в цифрах.",
-                stat_online: "Игроков онлайн",
-                stat_online_sub: "Пользователей прямо сейчас",
-                sec_rating: "Оценка пользователей",
-                sec_rating_sub: "Нравится ли вам MX Launcher?",
-                stat_downloads: "Скачиваний",
-                stat_downloads_sub: "Успешных скачиваний лоадера",
-                sec_security: "Безопасность",
-                sec_security_sub: "Мы заботимся о вашей системе.",
-                sec_video: "Видео-проверка",
-                sec_video_value: "Обзор на YouTube",
-                sec_video_sub: "Независимая проверка на вирусы",
-                sec_vt: "Отчёт VirusTotal",
-                sec_vt_value: "Результат: 3 / 72",
-                sec_vt_sub: "Проверка пройдена успешно",
-                sec_req: "Требования",
-                sec_req_sub: "Убедитесь, что ваша система подходит.",
-                req_os: "Операционная система",
-                req_os_val: "Windows 10 / 11 (только 64-bit)",
-                req_cpu: "Процессор (CPU)",
-                req_cpu_val: "Intel Core i3 / AMD Ryzen 3 или лучше",
-                req_ram: "Память (RAM)",
-                req_ram_val: "4 GB минимум — рекомендуется 8 GB",
-                req_disk: "Место на диске",
-                req_disk_val: "От 5 GB (лаунчер + игровые сборки)",
-                req_soft: "Дополнительное ПО",
-                req_soft_val: "Java 8 / Java 17 / Java 21",
-                sec_faq: "FAQ",
-                sec_faq_sub: "Ответы на частые вопросы.",
-                faq_1_q: "Чит или визуалы не запускаются?",
-                faq_1_a: "Большинство читов требуют конкретную версию Java. Убедитесь, что у вас установлены Java 8, 17 и 21, и выберите правильную версию в настройках профиля перед запуском программы.",
-                faq_2_q: "Лаунчер не запускается или выдает ошибку сети?",
-                faq_2_a: "В некоторых регионах провайдеры могут блокировать доступ к нашим серверам. Попробуйте использовать любой бесплатный VPN сервер (например, AvoVpn).",
-                footer_privacy: "Политика конфиденциальности",
-                footer_tg: "Официальный Telegram",
-                footer_copy: "MXlauncher © 2026 — Все права защищены",
-                auth_welcome: "Добро пожаловать",
-                auth_login_desc: "Войдите в свой аккаунт",
-                auth_create: "Создать аккаунт",
-                auth_wait: "Регистрация займет минуту",
-                auth_reset: "Сброс пароля",
-                auth_reset_desc: "Восстановление доступа",
-                auth_link: "Привязка Telegram",
-                auth_link_desc: "Требование безопасности",
-                auth_tab_login: "Войти",
-                auth_tab_register: "Регистрация",
-                auth_username: "Никнейм",
-                auth_password: "Пароль",
-                auth_captcha: "Код с картинки",
-                auth_btn_login: "ВОЙТИ",
-                auth_btn_register: "ОТПРАВИТЬ ССЫЛКУ в ТГ БОТ",
-                auth_tg_btn: "ОТКРЫТЬ ТЕЛЕГРАМ БОТА",
-                auth_forgot: "Забыли пароль?",
-                auth_to_register: "Нет аккаунта? Регистрация",
-                auth_to_login: "Уже есть аккаунт? Войти",
-                notif_welcome: "Добро пожаловать",
-                notif_download: "Менеджер загрузок",
-                notif_download_sub: "Скачивание началось..."
-            },
-            en: {
-                logo_title: "MXlauncher",
-                nav_support: "Support",
-                nav_login: "Log in",
-                nav_profile: "Profile",
-                download_btn: "DOWNLOAD",
-                hero_badge: "Version 1.0 — Free",
-                hero_desc: "A unified library of game modifications. Our app helps you download mods, cheats, and visuals completely free, without viruses or hidden subscriptions. Looking for a convenient loader? Consider yourself lucky!",
-                download_btn_full: "DOWNLOAD FREE",
-                hero_subtext: "You are downloading the official installer. Supports Windows 10/11 (x64).",
-                sec_screens: "Interface",
-                sec_screens_sub: "Take a look at how the loader looks from the inside.",
-                sec_stats: "Statistics",
-                sec_stats_sub: "A reflection of our community in numbers.",
-                stat_online: "Players online",
-                stat_online_sub: "Users currently online",
-                stat_downloads: "Downloads",
-                stat_downloads_sub: "Successful loader downloads",
-                sec_rating: "User Rating",
-                sec_rating_sub: "Do you like MX Launcher?",
-                sec_security: "Security",
-                sec_security_sub: "We care about your system.",
-                sec_video: "Video Review",
-                sec_video_value: "Review on YouTube",
-                sec_video_sub: "Independent virus scan",
-                sec_vt: "VirusTotal Report",
-                sec_vt_value: "Result: 3 / 72",
-                sec_vt_sub: "Verification passed successfully",
-                sec_req: "Requirements",
-                sec_req_sub: "Make sure your system is appropriate.",
-                req_os: "Operating System",
-                req_os_val: "Windows 10 / 11 (64-bit only)",
-                req_cpu: "Processor (CPU)",
-                req_cpu_val: "Intel Core i3 / AMD Ryzen 3 or better",
-                req_ram: "Memory (RAM)",
-                req_ram_val: "4 GB minimum — 8 GB recommended",
-                req_disk: "Disk Space",
-                req_disk_val: "From 5 GB (loader + game builds)",
-                req_soft: "Additional Software",
-                req_soft_val: "Java 8 / Java 17 / Java 21",
-                sec_faq: "FAQ",
-                sec_faq_sub: "Answers to frequently asked questions.",
-                faq_1_q: "Cheat or visuals won't launch?",
-                faq_1_a: "Most cheats require a specific version of Java. Make sure you have Java 8, 17, and 21 installed, and select the correct version in the profile settings before launching.",
-                faq_2_q: "Loader won't start or gives a network error?",
-                faq_2_a: "In some regions, providers may block access to our servers. Try using any free VPN server.",
-                footer_privacy: "Privacy Policy",
-                footer_tg: "Official Telegram",
-                footer_copy: "MXlauncher © 2026 — All rights reserved",
-                auth_welcome: "Welcome",
-                auth_login_desc: "Log into your account",
-                auth_create: "Create Account",
-                auth_wait: "Registration takes a minute",
-                auth_reset: "Reset Password",
-                auth_reset_desc: "Access recovery",
-                auth_link: "Link Telegram",
-                auth_link_desc: "Security requirement",
-                auth_tab_login: "Log in",
-                auth_tab_register: "Register",
-                auth_username: "Username",
-                auth_password: "Password",
-                auth_captcha: "Captcha code",
-                auth_btn_login: "LOG IN",
-                auth_btn_register: "SEND LINK TO TG BOT",
-                auth_tg_btn: "OPEN TELEGRAM BOT",
-                auth_forgot: "Forgot your password?",
-                auth_to_register: "No account? Register",
-                auth_to_login: "Already have an account? Log in",
-                notif_welcome: "Welcome",
-                notif_download: "Download Manager",
-                notif_download_sub: "Download started..."
-            }
-        };
-
-        async function getSha256Hash(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        const origFetch = window.fetch;
-        window.fetch = async function (url, options = {}) {
-            if (typeof url === 'string' && url.includes(API_URL)) {
-                const exempt = ['/handshake', '/check_update', '/online', '/get_downloads', '/get_ad'];
-                const isExempt = exempt.some(endpoint => url.includes(endpoint));
-                if (!isExempt) {
-                    let session_id = sessionStorage.getItem('mx_session_id');
-                    let session_secret = sessionStorage.getItem('mx_session_secret');
-                    if (!session_id || !session_secret) {
-                        try {
-                            const hs_res = await origFetch(`${API_URL}/handshake`);
-                            if (hs_res.ok) {
-                                const hs_data = await hs_res.json();
-                                session_id = hs_data.session_id;
-                                session_secret = hs_data.session_secret;
-                                sessionStorage.setItem('mx_session_id', session_id);
-                                sessionStorage.setItem('mx_session_secret', session_secret);
-                            }
-                        } catch (e) { console.error("Handshake failed:", e); }
-                    }
-                    if (session_id && session_secret) {
-                        const timestamp = (Date.now() / 1000).toString();
-                        const nonce = crypto.randomUUID();
-                        const urlObj = new URL(url);
-                        const path = urlObj.pathname;
-                        const method = (options.method || 'GET').toUpperCase();
-                        let bodyString = "";
-                        if (options.body) bodyString = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
-                        const bodyHash = await getSha256Hash(bodyString);
-                        const message = `${method}:${path}:${timestamp}:${nonce}:${bodyHash}`;
-                        const encoder = new TextEncoder();
-                        const keyData = encoder.encode(session_secret);
-                        const msgData = encoder.encode(message);
-                        const cryptoKey = await crypto.subtle.importKey("raw", keyData, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-                        const signatureBuffer = await crypto.subtle.sign("HMAC", cryptoKey, msgData);
-                        const signatureArray = Array.from(new Uint8Array(signatureBuffer));
-                        const signatureHex = signatureArray.map(b => b.toString(16).padStart(2, '0')).join('');
-                        options.headers = {
-                            ...options.headers,
-                            'X-Session-Id': session_id,
-                            'X-Signature': signatureHex,
-                            'X-Timestamp': timestamp,
-                            'X-Nonce': nonce
-                        };
-                    }
-                }
-            }
-            return origFetch(url, options);
-        };
-
-        origFetch(`${API_URL}/handshake`).then(r => r.json()).then(d => {
-            if (d.session_id) {
-                sessionStorage.setItem('mx_session_id', d.session_id);
-                sessionStorage.setItem('mx_session_secret', d.session_secret);
-            }
-        }).catch(() => { });
-
-        let authMode = 'login';
-        let isCodeSent = false;
-        let linkUsername = "";
-
-        function openAuthModal(e) {
-            if (e) e.preventDefault();
-            document.getElementById('authModal').classList.add('active');
-            switchAuthMode('login');
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.remove('active');
-        }
-
-        document.getElementById('authModal').addEventListener('click', function (e) {
-            if (e.target === this) closeAuthModal();
-        });
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') closeAuthModal();
-        });
-
-        function togglePasswordVisibility() {
-            const inp = document.getElementById('auth-password');
-            inp.type = inp.type === 'password' ? 'text' : 'password';
-        }
-
-        async function loadCaptcha() {
-            const img = document.getElementById('auth-captcha-image');
-            const idInput = document.getElementById('auth-captcha-id');
-            const textInput = document.getElementById('auth-captcha-text');
-            if (!img) return;
-
-            img.style.opacity = '0.4';
-            textInput.value = '';
-            try {
-                const res = await fetch(`${API_URL}/get_captcha`);
-                const data = await res.json();
-                if (data.status === 'ok') {
-                    img.src = data.image_base64;
-                    idInput.value = data.captcha_id;
-                    img.style.opacity = '1';
-                }
-            } catch (e) { img.style.opacity = '1'; }
-        }
-
-        function switchAuthMode(mode) {
-            authMode = mode;
-            isCodeSent = false;
-
-            document.getElementById('auth-status').innerText = "";
-            document.getElementById('auth-status').style.color = "var(--red)";
-
-            const title = document.getElementById('auth-modal-title-text');
-            const sub = document.getElementById('auth-modal-sub-text');
-            const btn = document.getElementById('auth-submit-btn');
-
-            document.getElementById('tab-login').classList.remove('active');
-            document.getElementById('tab-register').classList.remove('active');
-
-            document.getElementById('auth-username-group').style.display = 'none';
-            document.getElementById('auth-pass-group').style.display = 'none';
-            document.getElementById('auth-captcha-group').style.display = 'block';
-            document.getElementById('auth-tg-group').style.display = 'none';
-            document.getElementById('auth-forgot-btn').style.display = 'none';
-            document.getElementById('auth-switch-btn').style.display = 'block';
-
-            document.getElementById('auth-username').disabled = false;
-
-            if (mode === 'login') {
-                document.getElementById('tab-login').classList.add('active');
-                title.innerText = translations[currentLang].auth_welcome;
-                sub.innerText = translations[currentLang].auth_login_desc;
-                document.getElementById('auth-username-group').style.display = 'block';
-                document.getElementById('auth-pass-group').style.display = 'block';
-                document.getElementById('auth-forgot-btn').style.display = 'block';
-                document.getElementById('auth-username').placeholder = "Логин";
-                document.getElementById('auth-switch-btn').innerText = translations[currentLang].auth_to_register;
-                document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('register');
-                btn.innerText = translations[currentLang].auth_btn_login;
-                btn.style.display = "block";
-                loadCaptcha();
-            }
-            else if (mode === 'register') {
-                document.getElementById('tab-register').classList.add('active');
-                title.innerText = translations[currentLang].auth_create;
-                sub.innerText = translations[currentLang].auth_wait;
-                document.getElementById('auth-username-group').style.display = 'block';
-                document.getElementById('auth-pass-group').style.display = 'block';
-                document.getElementById('auth-username').placeholder = "Придумайте логин";
-                document.getElementById('auth-switch-btn').innerText = translations[currentLang].auth_to_login;
-                document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
-                btn.innerText = translations[currentLang].auth_btn_register;
-                btn.style.display = "block";
-                loadCaptcha();
-            }
-            else if (mode === 'reset') {
-                title.innerText = translations[currentLang].auth_reset;
-                sub.innerText = translations[currentLang].auth_reset_desc;
-                document.getElementById('auth-username-group').style.display = 'block';
-                document.getElementById('auth-username').placeholder = "Логин";
-                document.getElementById('auth-pass-group').style.display = 'block';
-                document.getElementById('auth-switch-btn').innerText = translations[currentLang].auth_to_login;
-                document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
-                btn.innerText = translations[currentLang].auth_btn_register;
-                btn.style.display = "block";
-                loadCaptcha();
-            }
-            else if (mode === 'link') {
-                title.innerText = translations[currentLang].auth_link;
-                sub.innerText = translations[currentLang].auth_link_desc;
-                document.getElementById('auth-username-group').style.display = 'block';
-                document.getElementById('auth-username').value = linkUsername;
-                document.getElementById('auth-username').disabled = true;
-                document.getElementById('auth-pass-group').style.display = 'block';
-                document.getElementById('auth-switch-btn').innerText = translations[currentLang].auth_to_login;
-                document.getElementById('auth-switch-btn').onclick = () => switchAuthMode('login');
-                btn.innerText = translations[currentLang].auth_btn_register;
-                btn.style.display = "block";
-                loadCaptcha();
-            }
-        }
-
-        async function handleAuthSubmit(e) {
-            e.preventDefault();
-            const user = document.getElementById('auth-username').value.trim();
-            const pass = document.getElementById('auth-password').value.trim();
-            const capText = document.getElementById('auth-captcha-text').value.trim();
-            const capId = document.getElementById('auth-captcha-id').value;
-
-            const btn = document.getElementById('auth-submit-btn');
-            const status = document.getElementById('auth-status');
-            status.style.color = 'var(--red)';
-
-            if (authMode === 'login' && (!user || !pass || !capText)) { status.innerText = "Заполните все поля!"; return; }
-            if ((authMode === 'register' || authMode === 'reset' || authMode === 'link') && (!user || !pass || (!isCodeSent && !capText))) { status.innerText = "Заполните все поля!"; return; }
-
-            if (authMode !== 'login' && !isCodeSent) {
-                if (!capText) { status.innerText = "Введите капчу!"; return; }
-                btn.disabled = true; btn.innerText = "ПОЛУЧЕНИЕ ССЫЛКИ...";
-
-                try {
-                    const res = await fetch(`${API_URL}/get_tg_link`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username: user, action: authMode, captcha_id: capId, captcha_text: capText })
-                    });
-                    const data = await res.json();
-                    if (res.ok) {
-                        isCodeSent = true;
-                        status.style.color = 'var(--online)';
-                        status.innerText = "Перейдите в Telegram по ссылке!";
-
-                        document.getElementById('auth-captcha-group').style.display = 'none';
-                        const tgGroup = document.getElementById('auth-tg-group');
-                        const tgLink = document.getElementById('auth-tg-link');
-                        tgGroup.style.display = 'block';
-                        tgLink.href = data.link;
-
-                        if (authMode === 'register') btn.innerText = "ПОДТВЕРДИЛ РЕГИСТРАЦИЮ В ТГ";
-                        if (authMode === 'reset') btn.innerText = "ПОДТВЕРДИЛ СБРОС В ТГ";
-                        if (authMode === 'link') btn.innerText = "ПОДТВЕРДИЛ ПРИВЯЗКУ В ТГ";
-                    } else {
-                        status.innerText = data.error || "Ошибка получения ссылки";
-                        loadCaptcha();
-                    }
-                } catch (e) { status.innerText = "Ошибка сервера"; }
-                btn.disabled = false;
-                return;
-            }
-
-            btn.disabled = true; btn.innerText = "ОБРАБОТКА...";
-
-            let endpoint = "";
-            let payload = {};
-
-            if (authMode === 'login') {
-                endpoint = "/login";
-                payload = { username: user, password: pass, captcha_id: capId, captcha_text: capText };
-            } else if (authMode === 'register') {
-                endpoint = "/register";
-                payload = { username: user, password: pass };
-            } else if (authMode === 'reset') {
-                endpoint = "/reset_password";
-                payload = { username: user, new_password: pass };
-            } else if (authMode === 'link') {
-                endpoint = "/link_tg";
-                payload = { username: user, password: pass };
-            }
-
-            try {
-                const res = await fetch(`${API_URL}${endpoint}`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const data = await res.json();
-
-                if (res.ok) {
-                    status.style.color = 'var(--online)';
-                    if (authMode === 'login') {
-                        localStorage.setItem('mx_token', data.token);
-                        localStorage.setItem('mx_username', data.username);
-                        closeAuthModal();
-                        showNotification(translations[currentLang].notif_welcome, data.username, true);
-                        updateAuthUI();
-                    } else {
-                        status.innerText = data.message || "Успешно!";
-                        setTimeout(() => switchAuthMode('login'), 2000);
-                    }
-                } else {
-                    if (authMode === 'login' && data.error === 'no_tg' && data.require_link) {
-                        linkUsername = data.username || user;
-                        switchAuthMode('link');
-                        document.getElementById('auth-status').innerText = "Требуется привязка Telegram!";
-                    } else {
-                        status.innerText = data.error || "Ошибка";
-                        if (authMode === 'login' || !isCodeSent) loadCaptcha();
-                    }
-                }
-            } catch (e) { status.innerText = "Ошибка сервера"; }
-
-            btn.disabled = false;
-            if (authMode === 'login') btn.innerText = translations[currentLang].auth_btn_login;
-            else if (!isCodeSent) btn.innerText = translations[currentLang].auth_btn_register;
-        }
-
-        function showNotification(title, text, isSuccess = false) {
-            const toast = document.getElementById('notificationToast');
-            document.getElementById('toastTitle').innerText = title;
-            document.getElementById('toastDesc').innerText = text;
-            toast.className = 'toast';
-            if (!isSuccess) toast.classList.add('toast-error');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 4000);
-        }
-
-        function handleDownload(e) {
-            if (e) e.preventDefault();
-            fetch(`${API_URL}/increment_downloads`, { method: 'POST' }).catch(() => { });
-            showNotification(translations[currentLang].notif_download, translations[currentLang].notif_download_sub, true);
-            window.location.href = "https://github.com/Kermi716/MXlauncher/releases/download/mxupdate/MXSetup.exe";
-        }
-
-        function updateAuthUI() {
-            const savedUser = localStorage.getItem('mx_username');
-            const btns = [document.getElementById('auth-btn-base'), document.getElementById('auth-btn-island'), document.getElementById('auth-btn-footer')];
-
-            if (savedUser) {
-                btns.forEach(btn => {
-                    if (btn) {
-                        if (btn.tagName === 'BUTTON') {
-                            btn.innerHTML = `
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
-                                </svg>
-                                <span>${savedUser}</span>
-                            `;
-                            btn.onclick = () => { window.location.href = "profile.html"; };
-                        } else {
-                            btn.innerHTML = `<span data-i18n="nav_profile">${translations[currentLang].nav_profile || "Профиль"}</span>`;
-                            btn.onclick = null;
-                            btn.href = "profile.html";
-                        }
-                    }
-                });
-            } else {
-                btns.forEach(btn => {
-                    if (btn && btn.tagName === 'BUTTON') {
-                        btn.onclick = openAuthModal;
-                    }
-                });
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            updateAuthUI();
-            fetchLauncherRating();
-            fetchVersion();
-        });
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'ru' ? 'en' : 'ru';
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            document.body.classList.add('lang-switching');
-
-            setTimeout(() => {
-                document.querySelectorAll('[data-i18n]').forEach(el => {
-                    const key = el.getAttribute('data-i18n');
-                    if (translations[currentLang][key]) {
-                        el.innerText = translations[currentLang][key];
-                    }
-                });
-
-                document.querySelectorAll('.lang-indicator').forEach(el => {
-                    el.innerText = currentLang.toUpperCase();
-                });
-
-                document.body.classList.remove('lang-switching');
-            }, 300);
-        }
-
-    </script>
 </body>
-
 </html>
