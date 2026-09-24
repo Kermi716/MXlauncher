@@ -700,9 +700,9 @@
             });
         }
 
-        function getDateSlug(dateStr) {
-            if (!dateStr) return '1';
-            const s = String(dateStr).trim();
+        function normalizeDateSlug(str) {
+            if (!str) return '';
+            const s = String(str).trim();
 
             const dmy = s.match(/^(\d{1,2})[\.\/\-](\d{1,2})[\.\/\-](\d{4})/);
             if (dmy) {
@@ -714,15 +714,12 @@
                 return `${ymd[1]}${ymd[2].padStart(2, '0')}${ymd[3].padStart(2, '0')}`;
             }
 
-            const numbers = s.replace(/\D/g, '');
-            if (numbers.length === 8) {
-                if (numbers.startsWith('20') || numbers.startsWith('19')) {
-                    return numbers;
-                }
-                return `${numbers.slice(4, 8)}${numbers.slice(2, 4)}${numbers.slice(0, 2)}`;
+            const digits = s.replace(/\D/g, '');
+            if (digits.length === 8) {
+                if (digits.startsWith('20') || digits.startsWith('19')) return digits;
+                return `${digits.slice(4, 8)}${digits.slice(2, 4)}${digits.slice(0, 2)}`;
             }
-
-            return numbers || '1';
+            return digits;
         }
 
         function parseDateNum(dateStr) {
@@ -731,7 +728,7 @@
         }
 
         function buildCardHtml(item) {
-            const slug = getDateSlug(item.date);
+            const slug = normalizeDateSlug(item.date);
             const rawImg = item.image || item.banner || '';
             let imgSrc = '';
 
@@ -768,35 +765,46 @@
                 return;
             }
 
-            if (list.length === 1) {
-                container.className = 'news-grid is-single';
-            } else {
-                container.className = 'news-grid';
-            }
-
+            container.className = list.length === 1 ? 'news-grid is-single' : 'news-grid';
             container.innerHTML = list.map(item => buildCardHtml(item)).join('');
         }
 
         function openSingleNews(targetSlug) {
-            const article = allNews.find(n => getDateSlug(n.date) === targetSlug || String(n.id) === targetSlug);
-            if (!article) return;
+            const cleanTarget = normalizeDateSlug(targetSlug);
+            const article = allNews.find(n => 
+                normalizeDateSlug(n.date) === cleanTarget || 
+                String(n.id) === String(targetSlug).trim()
+            );
+
+            if (!article) {
+                renderList(allNews);
+                return;
+            }
 
             document.getElementById('singleBackNav').style.display = 'block';
+            const pageHeader = document.querySelector('.news-page-header');
+            if (pageHeader) pageHeader.style.display = 'none';
+
             const container = document.getElementById('newsContainer');
             container.className = 'news-grid is-single';
             container.innerHTML = buildCardHtml(article);
 
-            window.history.pushState({ slug: targetSlug }, '', `/news/#${targetSlug}`);
+            if (window.location.hash !== `#${cleanTarget}`) {
+                window.history.pushState({ slug: cleanTarget }, '', `/news/#${cleanTarget}`);
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function showAllNews() {
             document.getElementById('singleBackNav').style.display = 'none';
+            const pageHeader = document.querySelector('.news-page-header');
+            if (pageHeader) pageHeader.style.display = 'flex';
+
             renderList(allNews);
             window.history.pushState(null, '', '/news/');
         }
 
-        window.addEventListener('popstate', () => {
+        function checkUrlAndOpen() {
             const hashMatch = window.location.hash.match(/(\d{8})/);
             const pathMatch = window.location.pathname.match(/news\/(\d{8})/);
             const match = hashMatch || pathMatch;
@@ -806,7 +814,10 @@
             } else {
                 showAllNews();
             }
-        });
+        }
+
+        window.addEventListener('popstate', checkUrlAndOpen);
+        window.addEventListener('hashchange', checkUrlAndOpen);
 
         async function initNews() {
             try {
@@ -817,15 +828,7 @@
                 const loaded = Array.isArray(data.news) ? data.news : (Array.isArray(data) ? data : []);
                 allNews = loaded.sort((a, b) => parseDateNum(b.date) - parseDateNum(a.date));
 
-                const hashMatch = window.location.hash.match(/(\d{8})/);
-                const pathMatch = window.location.pathname.match(/news\/(\d{8})/);
-                const match = hashMatch || pathMatch;
-
-                if (match && match[1]) {
-                    openSingleNews(match[1]);
-                } else {
-                    renderList(allNews);
-                }
+                checkUrlAndOpen();
             } catch (err) {
                 document.getElementById('newsContainer').className = 'news-grid is-single';
                 document.getElementById('newsContainer').innerHTML =
