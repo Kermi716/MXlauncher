@@ -701,8 +701,27 @@
         }
 
         function getDateSlug(dateStr) {
-            const numbers = (dateStr || '').replace(/\D/g, '');
-            if (numbers.length >= 8) return numbers.slice(0, 8);
+            if (!dateStr) return '1';
+            const s = String(dateStr).trim();
+
+            const dmy = s.match(/^(\d{1,2})[\.\/\-](\d{1,2})[\.\/\-](\d{4})/);
+            if (dmy) {
+                return `${dmy[3]}${dmy[2].padStart(2, '0')}${dmy[1].padStart(2, '0')}`;
+            }
+
+            const ymd = s.match(/^(\d{4})[\.\/\-](\d{1,2})[\.\/\-](\d{1,2})/);
+            if (ymd) {
+                return `${ymd[1]}${ymd[2].padStart(2, '0')}${ymd[3].padStart(2, '0')}`;
+            }
+
+            const numbers = s.replace(/\D/g, '');
+            if (numbers.length === 8) {
+                if (numbers.startsWith('20') || numbers.startsWith('19')) {
+                    return numbers;
+                }
+                return `${numbers.slice(4, 8)}${numbers.slice(2, 4)}${numbers.slice(0, 2)}`;
+            }
+
             return numbers || '1';
         }
 
@@ -767,7 +786,7 @@
             container.className = 'news-grid is-single';
             container.innerHTML = buildCardHtml(article);
 
-            window.history.pushState({ slug: targetSlug }, '', `/news/${targetSlug}`);
+            window.history.pushState({ slug: targetSlug }, '', `/news/#${targetSlug}`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -778,7 +797,10 @@
         }
 
         window.addEventListener('popstate', () => {
-            const match = window.location.pathname.match(/news\/(\d{8})/);
+            const hashMatch = window.location.hash.match(/(\d{8})/);
+            const pathMatch = window.location.pathname.match(/news\/(\d{8})/);
+            const match = hashMatch || pathMatch;
+
             if (match && match[1]) {
                 openSingleNews(match[1]);
             } else {
@@ -795,7 +817,10 @@
                 const loaded = Array.isArray(data.news) ? data.news : (Array.isArray(data) ? data : []);
                 allNews = loaded.sort((a, b) => parseDateNum(b.date) - parseDateNum(a.date));
 
-                const match = window.location.pathname.match(/news\/(\d{8})/);
+                const hashMatch = window.location.hash.match(/(\d{8})/);
+                const pathMatch = window.location.pathname.match(/news\/(\d{8})/);
+                const match = hashMatch || pathMatch;
+
                 if (match && match[1]) {
                     openSingleNews(match[1]);
                 } else {

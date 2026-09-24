@@ -1227,8 +1227,27 @@
         }
 
         function getDateSlug(dateStr) {
-            const numbers = (dateStr || '').replace(/\D/g, '');
-            if (numbers.length >= 8) return numbers.slice(0, 8);
+            if (!dateStr) return '1';
+            const s = String(dateStr).trim();
+
+            const dmy = s.match(/^(\d{1,2})[\.\/\-](\d{1,2})[\.\/\-](\d{4})/);
+            if (dmy) {
+                return `${dmy[3]}${dmy[2].padStart(2, '0')}${dmy[1].padStart(2, '0')}`;
+            }
+
+            const ymd = s.match(/^(\d{4})[\.\/\-](\d{1,2})[\.\/\-](\d{1,2})/);
+            if (ymd) {
+                return `${ymd[1]}${ymd[2].padStart(2, '0')}${ymd[3].padStart(2, '0')}`;
+            }
+
+            const numbers = s.replace(/\D/g, '');
+            if (numbers.length === 8) {
+                if (numbers.startsWith('20') || numbers.startsWith('19')) {
+                    return numbers;
+                }
+                return `${numbers.slice(4, 8)}${numbers.slice(2, 4)}${numbers.slice(0, 2)}`;
+            }
+
             return numbers || '1';
         }
 
@@ -1405,7 +1424,7 @@
 
                     const card = document.createElement('a');
                     card.className = 'latest-news-card';
-                    card.href = `news/${slug}`;
+                    card.href = `news/#${slug}`;
 
                     card.innerHTML = `
                         ${imgSrc ? `
