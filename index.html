@@ -2,466 +2,1450 @@
 <html lang="ru">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>mxlauncher — soon</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      user-select: none;
-      -webkit-user-drag: none;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MXLauncher</title>
+    <meta name="description" content="MXLauncher - мы собрали для вас все модификации на игры в одном лаунчере.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="manifest" href="site.webmanifest">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --surface-color: #fafafa;
+            --surface-hover: #f4f4f5;
+            --border-color: #e4e4e7;
+            --border-hover: #d4d4d8;
+            --text-main: #09090b;
+            --text-muted: #71717a;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --transition: 0.18s ease;
+        }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      overflow: hidden;
-      background: #0e1118;
-      position: relative;
-      cursor: default;
-    }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    #canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
+        html,
+        body {
+            width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
 
-    .grain-overlay {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 999;
-      opacity: 0.12;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.22' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
-      background-size: 260px 260px;
-      background-repeat: repeat;
-      mix-blend-mode: overlay;
-    }
+        body {
+            padding-top: 64px;
+        }
 
-    .convex-overlay {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 10;
-      box-shadow:
-        inset 0 0 25px 4px rgba(0, 0, 0, 0.45),
-        inset 0 1px 1px rgba(255, 255, 255, 0.05);
-      background: radial-gradient(ellipse at 50% 50%,
-          transparent 65%,
-          rgba(0, 0, 0, 0.12) 85%,
-          rgba(0, 0, 0, 0.40) 100%);
-    }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
 
-    .soon-wrapper {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 30;
-      pointer-events: none;
-      text-align: center;
-    }
+        button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            font: inherit;
+            color: inherit;
+        }
 
-    .soon-text {
-      font-size: clamp(64px, 14vw, 160px);
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: #ffffff;
-      text-transform: uppercase;
-      line-height: 1;
-    }
+        .site-header {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
 
-    .tg-link {
-      margin-top: 22px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: rgba(14, 18, 28, 0.55);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: rgba(255, 255, 255, 0.65);
-      pointer-events: auto;
-      cursor: pointer;
-      transition: color 0.15s ease, transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-    }
+        .header-inner {
+            width: 100%;
+            height: 64px;
+            padding: 0 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
 
-    .tg-link:hover {
-      color: #ffffff;
-      border-color: rgba(59, 130, 246, 0.5);
-      background: rgba(37, 99, 235, 0.15);
-      transform: scale(1.08);
-    }
+        .brand-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+            user-select: none;
+            transition: color var(--transition);
+            cursor: pointer;
+            white-space: nowrap;
+        }
 
-    .tg-link:active {
-      transform: scale(0.94);
-    }
+        .brand-title:hover {
+            color: var(--primary);
+        }
 
-    .tg-link svg {
-      width: 24px;
-      height: 24px;
-      display: block;
-    }
-  </style>
+        .header-nav {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-link {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color var(--transition);
+            cursor: pointer;
+            padding: 6px 2px;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #ffffff;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .main-content {
+            width: 100%;
+            flex: 1;
+            padding: 36px 28px 48px;
+            background: var(--bg-color);
+        }
+
+        .hero-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 0.9fr 1.25fr;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .hero-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.3;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+        }
+
+        .hero-desc {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            margin-top: 6px;
+        }
+
+        .btn-install {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform var(--transition);
+        }
+
+        .btn-install span {
+            font-family: 'Unbounded', sans-serif !important;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+            position: relative;
+            z-index: 2;
+            transition: color var(--transition);
+        }
+
+        .btn-install::before {
+            content: '';
+            position: absolute;
+            top: -24px;
+            left: -48px;
+            right: -48px;
+            height: 64px;
+            background: radial-gradient(ellipse 65% 55% at 48% 38%, rgba(37, 99, 235, 0.42) 0%, rgba(59, 130, 246, 0.16) 45%, rgba(59, 130, 246, 0) 80%);
+            filter: blur(8px);
+            pointer-events: none;
+            z-index: 1;
+            transition: transform var(--transition), opacity var(--transition);
+        }
+
+        .btn-install svg {
+            color: var(--primary);
+            position: relative;
+            z-index: 2;
+            transition: transform var(--transition), color var(--transition);
+        }
+
+        .btn-install:hover span {
+            color: var(--primary);
+        }
+
+        .btn-install:hover {
+            transform: translateX(4px);
+        }
+
+        .btn-install:hover::before {
+            transform: scale(1.15);
+            opacity: 1;
+        }
+
+        .btn-install:hover svg {
+            transform: translateY(2px);
+            color: var(--primary-hover);
+        }
+
+        .btn-install:active {
+            transform: translateX(2px);
+        }
+
+        .hero-preview {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .preview-stack {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-bg-card {
+            position: absolute;
+            top: 50%;
+            width: 88%;
+            border-radius: 8px;
+            overflow: hidden;
+            pointer-events: none;
+            user-select: none;
+            z-index: 1;
+            opacity: 0.35;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, filter 0.35s ease;
+        }
+
+        .preview-bg-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .preview-bg-left {
+            left: 0;
+            transform: translateY(-50%) translateX(-14%) scale(0.9);
+            filter: blur(5px) brightness(0.85);
+        }
+
+        .preview-bg-right {
+            right: 0;
+            transform: translateY(-50%) translateX(14%) scale(0.9);
+            filter: blur(5px) brightness(0.85);
+        }
+
+        .preview-stack:hover .preview-bg-left {
+            transform: translateY(-50%) translateX(-18%) scale(0.91);
+            opacity: 0.48;
+            filter: blur(4px) brightness(0.92);
+        }
+
+        .preview-stack:hover .preview-bg-right {
+            transform: translateY(-50%) translateX(18%) scale(0.91);
+            opacity: 0.48;
+            filter: blur(4px) brightness(0.92);
+        }
+
+        .preview-frame {
+            width: 100%;
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+            -webkit-mask-image: radial-gradient(ellipse 95% 95% at 50% 50%, #000 78%, transparent 100%);
+            mask-image: radial-gradient(ellipse 95% 95% at 50% 50%, #000 78%, transparent 100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+        }
+
+        .preview-stack:hover .preview-frame {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .preview-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .games-section {
+            max-width: 1200px;
+            margin: 56px auto 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            scroll-margin-top: 84px;
+        }
+
+        .games-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .games-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+        }
+
+        .games-wrapper {
+            position: relative;
+            width: 100%;
+            max-height: 250px;
+            overflow: hidden;
+            transition: max-height 0.55s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: max-height;
+        }
+
+        .games-wrapper::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 110px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.75) 45%, var(--bg-color) 100%);
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            z-index: 5;
+        }
+
+        .games-wrapper.is-expanded::after {
+            opacity: 0;
+        }
+
+        .games-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            padding-bottom: 6px;
+        }
+
+        .game-card {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--surface-color);
+            position: relative;
+            box-shadow: var(--shadow-sm);
+            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+        }
+
+        .game-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-md);
+        }
+
+        .game-banner {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.25s ease;
+        }
+
+        .game-card:hover .game-banner {
+            transform: scale(1.03);
+        }
+
+        .game-skeleton {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background: linear-gradient(90deg, #fafafa 25%, #f4f4f5 50%, #fafafa 75%);
+            background-size: 200% 100%;
+            animation: skeletonShimmer 1.4s infinite ease-in-out;
+        }
+
+        @keyframes skeletonShimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .games-toggle-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 2px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .games-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: transparent;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color var(--transition);
+            user-select: none;
+        }
+
+        .games-toggle-btn:hover {
+            color: var(--primary);
+        }
+
+        .games-toggle-icon {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .games-wrapper.is-expanded + .games-toggle-wrap .games-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .latest-news-section {
+            max-width: 1200px;
+            margin: 64px auto 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            scroll-margin-top: 84px;
+        }
+
+        .latest-news-header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .latest-news-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+        }
+
+        .latest-news-grid {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .latest-news-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+            color: inherit;
+            transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+        }
+
+        .latest-news-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+        }
+
+        .latest-news-img-box {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: #f4f4f5;
+        }
+
+        .latest-news-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .latest-news-card:hover .latest-news-img {
+            transform: scale(1.03);
+        }
+
+        .latest-news-body {
+            padding: 18px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .latest-news-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: #eff6ff;
+            color: var(--primary);
+            font-size: 11.5px;
+            font-weight: 600;
+            align-self: flex-start;
+        }
+
+        .latest-news-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.35;
+            color: var(--text-main);
+            transition: color var(--transition);
+        }
+
+        .latest-news-card:hover .latest-news-card-title {
+            color: var(--primary);
+        }
+
+        .latest-news-desc {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .faq-section {
+            max-width: 1200px;
+            margin: 64px auto 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scroll-margin-top: 84px;
+        }
+
+        .faq-header {
+            display: flex;
+            align-items: center;
+        }
+
+        .faq-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .faq-item {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--surface-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+            transition: border-color var(--transition);
+        }
+
+        .faq-item:hover {
+            border-color: var(--border-hover);
+        }
+
+        .faq-question {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+
+        .faq-answer {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        .site-footer {
+            width: 100%;
+            border-top: 1px solid var(--border-color);
+            background: var(--surface-color);
+            padding: 24px 28px;
+            margin-top: auto;
+        }
+
+        .footer-inner {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-brand {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        .footer-copy {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .footer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            padding: 6px 10px;
+            border-radius: var(--radius-md);
+            transition: color var(--transition);
+            border: none;
+            background: transparent;
+        }
+
+        .footer-btn:hover {
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-container {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 600px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-md);
+            transform: translateY(12px);
+            transition: transform 0.2s ease;
+        }
+
+        .modal-overlay.is-open .modal-container {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .modal-close-btn {
+            color: var(--text-muted);
+            padding: 4px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .modal-close-btn:hover {
+            color: var(--text-main);
+            background: var(--surface-hover);
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            font-size: 13.5px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-body h4 {
+            color: var(--text-main);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .modal-footer {
+            padding: 14px 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            background: var(--surface-color);
+            border-bottom-left-radius: var(--radius-lg);
+            border-bottom-right-radius: var(--radius-lg);
+        }
+
+        @media (max-width: 960px) {
+            .hero-section {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+
+            .hero-title {
+                font-size: 26px;
+            }
+
+            .main-content {
+                padding: 24px 20px 36px;
+            }
+
+            .games-section {
+                margin-top: 44px;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+
+            .games-wrapper {
+                max-height: 240px;
+            }
+
+            .latest-news-section {
+                margin-top: 48px;
+            }
+
+            .latest-news-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .faq-section {
+                margin-top: 48px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-nav {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding-top: 58px;
+            }
+
+            .header-inner {
+                padding: 0 16px;
+                height: 58px;
+            }
+
+            .main-content {
+                padding: 20px 16px 32px;
+            }
+
+            .hero-title {
+                font-size: 22px;
+            }
+
+            .hero-desc {
+                font-size: 14px;
+            }
+
+            .preview-bg-left {
+                transform: translateY(-50%) translateX(-8%) scale(0.92);
+                filter: blur(3px) brightness(0.85);
+                opacity: 0.28;
+            }
+
+            .preview-bg-right {
+                transform: translateY(-50%) translateX(8%) scale(0.92);
+                filter: blur(3px) brightness(0.85);
+                opacity: 0.28;
+            }
+
+            .preview-stack:hover .preview-bg-left {
+                transform: translateY(-50%) translateX(-8%) scale(0.92);
+            }
+
+            .preview-stack:hover .preview-bg-right {
+                transform: translateY(-50%) translateX(8%) scale(0.92);
+            }
+
+            .games-section {
+                margin-top: 32px;
+                gap: 14px;
+            }
+
+            .games-title {
+                font-size: 18px;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .games-wrapper {
+                max-height: 190px;
+            }
+
+            .games-wrapper::after {
+                height: 90px;
+            }
+
+            .latest-news-section {
+                margin-top: 36px;
+            }
+
+            .latest-news-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .faq-section {
+                margin-top: 36px;
+                gap: 14px;
+            }
+
+            .faq-title {
+                font-size: 18px;
+            }
+
+            .faq-item {
+                padding: 16px;
+            }
+
+            .faq-question {
+                font-size: 14.5px;
+            }
+
+            .faq-answer {
+                font-size: 13.5px;
+            }
+
+            .site-footer {
+                padding: 20px 16px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .footer-links {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <canvas id="canvas"></canvas>
-  <div class="convex-overlay"></div>
-  <div class="grain-overlay"></div>
+    <header class="site-header" id="headerContainer">
+        <div class="header-inner">
+            <a href="#" class="brand-title">MXLauncher</a>
 
-  <div class="soon-wrapper">
-    <div class="soon-text">Soon</div>
-    <a class="tg-link" href="https://t.me/mxlaunchers" target="_blank" rel="noopener noreferrer" title="Telegram">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path fill="currentColor" d="M16.906 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.062 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-      </svg>
-    </a>
-  </div>
+            <nav class="header-nav">
+                <a href="#gamesSection" class="nav-link">Игры</a>
+                <a href="news/index.html" class="nav-link">Новости</a>
+                <a href="#faqSection" class="nav-link">FAQ</a>
+                <button type="button" class="nav-link" id="topAgreementBtn">Соглашение</button>
+                <a href="https://t.me/lfds12" target="_blank" rel="noopener noreferrer" class="nav-link">Поддержка</a>
+            </nav>
 
-  <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+            <div class="header-actions">
+                <a href="https://xk9m2pq.xyz/download" class="btn btn-primary" id="topDownloadBtn">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>Скачать</span>
+                </a>
+            </div>
+        </div>
+    </header>
 
-    let dpr = window.devicePixelRatio || 1;
-    let width = 0;
-    let height = 0;
+    <main class="main-content" id="mainContent">
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">MXLauncher - библиотека с кучей модификаций на многие популярные игры</h1>
+                <p class="hero-desc">Все необходимые модификации собраны в одном месте. Устанавливайте моды в один клик без ручной настройки файлов.</p>
+                <div class="hero-actions">
+                    <a href="https://xk9m2pq.xyz/download" class="btn-install">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <span>Установить</span>
+                    </a>
+                </div>
+            </div>
 
-    function resize() {
-      dpr = window.devicePixelRatio || 1;
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    window.addEventListener('resize', resize);
-    resize();
+            <div class="hero-preview">
+                <div class="preview-stack">
+                    <div class="preview-bg-card preview-bg-left" aria-hidden="true">
+                        <img src="2.png" alt="" class="preview-bg-img">
+                    </div>
 
-    let targetX = -500, targetY = -500;
-    let currentX = -500, currentY = -500;
-    let isHovered = false;
-    let hoverAlpha = 0;
+                    <div class="preview-bg-card preview-bg-right" aria-hidden="true">
+                        <img src="3.png" alt="" class="preview-bg-img">
+                    </div>
 
-    let clickTime = -100;
-    let isMouseDown = false;
+                    <div class="preview-frame">
+                        <img src="1.png" alt="Интерфейс MXLauncher" class="preview-img">
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    window.addEventListener('mousemove', (e) => {
-      if (e.clientX >= 0 && e.clientX <= width && e.clientY >= 0 && e.clientY <= height) {
-        targetX = e.clientX;
-        targetY = e.clientY;
-        if (!isHovered) {
-          currentX = targetX;
-          currentY = targetY;
-          isHovered = true;
+        <section class="games-section" id="gamesSection">
+            <div class="games-header">
+                <h2 class="games-title">Игры в лаунчере</h2>
+            </div>
+
+            <div class="games-wrapper" id="gamesWrapper">
+                <div class="games-grid" id="gamesGrid">
+                    <div class="game-skeleton"></div>
+                    <div class="game-skeleton"></div>
+                    <div class="game-skeleton"></div>
+                    <div class="game-skeleton"></div>
+                    <div class="game-skeleton"></div>
+                    <div class="game-skeleton"></div>
+                    <div class="game-skeleton"></div>
+                    <div class="game-skeleton"></div>
+                </div>
+            </div>
+
+            <div class="games-toggle-wrap" id="gamesToggleWrap" style="display: none;">
+                <button type="button" class="games-toggle-btn" id="gamesToggleBtn">
+                    <span id="gamesToggleText">Показать все</span>
+                    <svg class="games-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <section class="latest-news-section" id="newsSection">
+            <div class="latest-news-header">
+                <h2 class="latest-news-title">Последние новости</h2>
+            </div>
+
+            <div class="latest-news-grid" id="latestNewsGrid">
+                <div class="game-skeleton"></div>
+                <div class="game-skeleton"></div>
+                <div class="game-skeleton"></div>
+            </div>
+        </section>
+
+        <section class="faq-section" id="faqSection">
+            <div class="faq-header">
+                <h2 class="faq-title">Часто задаваемые вопросы</h2>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3 class="faq-question">MXLauncher - это вирус? Антивирус ругается на файл</h3>
+                    <div class="faq-answer">
+                        <p><strong>Нет, лаунчер абсолютно безопасен.</strong> Все подобные предупреждения - это ложные срабатывания. Лаунчер является новым проектом и пока не имеет накопленной многолетней репутации у Microsoft SmartScreen, а также не использует дорогостоящую корпоративную цифровую подпись. Из-за этого эвристические анализаторы некоторых антивирусов могут перестраховываться и считать неизвестный исполняемый файл подозрительным. В программе нет скрытого майнинга, вредоносного кода или троянов - лаунчер занимается исключительно загрузкой и распаковкой модов.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Лаунчер бесплатный или есть платные подписки?</h3>
+                    <div class="faq-answer">
+                        <p>MXLauncher полностью бесплатный. Мы не требуем оформления платных подписок или скрытых покупок за скачивание лаунчера и установку модификаций.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Могут ли забанить за использование модификаций?</h3>
+                    <div class="faq-answer">
+                        <p>Для одиночных игр и игр с официальной поддержкой пользовательских модов бан исключён. Однако для онлайн-игр с жёсткими соревновательными античитами (например, VAC, Easy Anti-Cheat или BattlEye) бан может быть.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Как происходит установка модов?</h3>
+                    <div class="faq-answer">
+                        <p>Всё сделано максимально просто: вы выбираете нужную игру и модификацию в каталоге и нажимаете кнопку «Установить». Лаунчер самостоятельно определит директорию игры и корректно распакует все файлы - вам не придётся вручную копаться в системных папках.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">Что делать, если игра или лаунчер выдает ошибку?</h3>
+                    <div class="faq-answer">
+                        <p>Обратитесь в поддержку лаунчера.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span class="footer-brand">MXLauncher</span>
+                <span class="footer-copy">© 2026 MXLauncher. Все права защищены.</span>
+            </div>
+
+            <div class="footer-links">
+                <button type="button" class="footer-btn" id="openAgreementBtn">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span>Соглашение</span>
+                </button>
+
+                <a href="https://t.me/lfds12" target="_blank" rel="noopener noreferrer" class="footer-btn"
+                    id="footerSupportBtn">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>Поддержка</span>
+                </a>
+
+                <a href="https://t.me/mxlaunchers" target="_blank" rel="noopener noreferrer" class="footer-btn"
+                    id="footerTgBtn">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.22 0 .36z" />
+                    </svg>
+                    <span>Telegram</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="agreementModal" aria-hidden="true">
+        <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="agreementModalTitle">
+            <div class="modal-header">
+                <h3 class="modal-title" id="agreementModalTitle">Пользовательское соглашение</h3>
+                <button type="button" class="modal-close-btn" id="closeAgreementModal" aria-label="Закрыть">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Дата редакции:</strong> 22 сентября 2026 г.</p>
+                <h4>1. Общие положения</h4>
+                <p>Настоящее Пользовательское соглашение (далее - «Соглашение») регулирует порядок использования
+                    программного обеспечения MXLauncher и сопутствующих сервисов (далее - «Сервис»).</p>
+                <p>Используя Сервис, загружая или устанавливая клиент лаунчера, пользователь подтверждает свое полное и
+                    безоговорочное согласие со всеми условиями настоящего Соглашения.</p>
+                <h4>2. Использование программного обеспечения</h4>
+                <p>MXLauncher предоставляет пользователю неисключительное право использования лаунчера для загрузки,
+                    установки и управления игровыми модификациями в личных некоммерческих целях.</p>
+                <p>Пользователь обязуется не использовать Сервис для распространения вредоносного программного
+                    обеспечения, нарушения целостности серверов или ущемления прав третьих лиц.</p>
+                <h4>3. Интеллектуальная собственность</h4>
+                <p>Все товарные знаки, наименования игр, модификаций и сопутствующие материалы принадлежат их законным
+                    правообладателям. MXLauncher не претендует на авторские права сторонних игровых продуктов.</p>
+                <h4>4. Отказ от гарантий и ограничение ответственности</h4>
+                <p>Программное обеспечение предоставляется по принципу «как есть» (as is). Разработчики не несут
+                    ответственности за возможную несовместимость модификаций или перебои в работе сторонних сервисов.
+                </p>
+                <h4>5. Поддержка и обратная связь</h4>
+                <p>По всем техническим вопросам, предложениям и сообщениям об ошибках пользователи могут обращаться в
+                    официальную службу поддержки через официальный Telegram-канал проекта.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="confirmAgreementModal">Понятно</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://xk9m2pq.xyz';
+
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, function (m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
         }
-      } else {
-        isHovered = false;
-      }
-    });
 
-    window.addEventListener('mouseenter', (e) => {
-      targetX = e.clientX;
-      targetY = e.clientY;
-      currentX = targetX;
-      currentY = targetY;
-      isHovered = true;
-    });
+        function getDateSlug(dateStr) {
+            const numbers = (dateStr || '').replace(/\D/g, '');
+            if (numbers.length >= 8) return numbers.slice(0, 8);
+            return numbers || '1';
+        }
 
-    document.addEventListener('mouseleave', () => {
-      isHovered = false;
-      isMouseDown = false;
-    });
+        function parseDateNum(dateStr) {
+            const num = (dateStr || '').replace(/\D/g, '');
+            return parseInt(num, 10) || 0;
+        }
 
-    window.addEventListener('blur', () => {
-      isHovered = false;
-      isMouseDown = false;
-    });
+        const agreementModal = document.getElementById('agreementModal');
+        const openAgreementBtn = document.getElementById('openAgreementBtn');
+        const topAgreementBtn = document.getElementById('topAgreementBtn');
+        const closeAgreementModal = document.getElementById('closeAgreementModal');
+        const confirmAgreementModal = document.getElementById('confirmAgreementModal');
 
-    window.addEventListener('mousedown', (e) => {
-      if (e.button === 0) {
-        isMouseDown = true;
-        clickTime = performance.now() * 0.001;
-      }
-    });
-
-    window.addEventListener('mouseup', () => {
-      isMouseDown = false;
-    });
-
-    // touch support so the mobile version still gets the wavy glow
-    window.addEventListener('touchstart', (e) => {
-      const t = e.touches[0];
-      if (!t) return;
-      targetX = t.clientX;
-      targetY = t.clientY;
-      currentX = targetX;
-      currentY = targetY;
-      isHovered = true;
-      isMouseDown = true;
-      clickTime = performance.now() * 0.001;
-    }, { passive: true });
-
-    window.addEventListener('touchmove', (e) => {
-      const t = e.touches[0];
-      if (!t) return;
-      targetX = t.clientX;
-      targetY = t.clientY;
-    }, { passive: true });
-
-    window.addEventListener('touchend', () => {
-      isHovered = false;
-      isMouseDown = false;
-    });
-
-    function makeSimplex2D() {
-      const perm = new Uint8Array(512);
-      const p = new Uint8Array(256);
-      for (let i = 0; i < 256; i++) p[i] = i;
-      for (let i = 255; i > 0; i--) {
-        const r = Math.floor(Math.random() * (i + 1));
-        const t = p[i]; p[i] = p[r]; p[r] = t;
-      }
-      for (let i = 0; i < 512; i++) perm[i] = p[i & 255];
-
-      function grad2(hash, x, y) {
-        const h = hash & 7;
-        const u = h < 4 ? x : y;
-        const v = h < 4 ? y : x;
-        return ((h & 1) ? -u : u) + ((h & 2) ? -2.0 * v : 2.0 * v);
-      }
-
-      return function (x, y) {
-        const F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
-        const G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
-        let n0 = 0, n1 = 0, n2 = 0;
-        const s = (x + y) * F2;
-        const i = Math.floor(x + s);
-        const j = Math.floor(y + s);
-        const t = (i + j) * G2;
-        const X0 = i - t;
-        const Y0 = j - t;
-        const x0 = x - X0;
-        const y0 = y - Y0;
-        let i1, j1;
-        if (x0 > y0) { i1 = 1; j1 = 0; } else { i1 = 0; j1 = 1; }
-        const x1 = x0 - i1 + G2;
-        const y1 = y0 - j1 + G2;
-        const x2 = x0 - 1.0 + 2.0 * G2;
-        const y2 = y0 - 1.0 + 2.0 * G2;
-        const ii = i & 255;
-        const jj = j & 255;
-        let t0 = 0.5 - x0 * x0 - y0 * y0;
-        if (t0 >= 0) { t0 *= t0; n0 = t0 * t0 * grad2(perm[ii + perm[jj]], x0, y0); }
-        let t1 = 0.5 - x1 * x1 - y1 * y1;
-        if (t1 >= 0) { t1 *= t1; n1 = t1 * t1 * grad2(perm[ii + i1 + perm[jj + j1]], x1, y1); }
-        let t2 = 0.5 - x2 * x2 - y2 * y2;
-        if (t2 >= 0) { t2 *= t2; n2 = t2 * t2 * grad2(perm[ii + 1 + perm[jj + 1]], x2, y2); }
-        return 70.0 * (n0 + n1 + n2);
-      };
-    }
-
-    const simplex = makeSimplex2D();
-    const CELL_SIZE = 8;
-    const LEVELS = [-0.60, -0.25, 0.10, 0.45, 0.80];
-
-    function draw(timestamp) {
-      const t = timestamp * 0.000045;
-      const waveT = timestamp * 0.001;
-
-      ctx.clearRect(0, 0, width, height);
-
-      ctx.fillStyle = '#0e1118';
-      ctx.fillRect(0, 0, width, height);
-
-      const ease = 0.2;
-      currentX += (targetX - currentX) * ease;
-      currentY += (targetY - currentY) * ease;
-
-      const targetAlpha = isHovered ? 1.0 : 0.0;
-      hoverAlpha += (targetAlpha - hoverAlpha) * 0.14;
-
-      const cols = Math.ceil(width / CELL_SIZE) + 1;
-      const rows = Math.ceil(height / CELL_SIZE) + 1;
-      const field = new Float32Array(cols * rows);
-
-      const noiseScale = 0.0058;
-
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const px = c * CELL_SIZE;
-          const py = r * CELL_SIZE;
-
-          let mOffset = 0;
-          if (hoverAlpha > 0.01) {
-            const dx = px - currentX;
-            const dy = py - currentY;
-            const distSq = dx * dx + dy * dy;
-            if (distSq < 6000) {
-              const dist = Math.sqrt(distSq);
-              const mDist = 1 - dist / 77.4;
-              mOffset = Math.sin(dist * 0.10 - waveT * 2.5) * (0.28 * mDist * mDist * hoverAlpha);
+        function toggleAgreementModal(open) {
+            if (!agreementModal) return;
+            if (open) {
+                agreementModal.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+            } else {
+                agreementModal.classList.remove('is-open');
+                document.body.style.overflow = '';
             }
-          }
-
-          const v = simplex(px * noiseScale, py * noiseScale + t) +
-            0.4 * simplex(px * noiseScale * 2.0 + 15, py * noiseScale * 2.0 + t * 1.3) +
-            mOffset;
-          field[r * cols + c] = v;
         }
-      }
 
-      function traceIsolines() {
-        for (let l = 0; l < LEVELS.length; l++) {
-          const threshold = LEVELS[l];
-          for (let r = 0; r < rows - 1; r++) {
-            for (let c = 0; c < cols - 1; c++) {
-              const x = c * CELL_SIZE;
-              const y = r * CELL_SIZE;
-
-              const v0 = field[r * cols + c];
-              const v1 = field[r * cols + (c + 1)];
-              const v2 = field[(r + 1) * cols + (c + 1)];
-              const v3 = field[(r + 1) * cols + c];
-
-              const b0 = v0 >= threshold ? 1 : 0;
-              const b1 = v1 >= threshold ? 2 : 0;
-              const b2 = v2 >= threshold ? 4 : 0;
-              const b3 = v3 >= threshold ? 8 : 0;
-              const state = b0 | b1 | b2 | b3;
-
-              if (state === 0 || state === 15) continue;
-
-              function interp(valA, valB, posA, posB) {
-                const delta = valB - valA;
-                if (Math.abs(delta) < 1e-6) return (posA + posB) * 0.5;
-                return posA + ((threshold - valA) / delta) * (posB - posA);
-              }
-
-              const topX = interp(v0, v1, x, x + CELL_SIZE), topY = y;
-              const rightX = x + CELL_SIZE, rightY = interp(v1, v2, y, y + CELL_SIZE);
-              const botX = interp(v3, v2, x, x + CELL_SIZE), botY = y + CELL_SIZE;
-              const leftX = x, leftY = interp(v0, v3, y, y + CELL_SIZE);
-
-              switch (state) {
-                case 1: case 14:
-                  ctx.moveTo(leftX, leftY); ctx.lineTo(topX, topY); break;
-                case 2: case 13:
-                  ctx.moveTo(topX, topY); ctx.lineTo(rightX, rightY); break;
-                case 3: case 12:
-                  ctx.moveTo(leftX, leftY); ctx.lineTo(rightX, rightY); break;
-                case 4: case 11:
-                  ctx.moveTo(rightX, rightY); ctx.lineTo(botX, botY); break;
-                case 5:
-                  ctx.moveTo(leftX, leftY); ctx.lineTo(topX, topY);
-                  ctx.moveTo(rightX, rightY); ctx.lineTo(botX, botY); break;
-                case 10:
-                  ctx.moveTo(topX, topY); ctx.lineTo(rightX, rightY);
-                  ctx.moveTo(leftX, leftY); ctx.lineTo(botX, botY); break;
-                case 6: case 9:
-                  ctx.moveTo(topX, topY); ctx.lineTo(botX, botY); break;
-                case 7: case 8:
-                  ctx.moveTo(leftX, leftY); ctx.lineTo(botX, botY); break;
-              }
+        if (openAgreementBtn) openAgreementBtn.addEventListener('click', () => toggleAgreementModal(true));
+        if (topAgreementBtn) topAgreementBtn.addEventListener('click', () => toggleAgreementModal(true));
+        if (closeAgreementModal) closeAgreementModal.addEventListener('click', () => toggleAgreementModal(false));
+        if (confirmAgreementModal) confirmAgreementModal.addEventListener('click', () => toggleAgreementModal(false));
+        if (agreementModal) {
+            agreementModal.addEventListener('click', (e) => {
+                if (e.target === agreementModal) toggleAgreementModal(false);
+            });
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && agreementModal && agreementModal.classList.contains('is-open')) {
+                toggleAgreementModal(false);
             }
-          }
-        }
-      }
+        });
 
-      ctx.beginPath();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.024)';
-      ctx.lineWidth = 1;
-      traceIsolines();
-      ctx.stroke();
+        const gamesWrapper = document.getElementById('gamesWrapper');
+        const gamesToggleWrap = document.getElementById('gamesToggleWrap');
+        const gamesToggleBtn = document.getElementById('gamesToggleBtn');
+        const gamesToggleText = document.getElementById('gamesToggleText');
+        const gamesSection = document.getElementById('gamesSection');
+        const gamesGrid = document.getElementById('gamesGrid');
 
-      function createWavyPath(centerX, centerY, radius, wobbleAmp, speedMult, phase) {
-        const steps = 48;
-        ctx.beginPath();
-        for (let i = 0; i <= steps; i++) {
-          const angle = (i / steps) * Math.PI * 2;
-          const w1 = Math.sin(angle * 3 + waveT * 3.0 * speedMult + phase) * wobbleAmp;
-          const w2 = Math.cos(angle * 5 - waveT * 2.2 * speedMult) * (wobbleAmp * 0.45);
-          const r = Math.max(3, radius + w1 + w2);
-          const x = centerX + Math.cos(angle) * r;
-          const y = centerY + Math.sin(angle) * r;
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.closePath();
-      }
+        let isExpanded = false;
 
-      if (hoverAlpha > 0.005) {
-        const timeSinceClick = waveT - clickTime;
-        let springScale = 1.0;
-        let wobbleBoost = 1.0;
-
-        if (timeSinceClick < 0.5) {
-          const osc = Math.sin(timeSinceClick * 18) * Math.exp(-timeSinceClick * 6);
-          springScale = 1.0 + osc * 0.22;
-          wobbleBoost = 1.0 + Math.exp(-timeSinceClick * 5) * 1.5;
-        } else if (isMouseDown) {
-          springScale = 0.92;
+        function getBaseCollapsedHeight() {
+            return window.innerWidth <= 640 ? 190 : 250;
         }
 
-        const baseRadius = 34 * springScale;
-        const outerRadius = baseRadius * 1.35;
+        if (gamesToggleBtn) {
+            gamesToggleBtn.addEventListener('click', () => {
+                isExpanded = !isExpanded;
 
-        const outerGrad = ctx.createRadialGradient(
-          currentX, currentY, 0,
-          currentX, currentY, outerRadius
-        );
-        outerGrad.addColorStop(0, 'rgba(59, 130, 246, ' + (0.12 * hoverAlpha).toFixed(3) + ')');
-        outerGrad.addColorStop(0.4, 'rgba(37, 99, 235, ' + (0.06 * hoverAlpha).toFixed(3) + ')');
-        outerGrad.addColorStop(0.75, 'rgba(29, 78, 216, ' + (0.02 * hoverAlpha).toFixed(3) + ')');
-        outerGrad.addColorStop(1, 'rgba(14, 17, 24, 0)');
+                if (isExpanded) {
+                    const fullHeight = gamesGrid.scrollHeight;
+                    gamesWrapper.style.maxHeight = fullHeight + 'px';
+                    gamesWrapper.classList.add('is-expanded');
+                    gamesToggleText.textContent = 'Свернуть';
+                } else {
+                    gamesWrapper.style.maxHeight = gamesGrid.scrollHeight + 'px';
+                    gamesWrapper.offsetHeight;
+                    gamesWrapper.style.maxHeight = getBaseCollapsedHeight() + 'px';
+                    gamesWrapper.classList.remove('is-expanded');
+                    gamesToggleText.textContent = 'Показать все';
 
-        ctx.save();
-        ctx.fillStyle = outerGrad;
-        createWavyPath(currentX, currentY, baseRadius * 1.3, 5.5 * wobbleBoost, 0.7, Math.PI / 3);
-        ctx.fill();
-        ctx.restore();
+                    gamesSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        }
 
-        const midGrad = ctx.createRadialGradient(
-          currentX, currentY, 0,
-          currentX, currentY, baseRadius
-        );
-        midGrad.addColorStop(0, 'rgba(96, 165, 250, ' + (0.18 * hoverAlpha).toFixed(3) + ')');
-        midGrad.addColorStop(0.5, 'rgba(59, 130, 246, ' + (0.10 * hoverAlpha).toFixed(3) + ')');
-        midGrad.addColorStop(1, 'rgba(37, 99, 235, 0)');
+        async function fetchGames() {
+            if (!gamesGrid) return;
 
-        ctx.save();
-        ctx.fillStyle = midGrad;
-        createWavyPath(currentX, currentY, baseRadius, 4.0 * wobbleBoost, 1.0, 0);
-        ctx.fill();
-        ctx.restore();
+            try {
+                const response = await fetch(`${API_BASE}/api/games/public`);
+                if (!response.ok) throw new Error('Ошибка при загрузке игр');
 
-        ctx.save();
-        createWavyPath(currentX, currentY, baseRadius * 1.15, 3.2 * wobbleBoost, 1.0, 0);
-        ctx.clip();
-        ctx.beginPath();
-        ctx.strokeStyle = 'rgba(147, 197, 253, ' + (0.28 * hoverAlpha).toFixed(3) + ')';
-        ctx.lineWidth = 1.2;
-        traceIsolines();
-        ctx.stroke();
-        ctx.restore();
-      }
+                const data = await response.json();
+                const games = Array.isArray(data) ? data : (data.games || data.data || []);
 
-      requestAnimationFrame(draw);
-    }
+                if (!games.length) {
+                    if (gamesSection) gamesSection.style.display = 'none';
+                    return;
+                }
 
-    requestAnimationFrame(draw);
-  </script>
+                gamesGrid.innerHTML = '';
+
+                games.forEach(game => {
+                    const bannerRaw = game.banner || game.banner_url || game.image || game.poster || '';
+                    if (!bannerRaw) return;
+
+                    let bannerUrl = '';
+                    if (bannerRaw.startsWith('http://') || bannerRaw.startsWith('https://')) {
+                        bannerUrl = bannerRaw;
+                    } else if (bannerRaw.startsWith('/')) {
+                        bannerUrl = `${API_BASE}${bannerRaw}`;
+                    } else {
+                        bannerUrl = `${API_BASE}/banner/${bannerRaw}`;
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = 'game-card';
+
+                    const img = document.createElement('img');
+                    img.className = 'game-banner';
+                    img.src = bannerUrl;
+                    img.alt = game.name || game.title || 'Game banner';
+                    img.loading = 'lazy';
+
+                    img.onerror = () => {
+                        card.remove();
+                        checkToggleVisibility();
+                    };
+
+                    card.appendChild(img);
+                    gamesGrid.appendChild(card);
+                });
+
+                checkToggleVisibility();
+            } catch (err) {
+                console.warn('Не удалось загрузить игры из каталога:', err);
+                if (gamesSection) gamesSection.style.display = 'none';
+            }
+        }
+
+        function checkToggleVisibility() {
+            const totalCards = gamesGrid.querySelectorAll('.game-card').length;
+            const threshold = window.innerWidth <= 640 ? 2 : 4;
+            if (totalCards > threshold) {
+                if (gamesToggleWrap) gamesToggleWrap.style.display = 'flex';
+                if (!isExpanded) {
+                    gamesWrapper.style.maxHeight = getBaseCollapsedHeight() + 'px';
+                }
+            } else {
+                if (gamesToggleWrap) gamesToggleWrap.style.display = 'none';
+                if (gamesWrapper) {
+                    gamesWrapper.classList.add('is-expanded');
+                    gamesWrapper.style.maxHeight = 'none';
+                }
+            }
+        }
+
+        async function fetchLatestNews() {
+            const newsGrid = document.getElementById('latestNewsGrid');
+            const newsSection = document.getElementById('newsSection');
+            if (!newsGrid) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/api/news?_t=${Date.now()}`);
+                if (!res.ok) throw new Error('API error');
+                const data = await res.json();
+                const loaded = Array.isArray(data.news) ? data.news : (Array.isArray(data) ? data : []);
+
+                if (!loaded.length) {
+                    if (newsSection) newsSection.style.display = 'none';
+                    return;
+                }
+
+                const sorted = loaded.sort((a, b) => parseDateNum(b.date) - parseDateNum(a.date)).slice(0, 3);
+                newsGrid.innerHTML = '';
+
+                sorted.forEach(item => {
+                    const slug = getDateSlug(item.date);
+                    const rawImg = item.image || item.banner || '';
+                    let imgSrc = '';
+
+                    if (rawImg) {
+                        imgSrc = rawImg.startsWith('http') ? rawImg : `${API_BASE}${rawImg.startsWith('/') ? '' : '/'}${rawImg}`;
+                    }
+
+                    const card = document.createElement('a');
+                    card.className = 'latest-news-card';
+                    card.href = `news/${slug}`;
+
+                    card.innerHTML = `
+                        ${imgSrc ? `
+                            <div class="latest-news-img-box">
+                                <img src="${imgSrc}" alt="${escapeHtml(item.title)}" class="latest-news-img" loading="lazy">
+                            </div>
+                        ` : ''}
+                        <div class="latest-news-body">
+                            <div class="latest-news-date">
+                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                <span>${escapeHtml(item.date)}</span>
+                            </div>
+                            <h3 class="latest-news-card-title">${escapeHtml(item.title)}</h3>
+                            <p class="latest-news-desc">${escapeHtml(item.description)}</p>
+                        </div>
+                    `;
+                    newsGrid.appendChild(card);
+                });
+            } catch (err) {
+                console.warn('Не удалось загрузить последние новости:', err);
+                if (newsSection) newsSection.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            if (!isExpanded && gamesWrapper) {
+                gamesWrapper.style.maxHeight = getBaseCollapsedHeight() + 'px';
+            } else if (isExpanded && gamesWrapper) {
+                gamesWrapper.style.maxHeight = gamesGrid.scrollHeight + 'px';
+            }
+        });
+
+        fetchGames();
+        fetchLatestNews();
+    </script>
 </body>
 
 </html>
