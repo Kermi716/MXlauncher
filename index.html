@@ -426,11 +426,14 @@
             background: var(--surface-color);
             position: relative;
             box-shadow: var(--shadow-sm);
+            isolation: isolate;
+            transform: translateZ(0);
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
             transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
         }
 
         .game-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-2px) translateZ(0);
             border-color: var(--border-hover);
             box-shadow: var(--shadow-md);
         }
@@ -440,11 +443,15 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.25s ease;
+            transform: translateZ(0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform;
+            transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .game-card:hover .game-banner {
-            transform: scale(1.03);
+            transform: scale(1.03) translateZ(0);
         }
 
         .game-skeleton {
@@ -544,13 +551,16 @@
             box-shadow: var(--shadow-sm);
             text-decoration: none;
             color: inherit;
+            isolation: isolate;
+            transform: translateZ(0);
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
             transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
         }
 
         .latest-news-card:hover {
             border-color: var(--border-hover);
             box-shadow: var(--shadow-md);
-            transform: translateY(-3px);
+            transform: translateY(-3px) translateZ(0);
         }
 
         .latest-news-img-box {
@@ -558,6 +568,9 @@
             aspect-ratio: 16 / 9;
             overflow: hidden;
             background: #f4f4f5;
+            isolation: isolate;
+            transform: translateZ(0);
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
         }
 
         .latest-news-img {
@@ -565,11 +578,15 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.3s ease;
+            transform: translateZ(0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            will-change: transform;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .latest-news-card:hover .latest-news-img {
-            transform: scale(1.03);
+            transform: scale(1.03) translateZ(0);
         }
 
         .latest-news-body {
