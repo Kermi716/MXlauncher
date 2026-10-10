@@ -52,8 +52,6 @@
             display: flex;
             flex-direction: column;
             -webkit-font-smoothing: antialiased;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-overflow-scrolling: touch;
         }
 
         body {
@@ -530,177 +528,6 @@
             border-bottom-right-radius: var(--radius-lg);
         }
 
-        .mobile-menu-btn {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: var(--radius-md);
-            color: var(--text-main);
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: var(--transition);
-            flex-shrink: 0;
-        }
-
-        .mobile-menu-btn:hover {
-            background: var(--surface-hover);
-            border-color: var(--border-hover);
-        }
-
-        .mobile-menu-btn .close-icon {
-            display: none;
-        }
-
-        .mobile-menu-btn.is-active .burger-icon {
-            display: none;
-        }
-
-        .mobile-menu-btn.is-active .close-icon {
-            display: block;
-        }
-
-        .mobile-menu-drawer {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-            padding: 14px 16px 18px;
-            transform: translateY(-8px);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease, transform 0.2s ease;
-            box-sizing: border-box;
-        }
-
-        .mobile-menu-drawer.is-open {
-            transform: translateY(0);
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .mobile-menu-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            width: 100%;
-        }
-
-        .mobile-nav-link {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 10px 14px;
-            border-radius: var(--radius-md);
-            font-size: 14.5px;
-            font-weight: 500;
-            color: var(--text-main);
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            transition: var(--transition);
-            width: 100%;
-            box-sizing: border-box;
-            text-align: left;
-        }
-
-        .mobile-nav-link:hover,
-        .mobile-nav-link:active,
-        .mobile-nav-link.is-active {
-            background: #eff6ff;
-            color: var(--primary);
-            border-color: #bfdbfe;
-        }
-
-        .ad-block {
-            max-width: 1200px;
-            margin: 36px auto 0;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
-            scroll-margin-top: 84px;
-        }
-
-        .ad-native-inner {
-            width: 100%;
-            min-height: 80px;
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: 12px;
-            display: block;
-            box-shadow: var(--shadow-sm);
-            box-sizing: border-box;
-            overflow: hidden;
-        }
-
-        #container-9e49a8dcb1c9e229d8a71e9c0ab71b0b {
-            width: 100%;
-            display: block;
-            min-height: 50px;
-        }
-
-        #container-9e49a8dcb1c9e229d8a71e9c0ab71b0b img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .side-ad {
-            position: fixed;
-            top: 80px;
-            z-index: 90;
-            width: 160px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .side-ad-inner {
-            width: 160px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-        }
-
-        .side-ad-left {
-            left: 10px;
-        }
-
-        .side-ad-right {
-            right: 10px;
-        }
-
-        iframe {
-            max-width: 100%;
-            border: none;
-        }
-
-        @media (min-width: 1200px) and (max-width: 1599px) {
-            .news-wrapper,
-            .ad-block {
-                max-width: calc(100% - 380px);
-            }
-        }
-
-        @media (max-width: 1199px) {
-            .side-ad {
-                display: none;
-            }
-        }
-
         @media (max-width: 860px) {
             .news-grid {
                 grid-template-columns: 1fr;
@@ -712,14 +539,6 @@
             .header-nav {
                 display: none;
             }
-
-            .mobile-menu-btn {
-                display: inline-flex;
-            }
-
-            .mobile-menu-drawer {
-                display: block;
-            }
         }
 
         @media (max-width: 640px) {
@@ -728,139 +547,38 @@
             }
 
             .header-inner {
-                padding: 0 14px;
+                padding: 0 16px;
                 height: 58px;
             }
 
-            .brand-title {
-                font-size: 18px;
-            }
-
-            .header-actions {
-                gap: 8px;
-            }
-
-            .header-actions .btn {
-                padding: 7px 14px;
-                font-size: 13px;
-                gap: 6px;
-            }
-
             .main-content {
-                padding: 18px 14px 32px;
-            }
-
-            .news-wrapper {
-                gap: 18px;
+                padding: 24px 16px 40px;
             }
 
             .news-page-title {
-                font-size: 20px;
-            }
-
-            .news-page-desc {
-                font-size: 13.5px;
+                font-size: 22px;
             }
 
             .news-body {
-                padding: 14px 16px 16px;
+                padding: 16px;
             }
 
             .news-title {
-                font-size: 16px;
-            }
-
-            .news-desc {
-                font-size: 13.5px;
-            }
-
-            .ad-block {
-                margin-top: 24px;
-            }
-
-            .ad-native-inner {
-                padding: 8px;
-                border-radius: var(--radius-md);
+                font-size: 16.5px;
             }
 
             .site-footer {
-                padding: 20px 14px;
+                padding: 20px 16px;
             }
 
             .footer-inner {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 14px;
             }
 
             .footer-links {
                 width: 100%;
                 justify-content: flex-start;
-                gap: 8px;
-            }
-
-            .footer-btn {
-                padding: 6px 10px;
-                font-size: 12.5px;
-            }
-
-            .modal-overlay {
-                padding: 12px;
-            }
-
-            .modal-container {
-                max-height: 90vh;
-                border-radius: 10px;
-            }
-
-            .modal-header {
-                padding: 14px 16px;
-            }
-
-            .modal-title {
-                font-size: 15px;
-            }
-
-            .modal-body {
-                padding: 16px;
-                font-size: 13px;
-            }
-
-            .modal-footer {
-                padding: 12px 16px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .header-inner {
-                padding: 0 10px;
-            }
-
-            .brand-title {
-                font-size: 16.5px;
-            }
-
-            .header-actions .btn {
-                padding: 6px 10px;
-                font-size: 12px;
-            }
-
-            .header-actions .btn svg {
-                width: 13px;
-                height: 13px;
-            }
-
-            .mobile-menu-btn {
-                width: 34px;
-                height: 34px;
-            }
-
-            .main-content {
-                padding: 16px 10px 24px;
-            }
-
-            .news-page-title {
-                font-size: 18px;
             }
         }
     </style>
@@ -889,59 +607,9 @@
                     </svg>
                     <span>Скачать</span>
                 </a>
-                <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Меню">
-                    <svg class="burger-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="4" y1="6" x2="20" y2="6"></line>
-                        <line x1="4" y1="12" x2="20" y2="12"></line>
-                        <line x1="4" y1="18" x2="20" y2="18"></line>
-                    </svg>
-                    <svg class="close-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
             </div>
         </div>
-        <div class="mobile-menu-drawer" id="mobileMenuDrawer">
-            <nav class="mobile-menu-nav">
-                <a href="../index.html#gamesSection" class="mobile-nav-link">Игры</a>
-                <a href="index.html" class="mobile-nav-link is-active">Новости</a>
-                <a href="../index.html#faqSection" class="mobile-nav-link">FAQ</a>
-                <button type="button" class="mobile-nav-link" id="mobileAgreementBtn">Соглашение</button>
-                <a href="https://t.me/lfds12" target="_blank" rel="noopener noreferrer" class="mobile-nav-link">Поддержка</a>
-            </nav>
-        </div>
     </header>
-
-    <aside class="side-ad side-ad-left">
-        <div class="side-ad-inner">
-            <script>
-                atOptions = {
-                    'key' : '77cf6a17cacc04c3732797cfd8f3af45',
-                    'format' : 'iframe',
-                    'height' : 600,
-                    'width' : 160,
-                    'params' : {}
-                };
-            </script>
-            <script src="https://www.highrevenueformat.com/77cf6a17cacc04c3732797cfd8f3af45/invoke.js"></script>
-        </div>
-    </aside>
-
-    <aside class="side-ad side-ad-right">
-        <div class="side-ad-inner">
-            <script>
-                atOptions = {
-                    'key' : '9ef64698334c3a6e3dec6ce01c3cd92a',
-                    'format' : 'iframe',
-                    'height' : 300,
-                    'width' : 160,
-                    'params' : {}
-                };
-            </script>
-            <script src="https://www.highrevenueformat.com/9ef64698334c3a6e3dec6ce01c3cd92a/invoke.js"></script>
-        </div>
-    </aside>
 
     <main class="main-content">
         <div class="news-wrapper">
@@ -955,13 +623,6 @@
                     ← Вернуться ко всем новостям
                 </button>
             </div>
-
-            <section class="ad-block ad-block-native">
-                <div class="ad-native-inner">
-                    <script async="async" data-cfasync="false" src="https://pl31748462.profitableratecpmnetwork.com/9e49a8dcb1c9e229d8a71e9c0ab71b0b/invoke.js"></script>
-                    <div id="container-9e49a8dcb1c9e229d8a71e9c0ab71b0b"></div>
-                </div>
-            </section>
 
             <div class="news-grid" id="newsContainer">
                 <div class="news-state">Загрузка новостей...</div>
@@ -1249,50 +910,6 @@
                 toggleAgreementModal(false);
             }
         });
-
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenuDrawer = document.getElementById('mobileMenuDrawer');
-        const mobileAgreementBtn = document.getElementById('mobileAgreementBtn');
-
-        function toggleMobileMenu(open) {
-            if (!mobileMenuDrawer || !mobileMenuBtn) return;
-            const isOpen = open !== undefined ? open : !mobileMenuDrawer.classList.contains('is-open');
-            if (isOpen) {
-                mobileMenuDrawer.classList.add('is-open');
-                mobileMenuBtn.classList.add('is-active');
-            } else {
-                mobileMenuDrawer.classList.remove('is-open');
-                mobileMenuBtn.classList.remove('is-active');
-            }
-        }
-
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleMobileMenu();
-            });
-        }
-
-        document.querySelectorAll('.mobile-nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                toggleMobileMenu(false);
-            });
-        });
-
-        document.addEventListener('click', (e) => {
-            if (mobileMenuDrawer && mobileMenuDrawer.classList.contains('is-open')) {
-                if (!mobileMenuDrawer.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-                    toggleMobileMenu(false);
-                }
-            }
-        });
-
-        if (mobileAgreementBtn) {
-            mobileAgreementBtn.addEventListener('click', () => {
-                toggleMobileMenu(false);
-                toggleAgreementModal(true);
-            });
-        }
     </script>
 </body>
 
